@@ -1,7 +1,5 @@
 import java.util.Date;
 
-import javafx.scene.image.Image;
-
 public class LightSensor extends Device implements Sensor{
     private String light;
     
