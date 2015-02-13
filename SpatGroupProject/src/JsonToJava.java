@@ -244,9 +244,9 @@ public class JsonToJava extends Application{
 	  	welcome.setLayoutX(20);
 	  	welcome.setLayoutY(35);
 	  	
-	  	Label time = new Label();
+	  	final Label time = new Label();
 	  	time.setId("time");
-	  	SimpleDateFormat format = new SimpleDateFormat("EEE HH:mm:ss");
+	  	final SimpleDateFormat format = new SimpleDateFormat("EEE HH:mm:ss");
 	  	Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {  
 	  	     @Override  
 	  	     public void handle(ActionEvent event) {  
@@ -273,7 +273,7 @@ public class JsonToJava extends Application{
 	}
 
 	public void displayDevices(){
-	  	VBox vb = new VBox(30);
+	  	final VBox vb = new VBox(30);
 	  	
 	  	Pane sortingPane = new Pane();
 	  	sortingPane.setPrefSize(600, 40);
