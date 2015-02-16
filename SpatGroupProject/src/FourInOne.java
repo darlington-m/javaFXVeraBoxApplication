@@ -13,7 +13,7 @@ public class FourInOne extends Device {
 	int lasttrip;
 	
 	public FourInOne(){
-        super.setImage("lightbulb1.jpg");
+        super.setImage("4in1.jpg");
     }
 	
 	public String toString(){
@@ -29,4 +29,10 @@ public class FourInOne extends Device {
 	public void setHumidity(HumiditySensor humiditySensor){
 		this.humiditySensor = humiditySensor;
 	}
+    @Override
+    public String getDetails(){
+    	return super.getDetails() + "\nTemperature: " + temperatureSensor.getReading() + 
+    			"\nLight: " + lightSensor.getReading() + 
+    			"\nHumidity: " + humiditySensor.getReading();
+    }
 }

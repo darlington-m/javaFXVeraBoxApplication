@@ -3,7 +3,7 @@ public class TemperatureSensor extends Device implements Sensor{
     private int temperature;
     
     public TemperatureSensor(){
-    	 super.setImage("lightbulb1.jpg");
+    	 super.setImage("temperature.png");
     }
     @Override
     public int getReading(){
@@ -16,6 +16,9 @@ public class TemperatureSensor extends Device implements Sensor{
     @Override
     public String toString(){
 		return super.toString() + " Temperature: " + temperature;
-    	
+    }
+    @Override
+    public String getDetails(){
+    	return super.getDetails() + "\nTemperature: " + temperature;
     }
 }

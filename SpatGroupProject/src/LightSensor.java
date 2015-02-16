@@ -4,7 +4,7 @@ public class LightSensor extends Device implements Sensor{
     private String light;
     
     public LightSensor(){
-        super.setImage("lightbulb1.jpg");
+        super.setImage("bulb.png");
     }
     @Override
     public int getReading(){    	
@@ -20,5 +20,9 @@ public class LightSensor extends Device implements Sensor{
     }
     public int getLight(){
     	return Integer.parseInt(light.substring(0,3));
+    }
+    @Override
+    public String getDetails(){
+    	return super.getDetails() + "\nLight: " + light;
     }
 }

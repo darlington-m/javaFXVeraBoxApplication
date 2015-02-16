@@ -8,11 +8,21 @@ public class Device {
 	int subcategory;
 	int room;
 	int parent;
-	String image;
+	String image = "";
 
     @Override
     public String toString(){
     	return "Name: " + name + " Id: " + id + " AltID: " + altid + " Category: " + category + " Subcategory: " + subcategory + " Room: " + room + " Parent: " + parent;
+    }
+    
+    public String getDetails(){
+    	return "Name: " + name + 
+    			"\nId: " + id + 
+    			"\nAltID: " + altid + 
+    			"\nCategory: " + category + 
+    			"\nSubcategory: " + subcategory + 
+    			"\nRoom: " + room + 
+    			"\nParent: " + parent;
     }
 
 	public String getName() {

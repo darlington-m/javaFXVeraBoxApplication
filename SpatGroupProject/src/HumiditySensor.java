@@ -1,7 +1,7 @@
 public class HumiditySensor extends Device implements Sensor{
     private int humidityReading;
     HumiditySensor(){
-    	 super.setImage("lightbulb1.jpg");
+    	 super.setImage("humidity.jpg");
     }
     @Override
     public int getReading(){
@@ -15,5 +15,9 @@ public class HumiditySensor extends Device implements Sensor{
     @Override
     public String toString(){
     	return super.toString() + " Humidity Reading: " + humidityReading;
+    }
+    @Override
+    public String getDetails(){
+    	return super.getDetails() + "\nHumidity: " + humidityReading;
     }
 }

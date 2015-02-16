@@ -22,7 +22,7 @@ public class DanfossRadiator extends Device implements Sensor{
 		this.comment = comment;
 	}
 	public DanfossRadiator(){
-        super.setImage("lightbulb1.jpg");
+        super.setImage("radiator.jpg");
     }
 	@Override
 	public String toString(){
@@ -38,4 +38,15 @@ public class DanfossRadiator extends Device implements Sensor{
 	public String readingToSQL() {
 		return "" + heat;
 	}
+    @Override
+    public String getDetails(){
+    	return super.getDetails() + "\nSetPoint: " +setpoint + 
+    			"\nHeat: " +heat + 
+    			"\nCool: " + cool + 
+    			"\nCommands: " +commands + 
+    			"\nBatteryLevel: " +batterylevel + 
+    			"\nMode: " +mode + 
+    			"\nState:  " +state + 
+    			"\nComment: " +comment; 
+    }
 }
