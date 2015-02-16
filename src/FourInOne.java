@@ -37,6 +37,7 @@ public class FourInOne extends Device {
 	public void setHumidity(HumiditySensor humiditySensor){
 		this.humiditySensor = humiditySensor;
 	}
+	@Override
 	public Pane getPane(){
 		Pane pane = new Pane();
 		pane.setPrefSize(600,200);

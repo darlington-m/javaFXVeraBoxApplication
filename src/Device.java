@@ -75,6 +75,7 @@ public abstract class Device {
 		reading.setLayoutX(200);
 		reading.setLayoutY(100);
 		pane.getChildren().addAll(image,name,reading);
+		System.out.println("Pane created");
 		return pane;
 	}
 }

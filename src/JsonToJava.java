@@ -83,6 +83,7 @@ public class JsonToJava extends Application{
 	
 	
 	public Pane createPane(Device device){
+		System.out.println("Create Pane in main");
 		return device.getPane();
 
 	}
