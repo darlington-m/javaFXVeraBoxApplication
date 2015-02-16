@@ -73,11 +73,8 @@ public class JsonToJava extends Application{
 	
 	public static void main(String[] args) throws IOException {
 		
-		readingTimer = new Timer();
-		readingTimer.schedule(new ReadingTimer(), 0, 5000);
-		
-
-		
+//		readingTimer = new Timer();
+//		readingTimer.schedule(new ReadingTimer(), 0, 5000);
 		launch(args);
 	}
 	
