@@ -6,6 +6,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Timer;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -45,6 +46,7 @@ public class JsonToJava extends Application{
 	Tab tab1, tab2;
 	static MySQLConnect conn;
 	Button dashboardButton, settingsButton,accountButton,logoutButton,sceneButton;
+	private static Timer readingTimer;
 	
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>(){
 
@@ -70,6 +72,10 @@ public class JsonToJava extends Application{
 	
 	
 	public static void main(String[] args) throws IOException {
+		
+		readingTimer = new Timer();
+		readingTimer.schedule(new ReadingTimer(), 0, 5000);
+		
 //		try{
 //			
 //			System.out.println("aa");
@@ -154,6 +160,7 @@ public class JsonToJava extends Application{
 //		}catch (SocketException se){
 //			System.out.println("You are not connected to the internet");
 //		}
+		
 		launch(args);
 	}
 	
