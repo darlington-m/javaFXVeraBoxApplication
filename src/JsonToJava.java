@@ -83,41 +83,7 @@ public class JsonToJava extends Application{
 	
 	
 	public Pane createPane(Device device){
-		Pane pane = new Pane();
-		pane.setPrefSize(600,200);
-		pane.setStyle("-fx-background-color: #005C99");
-		ImageView image = null;
-			pane.setStyle("-fx-border-color: red; -fx-background-width: 2px;");
-			
-			System.out.println ("Resources/" + (device).getImage());
-			image = new ImageView(new Image(JsonToJava.class.getResource("Resources/lightbulb1.jpg").toExternalForm()));
-			image.setLayoutX(50);
-			image.setLayoutY(50);
-			
-			Text name = new Text(device.getName());
-			name.setStyle("-fx-text-fill: white; -fx-font-size: 25px;");
-			name.setLayoutX(200);
-			name.setLayoutY(50);
-			if(device instanceof FourInOne){
-				Text light = new Text("Reading: " + ((FourInOne)device).lightSensor.getLight());
-				light.setLayoutY(75);
-				light.setLayoutX(200);
-				Text temp = new Text("Reading: " + ((FourInOne)device).temperatureSensor.getReading());
-				temp.setLayoutY(100);
-				temp.setLayoutX(200);
-				Text  humidity = new Text("Reading: " + ((FourInOne)device).humiditySensor.getReading());
-				humidity.setLayoutY(125);
-				humidity.setLayoutX(200);
-				pane.getChildren().addAll(image,name,light,temp,humidity);
-				return pane;
-			}
-			else{
-				Text reading = new Text("Reading: " + ((Sensor) device).getReading());
-				reading.setLayoutX(200);
-				reading.setLayoutY(100);
-				pane.getChildren().addAll(image,name,reading);
-				return pane;
-			}
+		return device.getPane();
 
 	}
 

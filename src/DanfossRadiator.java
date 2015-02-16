@@ -12,6 +12,7 @@ public class DanfossRadiator extends Device implements Sensor{
 	public DanfossRadiator(int setpoint, int heat, int cool, String commands,
 			int batterylevel, String mode, int state, String comment) {
 		super();
+		super.setImage("lightbulb1.jpg");
 		this.setpoint = setpoint;
 		this.heat = heat;
 		this.cool = cool;
