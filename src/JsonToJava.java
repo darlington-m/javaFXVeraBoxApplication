@@ -76,90 +76,7 @@ public class JsonToJava extends Application{
 		readingTimer = new Timer();
 		readingTimer.schedule(new ReadingTimer(), 0, 5000);
 		
-//		try{
-//			
-//			System.out.println("aa");
-//			conn = new MySQLConnect();
-//			System.out.println("aa");
-//			Reader reader = new InputStreamReader(new URL("http://146.87.65.48:3480/data_request?id=sdata&output_format=json").openStream(), "UTF-8");
-//			System.out.println("aa");
-//			Gson gson = new Gson();
-//			System.out.println("aa");
-//			//creates a class Data Object Holds 2 arrays: devices and rooms.
-//			Data d = gson.fromJson(reader, Data.class);
-//			// for every device in the devices array
-//			for(JsonElement x : d.getDevices()){
-//				System.out.println("1");
-//				// cast the element to an object
-//				JsonObject object = x.getAsJsonObject();
-//				// put to an object
-//				int xa = Integer.parseInt(object.get("id").toString());
-//				switch(xa){
-//				case 11 :
-//					FourInOne four = new FourInOne();
-//					TemperatureSensor temperaturesensor = gson.fromJson(object, TemperatureSensor.class);
-//					HumiditySensor humiditysensor = gson.fromJson(object, HumiditySensor.class);
-//					LightSensor lightsensor = gson.fromJson(object, LightSensor.class);
-//
-//					four = gson.fromJson(object, FourInOne.class);
-//
-//					four.setHumidity(humiditysensor);
-//					four.setLight(lightsensor);
-//					four.setTemp(temperaturesensor);
-//					
-//					devices.add(four);
-//
-//					break;
-//				case 9 :
-//					DanfossRadiator radiator = new DanfossRadiator();
-//					radiator =  gson.fromJson(object, DanfossRadiator.class);
-//				//	System.out.println(radiator);
-//					devices.add(radiator);
-//					break;
-//				case 16 :
-//					DataMining datamining = new DataMining();
-//					datamining = gson.fromJson(object, DataMining.class);
-//					//System.out.println(datamining);
-//					devices.add(datamining);
-//					break;
-//				case 14 :
-//					HumiditySensor humiditySensor = new HumiditySensor();
-//					humiditySensor = gson.fromJson(object, HumiditySensor.class);
-//					System.out.println(humiditySensor);
-//					devices.add(humiditySensor);
-//					break;
-//				case 13 :
-//					LightSensor lightSensor = new LightSensor();
-//					lightSensor = gson.fromJson(object, LightSensor.class);
-//					//System.out.println(lightSensor);
-//					System.out.println(lightSensor.readingToSQL());
-//					conn.insertRow(lightSensor.readingToSQL());
-//					devices.add(lightSensor);
-//					break;
-//				case 12 :
-//					TemperatureSensor temperatureSensor = new TemperatureSensor();
-//					temperatureSensor = gson.fromJson(object, TemperatureSensor.class);
-//					//System.out.println(temperatureSensor);
-//					devices.add(temperatureSensor);
-//					break;       			
-//				}
-//			}
-//			
-//			// creates rooms and search through the devices and adds the correct device to the correct room.
-//			
-//			for(JsonElement rooms : d.getRooms()){
-//				JsonObject object = rooms.getAsJsonObject();
-//				Room room = gson.fromJson(object, Room.class);
-//				roomList.add(room);
-//					for(Device device : devices){
-//						if(device.getRoom() == room.getId()){
-//							room.addDeviceToRoom(device);
-//						}
-//					}
-//				}
-//		}catch (SocketException se){
-//			System.out.println("You are not connected to the internet");
-//		}
+
 		
 		launch(args);
 	}
@@ -329,5 +246,44 @@ public class JsonToJava extends Application{
 		
 	}
 	public void displayScenes(){}
+	
+	public void getDataFromJSON(){
+		try{
+			conn = new MySQLConnect();
+			Reader reader = new InputStreamReader(new URL("http://146.87.65.48:3480/data_request?id=sdata&output_format=json").openStream(), "UTF-8");
+			Gson gson = new Gson();
+			GSONObjectFactory factory  = new GSONObjectFactory();
+			//creates a class Data Object Holds 2 arrays: devices and rooms.
+			Data d = gson.fromJson(reader, Data.class);
+			// for every device in the devices array
+			
+			for(JsonElement x : d.getDevices()){
+				
+				devices.add(factory.toDeviceObject(x));
+			}
+			
+			// creates rooms 
+			
+			for(JsonElement rooms : d.getRooms()){
+				
+				roomList.add(factory.toRoomObject(rooms));
+					
+			}
+			
+			addDevicesToRooms();
+		}catch (Exception se){
+			System.out.println("You are not connected to the internet");
+		}
+	}
+	public static void addDevicesToRooms(){
+		//search through the devices and adds the correct device to the correct room.
+		for(Device device : devices){
+			for(Room room : roomList){
+				if(device.getRoom() == room.getId()){
+					room.addDeviceToRoom(device);
+				}
+			}
+		}
+	}
 }
 
