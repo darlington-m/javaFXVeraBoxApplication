@@ -8,7 +8,7 @@ public class LightSensor extends Device implements Sensor{
     }
     @Override
     public int getReading(){    	
-        return Integer.parseInt(light.substring(0, 3));
+        return 0;
     }
     @Override
     public String readingToSQL() {
@@ -19,7 +19,7 @@ public class LightSensor extends Device implements Sensor{
     	return super.toString() + " Light: " + light + "Image: " + super.getImage();
     }
     public int getLight(){
-    	return Integer.parseInt(light.substring(0,3));
+    	return 0;
     }
     @Override
     public String getDetails(){

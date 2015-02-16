@@ -36,6 +36,7 @@ import javafx.util.Duration;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 
 public class JsonToJava extends Application{
@@ -76,9 +77,10 @@ public class JsonToJava extends Application{
 	
 	
 	public static void main(String[] args) throws IOException {
-		try{
+		try{//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/10F1A74DB10F7B6D9888C97DA61E7D57007D1C/port_3480/data_request?id=user_data&rand=0.08118585776537657
+
 			conn = new MySQLConnect();
-			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/0C1EA38A3C2843C3F877885C6F34B2F1BC424D/port_3480/data_request?id=sdata&output_format=json").openStream(), "UTF-8");
+			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/10F1A74DB10F7B6D9888C97DA61E7D57007D1C/port_3480/data_request?id=user_data&rand=0.08118585776537657").openStream(), "UTF-8");
 			Gson gson = new Gson();
 			//creates a class Data Object Holds 2 arrays: devices and rooms.
 			Data d = gson.fromJson(reader, Data.class);
@@ -87,7 +89,7 @@ public class JsonToJava extends Application{
 				// cast the element to an object
 				JsonObject object = x.getAsJsonObject();
 				// put to an object
-				int xa = Integer.parseInt(object.get("id").toString());
+				int xa = validateInt(object.get("id").toString());
 				switch(xa){
 				case 11 :
 					FourInOne four = new FourInOne();
@@ -262,7 +264,7 @@ public class JsonToJava extends Application{
 	  	}));
 	  	timeline.setCycleCount(Animation.INDEFINITE);  
 	  	timeline.play();  
-	  	time.setLayoutX(590);
+	  	time.setLayoutX(570);
 	  	time.setLayoutY(45);
 	  	
 	  	topDisplay.getChildren().addAll(welcome,time);
@@ -339,6 +341,15 @@ public class JsonToJava extends Application{
 	}
 	public void displayScenes(){
 		
+	}
+	
+	public static int validateInt(String string){
+		if(string.matches("[0-9]*")){
+			return Integer.parseInt(string);
+		}else{
+			string = string.replaceAll("\\D+","");
+			return Integer.parseInt(string);
+		}
 	}
 	
 	public void showDeviceDetails(Rectangle image){

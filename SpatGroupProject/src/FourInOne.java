@@ -13,7 +13,7 @@ public class FourInOne extends Device {
 	int lasttrip;
 	
 	public FourInOne(){
-        super.setImage("4in1.jpg");
+        super.setImage("4in1.png");
     }
 	
 	public String toString(){
