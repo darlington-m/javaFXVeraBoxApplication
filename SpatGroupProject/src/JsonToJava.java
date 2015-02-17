@@ -77,10 +77,10 @@ public class JsonToJava extends Application{
 	
 	
 	public static void main(String[] args) throws IOException {
-		try{//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/10F1A74DB10F7B6D9888C97DA61E7D57007D1C/port_3480/data_request?id=user_data&rand=0.08118585776537657
+		try{
+			conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242
 
-			conn = new MySQLConnect();
-			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/10F1A74DB10F7B6D9888C97DA61E7D57007D1C/port_3480/data_request?id=user_data&rand=0.08118585776537657").openStream(), "UTF-8");
+			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242").openStream(), "UTF-8");
 			Gson gson = new Gson();
 			//creates a class Data Object Holds 2 arrays: devices and rooms.
 			Data d = gson.fromJson(reader, Data.class);
