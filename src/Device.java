@@ -59,4 +59,5 @@ public class Device {
 		this.image = image;
 	}
 
+
 }

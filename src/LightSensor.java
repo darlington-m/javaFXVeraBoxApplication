@@ -12,7 +12,7 @@ public class LightSensor extends Device implements Sensor{
     }
     @Override
     public String readingToSQL() {
-        return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category,subcategory,room,parent,light) VALUES (" + new Date() + ", " + getName() + ",  "  + getId() + ",  "  + getAltid() + ",  "  + getCategory() + ",  "  + getSubcategory() + ",  "  + getRoom() + ",  "  +getParent() + ",  "  +getLight()  +  ")");
+        return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, light) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getLight()  +  "')");
     }
     @Override
     public String toString(){

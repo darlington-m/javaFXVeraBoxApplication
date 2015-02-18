@@ -1,16 +1,20 @@
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Timer;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -77,6 +81,11 @@ public class JsonToJava extends Application{
 	
 	
 	public static void main(String[] args) throws IOException {
+		launch(args);
+	}
+	
+	
+	public static void getData() throws UnsupportedEncodingException, MalformedURLException, IOException {
 		try{
 			conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242
 
@@ -124,6 +133,7 @@ public class JsonToJava extends Application{
 				case 13 :
 					LightSensor lightSensor = new LightSensor();
 					lightSensor = gson.fromJson(object, LightSensor.class);
+					conn.insertRow(lightSensor.readingToSQL());
 					devices.add(lightSensor);
 					break;
 				case 12 :
@@ -149,16 +159,16 @@ public class JsonToJava extends Application{
 		}catch (SocketException se){
 			System.out.println("You are not connected to the internet");
 		}
-		launch(args);
+		
 	}
-	
-	
+
+
 	public Pane createPane(Device device){
 		Pane pane = new Pane();
 		pane.setId("devices");
 		pane.setPrefSize(600,200);
 		
-		Rectangle image = new Rectangle(100,100);
+		final Rectangle image = new Rectangle(100,100);
 		image.setUserData(device);
 		image.setFill(new ImagePattern(new Image(JsonToJava.class.getResource("Resources/"+ device.getImage()).toExternalForm())));
 		image.setLayoutX(30);
@@ -200,6 +210,8 @@ public class JsonToJava extends Application{
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		getData();
+
 		stage.setTitle("Vera Box");
 	  	root = new Pane();
 	    scene = new Scene(root, 900, 600);
@@ -252,9 +264,9 @@ public class JsonToJava extends Application{
 	  	welcome.setLayoutX(20);
 	  	welcome.setLayoutY(35);
 	  	
-	  	Label time = new Label();
+	  	final Label time = new Label();
 	  	time.setId("time"); 
-	  	SimpleDateFormat format = new SimpleDateFormat("EEE HH:mm:ss");
+	  	final SimpleDateFormat format = new SimpleDateFormat("EEE HH:mm:ss");
 	  	Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {  
 	  	     @Override  
 	  	     public void handle(ActionEvent event) {  
@@ -280,6 +292,10 @@ public class JsonToJava extends Application{
 		back.setLayoutX(400);
 		back.setLayoutY(400);
 	  	stage.show();
+	  	
+		Timer timer = new Timer();
+		timer.schedule(new ReadingTimer(), 0, 5000);
+		
 	  			
 	}
 
@@ -288,7 +304,7 @@ public class JsonToJava extends Application{
 		paneBackground.setStyle("-fx-background-color:white; -fx-pref-width:600; -fx-pref-height: 40;");
 		paneBackground.setLayoutX(45);		
 		
-	  	Pane sortingPane = new Pane();
+	  	final Pane sortingPane = new Pane();
 	  	sortingPane.setPrefSize(600, 40);
 	  	sortingPane.setLayoutX(45);
 	  	sortingPane.setId("sortingPane");
@@ -313,7 +329,7 @@ public class JsonToJava extends Application{
 	  	hbox.getChildren().addAll(sort,roomText,rooms,devicesText,deviceList);
 	  	sortingPane.getChildren().addAll(hbox);	  	  	
 	  	
-	  	VBox vb = new VBox(30);
+	  	final VBox vb = new VBox(30);
 	  	vb.setLayoutY(sortingPane.getPrefHeight());
 	  	vb.setStyle("-fx-padding: 0 0 0 45px");
 	  	
@@ -359,7 +375,7 @@ public class JsonToJava extends Application{
 		back.setVisible(true);
 		
 		Device device = (Device)image.getUserData();
-		Text text = new Text(device.getDetails());
+		Text text = new Text(((Device) device).getDetails());
 		text.setId("deviceDetails");
 		image.setLayoutX(50);
 		image.setLayoutY(100);
