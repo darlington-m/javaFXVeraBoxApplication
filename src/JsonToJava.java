@@ -264,7 +264,7 @@ public class JsonToJava extends Application{
 	  	}));
 	  	timeline.setCycleCount(Animation.INDEFINITE);  
 	  	timeline.play();  
-	  	time.setLayoutX(570);
+	  	time.setLayoutX(500);
 	  	time.setLayoutY(45);
 	  	
 	  	topDisplay.getChildren().addAll(welcome,time);
@@ -302,11 +302,13 @@ public class JsonToJava extends Application{
 	  	ChoiceBox<String> rooms = new ChoiceBox<String>();
 	  	rooms.getItems().addAll("Living Room","Kitchen","Study","Bedroom","BathRoom");
 	  	rooms.setId("sortingDropDown");
+	  	rooms.setMaxWidth(100);
 	  	Label devicesText = new Label("\t\tDevices:");
 	  	devicesText.setId("sortingLabel");
 	  	ChoiceBox<String> deviceList = new ChoiceBox<String>();
 	  	deviceList.getItems().addAll("4 in 1 Sensor", "Heat Sensor", "Light Sensor", "Danfoss Radiator");
 	  	deviceList.setId("sortingDropDown");
+	  	deviceList.setMaxWidth(100);
 	  	
 	  	hbox.getChildren().addAll(sort,roomText,rooms,devicesText,deviceList);
 	  	sortingPane.getChildren().addAll(hbox);	  	  	
