@@ -300,7 +300,7 @@ public class JsonToJava extends Application{
 	  	stage.show();
 	  	
 		Timer timer = new Timer();
-		timer.schedule(new ReadingTimer(), 0, 5000);
+		timer.schedule(new ReadingTimer(), 0, 360000);
 		
 	  			
 	}
