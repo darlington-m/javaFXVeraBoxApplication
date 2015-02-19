@@ -89,7 +89,7 @@ public class JsonToJava extends Application{
 		try{
 			conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242
 
-			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242").openStream(), "UTF-8");
+			Reader reader = new InputStreamReader(new URL("https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242").openStream(), "UTF-8");			
 			Gson gson = new Gson();
 			//creates a class Data Object Holds 2 arrays: devices and rooms.
 			Data d = gson.fromJson(reader, Data.class);
@@ -112,12 +112,16 @@ public class JsonToJava extends Application{
 					four.setLight(lightsensor);
 					four.setTemp(temperaturesensor);
 					
+					conn.insertRow(four.readingToSQL());
+
+					
 					devices.add(four);
 
 					break;
 				case 9 :
 					DanfossRadiator radiator = new DanfossRadiator();
 					radiator =  gson.fromJson(object, DanfossRadiator.class);
+					conn.insertRow(radiator.readingToSQL());
 					devices.add(radiator);
 					break;
 				case 16 :
@@ -128,6 +132,7 @@ public class JsonToJava extends Application{
 				case 14 :
 					HumiditySensor humiditySensor = new HumiditySensor();
 					humiditySensor = gson.fromJson(object, HumiditySensor.class);
+					conn.insertRow(humiditySensor.readingToSQL());
 					devices.add(humiditySensor);
 					break;
 				case 13 :
@@ -139,6 +144,7 @@ public class JsonToJava extends Application{
 				case 12 :
 					TemperatureSensor temperatureSensor = new TemperatureSensor();
 					temperatureSensor = gson.fromJson(object, TemperatureSensor.class);
+					conn.insertRow(temperatureSensor.readingToSQL());
 					devices.add(temperatureSensor);
 					break;       			
 				}

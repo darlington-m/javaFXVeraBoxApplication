@@ -29,6 +29,12 @@ public class FourInOne extends Device {
 	public void setHumidity(HumiditySensor humiditySensor){
 		this.humiditySensor = humiditySensor;
 	}
+	
+	public String readingToSQL(){
+		return 	temperatureSensor.readingToSQL() + ";" + 
+				lightSensor.readingToSQL() + ";" +
+				humiditySensor.readingToSQL();
+	}
     @Override
     public String getDetails(){
     	return super.getDetails() + "\nTemperature: " + temperatureSensor.getReading() + 

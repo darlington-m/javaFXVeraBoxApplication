@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class HumiditySensor extends Device implements Sensor{
     private int humidityReading;
     HumiditySensor(){
@@ -10,7 +12,7 @@ public class HumiditySensor extends Device implements Sensor{
 
     @Override
     public String readingToSQL() {
-        return new String("Insert into reading");
+        return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, humidity) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getReading()  +  "')");
     }
     @Override
     public String toString(){

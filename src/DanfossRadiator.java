@@ -1,3 +1,5 @@
+import java.util.Date;
+
 
 public class DanfossRadiator extends Device implements Sensor{
 	int setpoint;
@@ -36,7 +38,7 @@ public class DanfossRadiator extends Device implements Sensor{
 
 	@Override
 	public String readingToSQL() {
-		return "" + heat;
+        return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, heat) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getReading()  +  "')");
 	}
     @Override
     public String getDetails(){
