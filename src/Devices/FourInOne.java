@@ -3,9 +3,9 @@ package Devices;
 public class FourInOne extends Device {
 
 	int batterylevel;
-	TemperatureSensor temperatureSensor;
-	LightSensor lightSensor;
-	HumiditySensor humiditySensor;
+	private TemperatureSensor temperatureSensor;
+	private LightSensor lightSensor;
+	private HumiditySensor humiditySensor;
 	int armedtripped;
 	int armed;
 	int state;
@@ -18,37 +18,67 @@ public class FourInOne extends Device {
     }
 	
 	public String toString(){
-		return super.toString() + " Battery Level: " + batterylevel + " Temperature: " + temperatureSensor.getReading() + " Light: " + lightSensor.getReading() + " Humidity: " + humiditySensor.getReading() + " ArmedTripped: " + armedtripped + " Armed: " + armed + " State: " + state + " Comment: " + comment + " Tripped: " + tripped + " LastTrip: " + lasttrip; 
+		return super.toString() + " Battery Level: " + batterylevel + " Temperature: " + getTemperatureSensor().getReading() + " Light: " + getLightSensor().getReading() + " Humidity: " + getHumiditySensor().getReading() + " ArmedTripped: " + armedtripped + " Armed: " + armed + " State: " + state + " Comment: " + comment + " Tripped: " + tripped + " LastTrip: " + lasttrip; 
 	}
 	public TemperatureSensor getTemp(){
-		return temperatureSensor;
+		return getTemperatureSensor();
 	}
 	public LightSensor getLight(){
-		return lightSensor;
+		return getLightSensor();
 	}
 	public HumiditySensor getHumidity(){
-		return humiditySensor;
+		return getHumiditySensor();
 	}
 	
 	public void setTemp(TemperatureSensor temperatureSensor){
-		this.temperatureSensor = temperatureSensor;		
+		this.setTemperatureSensor(temperatureSensor);		
 	}
 	public void setLight(LightSensor lightSensor){
-		this.lightSensor = lightSensor;
+		this.setLightSensor(lightSensor);
 	}
 	public void setHumidity(HumiditySensor humiditySensor){
-		this.humiditySensor = humiditySensor;
+		this.setHumiditySensor(humiditySensor);
 	}
 	
 	public String readingToSQL(){
-		return 	temperatureSensor.readingToSQL() + ";" + 
-				lightSensor.readingToSQL() + ";" +
-				humiditySensor.readingToSQL();
+		return 	getTemperatureSensor().readingToSQL() + ";" + 
+		lightSensor.readingToSQL() + "," +
+		humiditySensor.readingToSQL();
 	}
+    
+	@Override
+	public String readingFromSQL() {
+		return new String("SELECT humidity,light,heat FROM Reading WHERE id =  '" + getId() + "'");
+	}
+	
     @Override
     public String getDetails(){
-    	return super.getDetails() + "\nTemperature: " + temperatureSensor.getReading() + 
-    			"\nLight: " + lightSensor.getReading() + 
-    			"\nHumidity: " + humiditySensor.getReading();
+    	return super.getDetails() + "\nTemperature: " + getTemperatureSensor().getReading() + 
+    			"\nLight: " + getLightSensor().getReading() + 
+    			"\nHumidity: " + getHumiditySensor().getReading();
     }
+
+	public LightSensor getLightSensor() {
+		return lightSensor;
+	}
+
+	public void setLightSensor(LightSensor lightSensor) {
+		this.lightSensor = lightSensor;
+	}
+
+	public TemperatureSensor getTemperatureSensor() {
+		return temperatureSensor;
+	}
+
+	public void setTemperatureSensor(TemperatureSensor temperatureSensor) {
+		this.temperatureSensor = temperatureSensor;
+	}
+
+	public HumiditySensor getHumiditySensor() {
+		return humiditySensor;
+	}
+
+	public void setHumiditySensor(HumiditySensor humiditySensor) {
+		this.humiditySensor = humiditySensor;
+	}
 }

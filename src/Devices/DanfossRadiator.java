@@ -41,6 +41,12 @@ public class DanfossRadiator extends Device implements Sensor{
 	public String readingToSQL() {
         return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, heat) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getReading()  +  "')");
 	}
+	
+	@Override
+	public String readingFromSQL() {
+		return new String("SELECT heat FROM Reading WHERE id =  '" + getId() + "'");
+	}
+	
     @Override
     public String getDetails(){
     	return super.getDetails() + "\nSetPoint: " +setpoint + 

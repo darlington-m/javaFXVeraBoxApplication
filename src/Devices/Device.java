@@ -59,6 +59,11 @@ public class Device {
 	public void setImage(String image){
 		this.image = image;
 	}
+	
+	public String readingFromSQL() 
+	{
+		return new String("");
+	}
 
 
 }

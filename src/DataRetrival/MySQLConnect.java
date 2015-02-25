@@ -21,6 +21,7 @@ public class MySQLConnect {
 	public void insertRow(String sql) {
 
 		try {
+			System.out.println(sql);
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
@@ -31,18 +32,18 @@ public class MySQLConnect {
 			// Handle errors for Class.forName
 			e.printStackTrace();
 		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					conn.close();
-			} catch (SQLException se) {
-			}// do nothing
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}// end finally try
+//			// finally block used to close resources
+//			try {
+//			//	if (stmt != null)
+//			//		conn.close();
+//			} catch (SQLException se) {
+//			}// do nothing
+//			try {
+//			//	if (conn != null)
+//			//		conn.close();
+//			} catch (SQLException se) {
+//				se.printStackTrace();
+//			}// end finally try
 		}// end try
 	}
 

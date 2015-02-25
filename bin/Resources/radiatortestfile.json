@@ -1,0 +1,8 @@
+
+"devices": [ 
+{ "name": "Danfoss Radiator", "altid": "4", "id": 9, "category": 5, "subcategory": 2, "room": 1, "parent": 1, "commands": "heater_setpoint", "batterylevel": "67", "status": "1", "setpoint": "30", "heat": "30", "cool": "30", "mode": "Off", "state": -1, "comment": "" }, 
+
+
+]
+
+

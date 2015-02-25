@@ -4,13 +4,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.TimerTask;
 
+import GUI.VeraGUI;
+
 
 public class ReadingTimer extends TimerTask{
 	
 	@Override
 	public void run() {
 		try {
-			JsonToJava.getData();
+			VeraGUI.getData();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

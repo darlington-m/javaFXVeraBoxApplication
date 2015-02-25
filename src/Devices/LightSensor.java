@@ -16,6 +16,12 @@ public class LightSensor extends Device implements Sensor{
     	System.out.println(light);
         return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, light) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getLight()  +  "')");
     }
+    
+	@Override
+	public String readingFromSQL() {
+		return new String("SELECT light FROM Reading WHERE id =  '" + getId() + "'");
+	}
+	
     @Override
     public String toString(){
     	return super.toString() + " Light: " + light + "Image: " + super.getImage();
