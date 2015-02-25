@@ -12,7 +12,7 @@ public class ReadingTimer extends TimerTask{
 	@Override
 	public void run() {
 		try {
-			VeraGUI.getData();
+			JsonToJava.getData();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

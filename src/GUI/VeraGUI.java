@@ -39,6 +39,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import DataRetrival.JsonToJava;
 import DataRetrival.MySQLConnect;
 import DataRetrival.ReadingTimer;
 import Devices.DanfossRadiator;
@@ -59,131 +60,48 @@ import com.google.gson.JsonObject;
 
 
 public class VeraGUI extends Application{
-	static ArrayList<Device> devices = new ArrayList<Device>();
-	static ArrayList<Room> roomList = new ArrayList<Room>();
+
+	MySQLConnect conn = new MySQLConnect();
 
 	Scene scene;
 	Pane root, display;
-	Tab tab1, tab2;
-	static MySQLConnect conn;
 	Button dashboardButton, settingsButton,accountButton,logoutButton,sceneButton,back;
-	ArrayList<Integer> tempArray = new ArrayList<Integer>();
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent arg0) {
 			display.getChildren().clear();
-			if(arg0.getSource() == dashboardButton){
+			
+			switch(((Button) arg0.getSource()).getText()){
+
+			case"Dashboard":
 				displayDevices();
-			}
-			else if (arg0.getSource() == settingsButton){
+				break;
+			case"Settings":
 				displaySettings();
-			}
-			else if (arg0.getSource() == accountButton){
+				break;
+			case"Account":
 				displayAccountInfo();
-			}
-			else if (arg0.getSource() == logoutButton){
+				break;
+			case"Logout":
 				System.exit(0);
-			}
-			else if (arg0.getSource() == sceneButton){
+				break;
+			case"Scenes":
 				displayScenes();
-			}
-			else if (arg0.getSource() == back){
+				break;
+			case"Back":
 				displayDevices();
+				break;
 			}
 			back.setVisible(false);
+
 		}};
 
 
 		public static void main(String[] args) throws IOException {
 			launch(args);
 		}
-
-
-		public static void getData() throws UnsupportedEncodingException, MalformedURLException, IOException {
-			try{
-				conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/12789F1A7AEAA473339715B3EB28399B54410E/port_3480/data_request?id=user_data&rand=0.3267199413385242
-
-				Reader reader = new InputStreamReader(new URL("http://146.87.65.48:3480/data_request?id=sdata&output_format=json&Devices").openStream(), "UTF-8");			
-				Gson gson = new Gson();
-				//creates a class Data Object Holds 2 arrays: devices and rooms.
-				Data d = gson.fromJson(reader, Data.class);
-				// for every device in the devices array
-				for(JsonElement x : d.getDevices()){
-					// cast the element to an object
-					JsonObject object = x.getAsJsonObject();
-					// put to an object
-					int xa = validateInt(object.get("id").toString());
-					switch(xa){
-					case 11 :
-						FourInOne four = new FourInOne();
-						TemperatureSensor temperaturesensor = gson.fromJson(object, TemperatureSensor.class);
-						HumiditySensor humiditysensor = gson.fromJson(object, HumiditySensor.class);
-						LightSensor lightsensor = gson.fromJson(object, LightSensor.class);
-
-						four = gson.fromJson(object, FourInOne.class);
-
-						four.setHumidity(humiditysensor);
-						four.setLight(lightsensor);
-						four.setTemp(temperaturesensor);
-
-						conn.insertRow(four.readingToSQL());
-
-
-						devices.add(four);
-
-						break;
-					case 9 :
-						DanfossRadiator radiator = new DanfossRadiator();
-						radiator =  gson.fromJson(object, DanfossRadiator.class);
-						conn.insertRow(radiator.readingToSQL());
-						devices.add(radiator);
-						break;
-					case 16 :
-						DataMining datamining = new DataMining();
-						datamining = gson.fromJson(object, DataMining.class);
-						devices.add(datamining);
-						break;
-					case 14 :
-						HumiditySensor humiditySensor = new HumiditySensor();
-						humiditySensor = gson.fromJson(object, HumiditySensor.class);
-						conn.insertRow(humiditySensor.readingToSQL());
-						devices.add(humiditySensor);
-						break;
-					case 13 :
-						LightSensor lightSensor = new LightSensor();
-						lightSensor = gson.fromJson(object, LightSensor.class);
-						conn.insertRow(lightSensor.readingToSQL());
-						devices.add(lightSensor);
-						break;
-					case 12 :
-						TemperatureSensor temperatureSensor = new TemperatureSensor();
-						temperatureSensor = gson.fromJson(object, TemperatureSensor.class);
-						conn.insertRow(temperatureSensor.readingToSQL());
-						devices.add(temperatureSensor);
-						break;       			
-					}
-				}
-
-				// creates rooms and search through the devices and adds the correct device to the correct room.
-
-				for(JsonElement rooms : d.getRooms()){
-					JsonObject object = rooms.getAsJsonObject();
-					Room room = gson.fromJson(object, Room.class);
-					roomList.add(room);
-					for(Device device : devices){
-						if(device.getRoom() == room.getId()){
-							room.addDeviceToRoom(device);
-						}
-					}
-				}
-			}catch (SocketException se){
-				System.out.println("You are not connected to the internet");
-			}
-
-		}
-
 
 		public Pane createPane(Device device){
 			Pane pane = new Pane();
@@ -232,7 +150,6 @@ public class VeraGUI extends Application{
 
 		@Override
 		public void start(Stage stage) throws Exception {
-			getData();
 
 			stage.setTitle("Vera Box");
 			root = new Pane();
@@ -316,10 +233,6 @@ public class VeraGUI extends Application{
 
 			stage.show();
 
-			Timer timer = new Timer();
-			timer.schedule(new ReadingTimer(), 0, 360000);
-
-
 		}
 
 		public void displayDevices(){	
@@ -367,12 +280,25 @@ public class VeraGUI extends Application{
 					vb.setLayoutY(-new_val.doubleValue()+sortingPane.getPrefHeight());
 				}
 			});
-
-			for(Device device: devices){
-				vb.getChildren().add(createPane(device));
-			}
-
-			display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
+			
+			Test test = new Test();
+			ArrayList<Device> devices = test.run();
+		  	for(Device device: devices){
+		  		System.out.println(device.getDetails());
+		  		vb.getChildren().add(createPane(device));
+		  	}
+		  	display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
+			
+//			try {
+//				for(Device device: JsonToJava.getData()){
+//					vb.getChildren().add(createPane(device));
+//				}
+//
+//				display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+			
 		}
 		public void displayAccountInfo(){
 
@@ -382,15 +308,6 @@ public class VeraGUI extends Application{
 		}
 		public void displayScenes(){
 
-		}
-
-		public static int validateInt(String string){
-			if(string.matches("[0-9]*")){
-				return Integer.parseInt(string);
-			}else{
-				string = string.replaceAll("\\D+","");
-				return Integer.parseInt(string);
-			}
 		}
 
 		public void showDeviceDetails(Rectangle image){
@@ -430,6 +347,7 @@ public class VeraGUI extends Application{
 
 			System.out.println(device.readingFromSQL());
 			try {
+				ArrayList<Integer> tempArray = new ArrayList<Integer>();
 				ResultSet results = conn.getRows(device.readingFromSQL());
 				System.out.println(results);
 				while (results.next())
@@ -458,10 +376,4 @@ public class VeraGUI extends Application{
 
 			display.getChildren().addAll(image,text);
 		}
-
-		public ArrayList<Integer> getArray()
-		{
-			return tempArray;
-		}
-
 }

@@ -41,7 +41,7 @@ public class JsonToJava {
 	}
 	
 	
-	public static void getData() throws UnsupportedEncodingException, MalformedURLException, IOException {
+	public static ArrayList<Device> getData() throws UnsupportedEncodingException, MalformedURLException, IOException {
 		try{
 			conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/016BBB17C64CC3B95EF174BDA508B777CE8E16/port_3480/data_request?id=user_data&rand=0.9910120870918036
 			System.out.println("Attempting url");
@@ -122,6 +122,7 @@ public class JsonToJava {
 		}catch (SocketException se){
 			System.out.println("You are not connected to the internet");
 		}
+		return devices;
 	}
 
 	public static int validateInt(String string){
@@ -131,9 +132,6 @@ public class JsonToJava {
 			string = string.replaceAll("\\D+","");
 			return Integer.parseInt(string);
 		}
-	}
-	public static ArrayList<Device> getDevices(){
-		return devices;
 	}
 }
 

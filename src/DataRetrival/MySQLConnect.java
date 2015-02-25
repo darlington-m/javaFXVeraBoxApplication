@@ -48,6 +48,7 @@ public class MySQLConnect {
 	}
 
 	public ResultSet getRows(String sql) throws SQLException {
+		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		stmt = conn.createStatement();
 		resultSet = stmt.executeQuery(sql);
 		return resultSet;
