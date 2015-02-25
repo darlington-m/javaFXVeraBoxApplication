@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 public class Charts {
 
 
-	String test = "test1";
+	String type = "test";
 	
 
 	//chart stuff
@@ -28,9 +28,10 @@ public class Charts {
 	Device device;
 
 	ArrayList<Integer> array;
-	public Charts(ArrayList<Integer> tempArray, Device device){
+	public Charts(ArrayList<Integer> tempArray, Device device, String type){
 		this.array = tempArray;
 		this.device = device;
+		this.type = type;
 	}
 	
 	public void show(Pane pane) 
@@ -40,7 +41,7 @@ public class Charts {
 		xAxis.setLabel("The time in which the reading was recorded");
 		yAxis.setLabel("Whatever measurement you're reading in");
 		
-		if(test.equalsIgnoreCase("test"))
+		if(type.equalsIgnoreCase("Bar Chart"))
 		{
 			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis);
 			barChart.setId("BarChart");
@@ -60,7 +61,7 @@ public class Charts {
 			pane.getChildren().add(barChart);
 		//	scene = new Scene(barChart, 800, 600);
 		}
-		else if(test.equalsIgnoreCase("test1"))
+		else if(type.equalsIgnoreCase("Line Chart"))
 		{
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis);
 			lineChart.setId("BarChart");

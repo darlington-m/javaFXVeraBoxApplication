@@ -1,18 +1,12 @@
 package GUI;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -26,9 +20,10 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -39,33 +34,25 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import DataRetrival.JsonToJava;
 import DataRetrival.MySQLConnect;
-import DataRetrival.ReadingTimer;
-import Devices.DanfossRadiator;
-import Devices.Data;
-import Devices.DataMining;
 import Devices.Device;
 import Devices.FourInOne;
-import Devices.HumiditySensor;
-import Devices.LightSensor;
-import Devices.Room;
 import Devices.Sensor;
-import Devices.TemperatureSensor;
 import Graphs.Charts;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 
 public class VeraGUI extends Application{
 
 	MySQLConnect conn = new MySQLConnect();
 
-	Scene scene;
-	Pane root, display;
-	Button dashboardButton, settingsButton,accountButton,logoutButton,sceneButton,back;
+	private Scene scene;
+	private Pane root, display;
+	private Button firstButton, secondButton,thirdButton,fourthButton,fifthButton,sixthButton;
+	private DatePicker compareTo, compareFrom, secondCompareTo, secondCompareFrom;
+	private VBox sideButtons;
+	private RadioButton compareone;
+	private ChoiceBox<String> graphType;
+	ArrayList<Integer> tempArray = new ArrayList<Integer>();
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>(){
 
@@ -94,10 +81,35 @@ public class VeraGUI extends Application{
 				displayDevices();
 				break;
 			}
-			back.setVisible(false);
-
+			sixthButton.setVisible(false);
 		}};
+	
+	EventHandler<ActionEvent> detailButtonHandler = new EventHandler<ActionEvent>(){
 
+		@Override
+		public void handle(ActionEvent event) {
+			switch(((Button) event.getSource()).getText()){
+			case"Compare":
+				VBox dropdown = new  VBox(5);
+				dropdown.setId("dropdown");
+				Label compareLabel = new Label("Compare From");
+				Label compareToLabel = new Label("Compare To");
+				dropdown.getChildren().addAll(compareLabel, compareFrom,compareToLabel, compareTo);
+				sideButtons.getChildren().add(1,dropdown);
+				
+				VBox dropdown2 = new VBox(5);
+				dropdown.setId("dropdown");
+				Label compareLabel2 = new Label("Compare From");
+				HBox label = new HBox(15);
+				label.getChildren().addAll(compareLabel2, compareone);
+				Label compareToLabel2 = new Label("Compare To");
+				dropdown.getChildren().addAll(label,secondCompareFrom,compareToLabel2,secondCompareTo);
+				sideButtons.getChildren().add(2,dropdown2);
+				break;
+			}
+		}
+		
+	};
 
 		public static void main(String[] args) throws IOException {
 			launch(args);
@@ -118,6 +130,7 @@ public class VeraGUI extends Application{
 				@Override
 				public void handle(MouseEvent arg0) {
 					showDeviceDetails(image);
+					changeButtons();
 				}});
 
 			Label name = new Label(device.getName());
@@ -147,7 +160,6 @@ public class VeraGUI extends Application{
 
 		}
 
-
 		@Override
 		public void start(Stage stage) throws Exception {
 
@@ -167,31 +179,37 @@ public class VeraGUI extends Application{
 			image.setLayoutX(20);
 			image.setLayoutY(30);
 
-			VBox vBox = new VBox(0);
-			vBox.setLayoutY((image.getLayoutY()+image.getImage().getHeight()) + 10);
-			vBox.setStyle("-fx-padding: 30px 0 0 0");
+			sideButtons = new VBox(0);
+			sideButtons.setLayoutY((image.getLayoutY()+image.getImage().getHeight()) + 10);
+			sideButtons.setStyle("-fx-padding: 30px 0 0 0");
 
-			dashboardButton = new Button("Dashboard");
-			dashboardButton.setOnAction(buttonHandler);
+			firstButton = new Button("Dashboard");
+			firstButton.setOnAction(buttonHandler);
+			firstButton.setId("sideButton");
 
-			settingsButton = new Button("Settings");
-			settingsButton.setOnAction(buttonHandler);
+			secondButton = new Button("Settings");
+			secondButton.setOnAction(buttonHandler);
+			secondButton.setId("sideButton");
 
-			accountButton = new Button("Account Info");
-			accountButton.setOnAction(buttonHandler);
+			thirdButton = new Button("Account Info");
+			thirdButton.setOnAction(buttonHandler);
+			thirdButton.setId("sideButton");
 
-			sceneButton = new Button("Scenes");
-			sceneButton.setOnAction(buttonHandler);
+			fourthButton = new Button("Logout");
+			fourthButton.setOnAction(buttonHandler);
+			fourthButton.setId("sideButton");
+			
+			fifthButton = new Button("Scenes");
+			fifthButton.setOnAction(buttonHandler);
+			fifthButton.setId("sideButton");
 
-			logoutButton = new Button("Logout");
-			logoutButton.setOnAction(buttonHandler);
+			sixthButton = new Button("Back");
+			sixthButton.setOnAction(buttonHandler);
+			sixthButton.setVisible(false);
+			sixthButton.setId("sideButton");
 
-			back = new Button("Back");
-			back.setOnAction(buttonHandler);
-			back.setVisible(false);
-
-			vBox.getChildren().addAll(dashboardButton,sceneButton,accountButton,settingsButton,logoutButton,back);
-			sideDisplay.getChildren().addAll(vBox,image);
+			sideButtons.getChildren().addAll(firstButton,fifthButton,thirdButton,secondButton,fourthButton,sixthButton);
+			sideDisplay.getChildren().addAll(sideButtons,image);
 
 			Pane topDisplay = new Pane();
 			topDisplay.setLayoutX(sideDisplay.getPrefWidth());
@@ -227,10 +245,43 @@ public class VeraGUI extends Application{
 			display.setLayoutY(topDisplay.getPrefHeight());  	
 			root.getChildren().addAll(display,sideDisplay,topDisplay);
 
-
-			back.setLayoutX(400);
-			back.setLayoutY(400);
-
+			sixthButton.setLayoutX(400);
+			sixthButton.setLayoutY(400);
+			
+			compareTo = new DatePicker();
+			compareFrom = new DatePicker();
+			compareTo.setValue(LocalDate.now());
+			compareFrom.setValue(compareTo.getValue().minusDays(1));
+			compareTo.setId("datePicker");
+			compareFrom.setId("datePicker");
+			
+			secondCompareTo = new DatePicker();
+			secondCompareFrom = new DatePicker();
+			secondCompareTo.setValue(LocalDate.now());
+			secondCompareFrom.setValue(secondCompareTo.getValue().minusDays(1));
+			secondCompareTo.setId("datePicker");
+			secondCompareFrom.setId("datePicker");
+			secondCompareTo.setDisable(true);
+			secondCompareFrom.setDisable(true);
+			
+			//ToggleGroup group = new ToggleGroup();
+			compareone = new RadioButton("Enabled");
+			compareone.setOnAction(new EventHandler<ActionEvent>(){
+				@Override
+				public void handle(ActionEvent arg0) {
+					if(((RadioButton)arg0.getSource()).isSelected()){
+						secondCompareTo.setDisable(false);
+						secondCompareFrom.setDisable(false);
+					}else{
+						secondCompareTo.setDisable(true);
+						secondCompareFrom.setDisable(true);
+					}
+				}});			
+			graphType = new ChoiceBox<String>();
+			graphType.getItems().addAll("Line Chart", "Bar Chart");
+			graphType.setLayoutX(600);
+			graphType.setLayoutY(20);
+			
 			stage.show();
 
 		}
@@ -300,21 +351,49 @@ public class VeraGUI extends Application{
 //			}
 			
 		}
+		
 		public void displayAccountInfo(){
 
 		}
+		
 		public void displaySettings(){
 
 		}
-		public void displayScenes(){
+		
+		private void displayScenes(){
 
 		}
 
-		public void showDeviceDetails(Rectangle image){
-			display.getChildren().clear();
-			back.setVisible(true);
+		private void changeButtons(){
+			if(firstButton.getText().equals("Dashboard")){
+				firstButton.setText("Compare");
+				firstButton.setOnAction(detailButtonHandler);
+			}else{
+				firstButton.setText("Dashboard");
+				firstButton.setOnAction(buttonHandler);
 
-			Device device = (Device)image.getUserData();
+				secondButton.setText("Settings");
+				secondButton.setOnAction(buttonHandler);
+
+				thirdButton.setText("Account Info");
+				thirdButton.setOnAction(buttonHandler);
+
+				fourthButton.setText("Logout");
+				fourthButton.setOnAction(buttonHandler);
+				
+				fifthButton.setText("Scenes");
+				fifthButton.setOnAction(buttonHandler);
+
+				sixthButton.setText("Back");
+				sixthButton.setOnAction(buttonHandler);
+			}
+		}
+		
+		private void showDeviceDetails(Rectangle image){
+			display.getChildren().clear();
+			sixthButton.setVisible(true);
+				
+			final Device device = (Device)image.getUserData();
 			Label text = new Label(((Device) device).getName());
 			text.setId("WelcomeMessage");
 			text.setId("deviceDetails");
@@ -347,7 +426,7 @@ public class VeraGUI extends Application{
 
 			System.out.println(device.readingFromSQL());
 			try {
-				ArrayList<Integer> tempArray = new ArrayList<Integer>();
+				tempArray = new ArrayList<Integer>();
 				ResultSet results = conn.getRows(device.readingFromSQL());
 				System.out.println(results);
 				while (results.next())
@@ -360,8 +439,8 @@ public class VeraGUI extends Application{
 					}
 
 				}
-
-				Charts chart = new Charts(tempArray, device);
+				display.getChildren().addAll(image,text,graphType);
+				Charts chart = new Charts(tempArray, device,"Line Chart");
 				chart.show(display);
 			} 
 			catch (SQLException e1) 
@@ -374,6 +453,13 @@ public class VeraGUI extends Application{
 				e.printStackTrace();
 			}
 
-			display.getChildren().addAll(image,text);
+			graphType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
+				public void changed(ObservableValue<? extends String> source, String oldValue, String newValue){
+					display.getChildren().remove(display.getChildren().size()-1); // removes old graph 
+					Charts chart = new Charts(tempArray, device,newValue);
+					chart.show(display);
+					
+				}
+			});			
 		}
 }
