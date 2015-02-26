@@ -1,4 +1,4 @@
-.button  {
+#sideButton  {
 -fx-font-weight: bold;
 -fx-background-color: #F4F4F4;
 -fx-pref-width: 200px;
@@ -8,7 +8,7 @@
 -fx-border-color:black;
 }
 
-.button:hover {
+#sideButton:hover {
 -fx-background-color: #12805C;
 -fx-text-fill: white;
 }
@@ -69,4 +69,51 @@
 #deviceDetails{
 -fx-text-fill: #12805C;
 -fx-font-size:  20px;
+}
+
+#datePicker{
+-fx-pref-width: 170px;
+-fx-pref-height: 25px;
+}
+
+#dropdown{
+-fx-padding: 10px 0 20px 10px;
+-fx-border-width: 0 0 1px 0;
+-fx-border-color:black;
+}
+
+#ViewTypeBox{
+-fx-border-color: #F4F4F4;
+-fx-border-width: 3px;
+}
+
+#SmallText{
+-fx-font-size:15px;
+-fx-text-fill: #12805C;
+}
+
+.chart-series-line{
+-fx-stroke-width: 2px;
+-fx-effect: null;
+}
+
+.default-color0.chart-series-line {
+-fx-stroke: #66CD00;
+}
+.default-color1.chart-series-line {
+-fx-stroke: #00AF33;
+}
+
+
+.default-color0.chart-line-symbol {
+-fx-background-color: #66CD00, white;
+}
+.default-color1.chart-line-symbol{
+-fx-background-color: #00AF33, white;
+}
+.default-color0.chart-bar {
+-fx-background-color: #66CD00;
+}
+.default-color1.chart-bar{
+-fx-background-color: #00AF33;
 }

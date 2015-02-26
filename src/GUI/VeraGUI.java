@@ -52,7 +52,9 @@ public class VeraGUI extends Application{
 	private VBox sideButtons;
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
-	ArrayList<Integer> tempArray = new ArrayList<Integer>();
+	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
+	private int compare2 = 0;
+	private Rectangle tempImage = null;
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>(){
 
@@ -88,24 +90,24 @@ public class VeraGUI extends Application{
 
 		@Override
 		public void handle(ActionEvent event) {
-			switch(((Button) event.getSource()).getText()){
-			case"Compare":
-				VBox dropdown = new  VBox(5);
-				dropdown.setId("dropdown");
-				Label compareLabel = new Label("Compare From");
-				Label compareToLabel = new Label("Compare To");
-				dropdown.getChildren().addAll(compareLabel, compareFrom,compareToLabel, compareTo);
-				sideButtons.getChildren().add(1,dropdown);
-				
-				VBox dropdown2 = new VBox(5);
-				dropdown.setId("dropdown");
-				Label compareLabel2 = new Label("Compare From");
-				HBox label = new HBox(15);
-				label.getChildren().addAll(compareLabel2, compareone);
-				Label compareToLabel2 = new Label("Compare To");
-				dropdown.getChildren().addAll(label,secondCompareFrom,compareToLabel2,secondCompareTo);
-				sideButtons.getChildren().add(2,dropdown2);
-				break;
+			if(compare2 == 0)
+			{
+					VBox dropdown = new  VBox(5);
+					dropdown.setId("dropdown");
+					Label compareLabel = new Label("Compare From");
+					Label compareToLabel = new Label("Compare To");
+					dropdown.getChildren().addAll(compareLabel, compareFrom,compareToLabel, compareTo);
+					sideButtons.getChildren().add(1,dropdown);
+					
+					VBox dropdown2 = new VBox(5);
+					dropdown.setId("dropdown");
+					Label compareLabel2 = new Label("Compare From");
+					HBox label = new HBox(15);
+					label.getChildren().addAll(compareLabel2, compareone);
+					Label compareToLabel2 = new Label("Compare To");
+					dropdown.getChildren().addAll(label,secondCompareFrom,compareToLabel2,secondCompareTo);
+					sideButtons.getChildren().add(2,dropdown2);
+					compare2++;
 			}
 		}
 		
@@ -177,11 +179,12 @@ public class VeraGUI extends Application{
 
 			ImageView image = new ImageView(new Image(VeraGUI.class.getResource("/Resources/oem_logo.png").toExternalForm()));
 			image.setLayoutX(20);
-			image.setLayoutY(30);
+			image.setLayoutY(13);
+			image.setId("logo");
 
 			sideButtons = new VBox(0);
-			sideButtons.setLayoutY((image.getLayoutY()+image.getImage().getHeight()) + 10);
-			sideButtons.setStyle("-fx-padding: 30px 0 0 0");
+			sideButtons.setLayoutY((image.getLayoutY()+image.getImage().getHeight())-15);
+			sideButtons.setStyle("-fx-padding: 15px 0 0 0");
 
 			firstButton = new Button("Dashboard");
 			firstButton.setOnAction(buttonHandler);
@@ -392,7 +395,8 @@ public class VeraGUI extends Application{
 		private void showDeviceDetails(Rectangle image){
 			display.getChildren().clear();
 			sixthButton.setVisible(true);
-				
+			tempImage =  image;
+			
 			final Device device = (Device)image.getUserData();
 			Label text = new Label(((Device) device).getName());
 			text.setId("WelcomeMessage");
@@ -460,6 +464,7 @@ public class VeraGUI extends Application{
 					chart.show(display);
 					
 				}
-			});			
+			});	
+			
 		}
 }
