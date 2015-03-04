@@ -1,6 +1,9 @@
 package Devices;
 import java.util.Date;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+
 public class HumiditySensor extends Device implements Sensor{
     private int humidityReading;
     public HumiditySensor(){
@@ -28,5 +31,13 @@ public class HumiditySensor extends Device implements Sensor{
     @Override
     public String getDetails(){
     	return super.getDetails() + "\nHumidity: " + humidityReading;
+    }
+    public Pane getPane(){
+    	Pane pane = super.getPane();
+		Label reading = new Label("Reading: " + getReading());
+		reading.setLayoutX(200);
+		reading.setLayoutY(100);
+		pane.getChildren().addAll(reading);
+		return pane;
     }
 }

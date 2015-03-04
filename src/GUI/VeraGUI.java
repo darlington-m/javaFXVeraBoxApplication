@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.List;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Iterator;
+import java.util.Collections;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -20,7 +19,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -34,14 +32,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
-import Devices.FourInOne;
-import Devices.Sensor;
 import Graphs.Charts;
 
 
@@ -51,24 +45,19 @@ public class VeraGUI extends Application{
 
 	private Scene scene;
 	private Pane root, display;
-	private Button firstButton, secondButton,thirdButton,fourthButton,fifthButton,sixthButton;
 	private DatePicker compareTo, compareFrom, secondCompareTo, secondCompareFrom;
 	private VBox sideButtons;
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
 	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
 
-	
 	ArrayList<Button> buttons = new ArrayList<Button>();
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			display.getChildren().clear();
-
 			switch(((Button) arg0.getSource()).getText()){
-
 			case"Dashboard":
 				displayDevices();
 				break;
@@ -85,77 +74,25 @@ public class VeraGUI extends Application{
 				displayScenes();
 				break;
 			case"Compare":
-				if(sideButtons.getChildren().get(1) instanceof VBox )
-				{
+				if(sideButtons.getChildren().get(1) instanceof VBox ){
 					 changeButtons("details");
-					 Iterator it = sideButtons.getChildren().iterator();
-					 while(it.hasNext()){
-						 Node item = (Node)it.next();
-						 if(item instanceof VBox){
-							 System.out.println("removed");
-							 it.remove();
-						 }
-					 }
-				}
-				else {
+				}else{
 					changeButtons("compare");
 				}
 				break;
 			case"Back":
 				displayDevices();
 				break;
+			case"Download CSV":
+				System.out.println("Do CSV File");
+				System.out.println("Date 1:" + compareTo.getValue() + "\n Date 2:" + compareFrom.getValue());
+				break;
 			}
-			sixthButton.setVisible(false);
 		}};
 
 
 			public static void main(String[] args) throws IOException {
 				launch(args);
-			}
-
-			public Pane createPane(Device device){
-				Pane pane = new Pane();
-				pane.setId("devices");
-				pane.setPrefSize(600,200);
-
-				final Rectangle image = new Rectangle(100,100);
-				image.setUserData(device);
-				image.setFill(new ImagePattern(new Image(VeraGUI.class.getResource("/Resources/"+ device.getImage()).toExternalForm())));
-				image.setLayoutX(30);
-				image.setLayoutY(30);
-				pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
-
-					@Override
-					public void handle(MouseEvent arg0) {
-						showDeviceDetails(image);
-						changeButtons("details");
-					}});
-
-				Label name = new Label(device.getName());
-				name.setId("DeviceName");
-				name.setLayoutX(200);
-				name.setLayoutY(20);
-				if(device instanceof FourInOne){
-					Label light = new Label("Reading: " + ((FourInOne)device).getLightSensor().getLight());
-					light.setLayoutY(75);
-					light.setLayoutX(200);
-					Label temp = new Label("Reading: " + ((FourInOne)device).getTemperatureSensor().getReading());
-					temp.setLayoutY(100);
-					temp.setLayoutX(200);
-					Label  humidity = new Label("Reading: " + ((FourInOne)device).getHumiditySensor().getReading());
-					humidity.setLayoutY(125);
-					humidity.setLayoutX(200);
-					pane.getChildren().addAll(image,name,light,temp,humidity);
-					return pane;
-				}
-				else{
-					Label reading = new Label("Reading: " + ((Sensor) device).getReading());
-					reading.setLayoutX(200);
-					reading.setLayoutY(100);
-					pane.getChildren().addAll(image,name,reading);
-					return pane;
-				}
-
 			}
 
 			@Override
@@ -179,31 +116,18 @@ public class VeraGUI extends Application{
 				image.setId("logo");
 
 				sideButtons = new VBox(0);
-				sideButtons.setLayoutY((image.getLayoutY()+image.getImage().getHeight())-15);
+				sideButtons.setLayoutY((image.getLayoutY()+image.getImage().getHeight())-5);
 				sideButtons.setStyle("-fx-padding: 15px 0 0 0");
 
-
-				firstButton = new Button();
-				buttons.add(firstButton);
-				secondButton = new Button();
-				buttons.add(secondButton);
-				thirdButton = new Button();
-				buttons.add(thirdButton);
-				fourthButton = new Button();
-				buttons.add(fourthButton);
-				fifthButton = new Button();
-				buttons.add(fifthButton);
-				sixthButton = new Button();
-				buttons.add(sixthButton);
-				
-				changeButtons("mainMenu");
-				
-				for(Button button: buttons){
+				for(int x=0; x<6; x++){
+					Button button = new Button();
+					buttons.add(button);
 					button.setId("sideButton");
 					button.setOnAction(buttonHandler);
 				}
-
-				sideButtons.getChildren().addAll(firstButton,fifthButton,thirdButton,secondButton,fourthButton,sixthButton);
+							
+				changeButtons("mainMenu");				
+				
 				sideDisplay.getChildren().addAll(sideButtons,image);
 
 				Pane topDisplay = new Pane();
@@ -240,15 +164,24 @@ public class VeraGUI extends Application{
 				display.setLayoutY(topDisplay.getPrefHeight());  	
 				root.getChildren().addAll(display,sideDisplay,topDisplay);
 
-				sixthButton.setLayoutX(400);
-				sixthButton.setLayoutY(400);
-
 				compareTo = new DatePicker();
 				compareFrom = new DatePicker();
 				compareTo.setValue(LocalDate.now());
 				compareFrom.setValue(compareTo.getValue().minusDays(1));
 				compareTo.setId("datePicker");
 				compareFrom.setId("datePicker");
+				compareTo.valueProperty().addListener(new ChangeListener<LocalDate>(){
+
+					@Override
+					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
+						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
+					}});
+				compareFrom.valueProperty().addListener(new ChangeListener<LocalDate>(){
+
+					@Override
+					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
+						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
+					}});
 
 				secondCompareTo = new DatePicker();
 				secondCompareFrom = new DatePicker();
@@ -258,6 +191,18 @@ public class VeraGUI extends Application{
 				secondCompareFrom.setId("datePicker");
 				secondCompareTo.setDisable(true);
 				secondCompareFrom.setDisable(true);
+				secondCompareTo.valueProperty().addListener(new ChangeListener<LocalDate>(){
+
+					@Override
+					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
+						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
+					}});
+				secondCompareFrom.valueProperty().addListener(new ChangeListener<LocalDate>(){
+
+					@Override
+					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
+						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
+					}});
 
 				//ToggleGroup group = new ToggleGroup();
 				compareone = new RadioButton("Enabled");
@@ -276,6 +221,8 @@ public class VeraGUI extends Application{
 				graphType.getItems().addAll("Line Chart", "Bar Chart");
 				graphType.setLayoutX(600);
 				graphType.setLayoutY(20);
+
+				
 
 				stage.show();
 
@@ -325,19 +272,36 @@ public class VeraGUI extends Application{
 					public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 						vb.setLayoutY(-new_val.doubleValue()+sortingPane.getPrefHeight());
 					}
-				});
-
+				});	
+	// TESTING DOESNT ADD TO DATABASE CAN BE RAN FROM HOME			
 				Test test = new Test();
 				ArrayList<Device> devices = test.run();
-				for(Device device: devices){
+				for(final Device device: devices){
+					Pane pane = device.getPane();
 					System.out.println(device.getDetails());
-					vb.getChildren().add(createPane(device));
+					pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
+
+						@Override
+						public void handle(MouseEvent arg0) {
+							showDeviceDetails(device);
+							changeButtons("details");
+						}});
+					vb.getChildren().add(pane);
 				}
 				display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
-
+	// END OF TESTING
+				
+	// UN COMMENT WHEN ADDING TO DB AND ABLE TO GET DATA
 				//			try {
 				//				for(Device device: JsonToJava.getData()){
-				//					vb.getChildren().add(createPane(device));
+				//					Pane pane = device.getPane();
+				//					pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
+				//						@Override
+				//						public void handle(MouseEvent arg0) {
+				//							showDeviceDetails(device);
+				//							changeButtons("details");
+				//						}});
+				//					vb.getChildren().add(device.getPane());
 				//				}
 				//
 				//				display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
@@ -360,100 +324,70 @@ public class VeraGUI extends Application{
 			}
 
 			private void changeButtons(String name){
+				sideButtons.getChildren().clear();
 				java.util.List<String> names = new ArrayList<String>();
-				int x = 0;
-			// if List<String> isnt specific enough:
 				switch(name){
 				case"mainMenu":
 					String[] words = {"Dashboard", "Settings", "Account Info", "Scenes", "Logout"};	
 					names = Arrays.<String>asList(words);
 					break;
 				case"details":
-					
-					String[] words2 = {"Compare", "Back", "Logout"};	
+					String[] words2 = {"Compare", "Download CSV", "Back", "Logout"};	
 					names = Arrays.<String>asList(words2);
-					
 					break;
 				case"compare":
 					
-					String[] words3 = {"Compare", "Back", "Logout"};	
+					String[] words3 = {"Compare", "Download CSV", "Back", "Logout"};	
 					names = Arrays.<String>asList(words3);
 					
-					VBox dropdown = new  VBox(5), dropdown2 = new  VBox(5);
+					VBox dropdown = new  VBox(5);
 					dropdown.setId("dropdown");
+					sideButtons.getChildren().add(dropdown);
 					Label compareLabel = new Label("Compare From");
 					Label compareToLabel = new Label("Compare To");
-					dropdown.getChildren().addAll(compareLabel, compareFrom,compareToLabel, compareTo);
-					sideButtons.getChildren().add(1,dropdown);
-					//VBox dropdown2 = new VBox(5);
-					dropdown.setId("dropdown");
 					Label compareLabel2 = new Label("Compare From");
-					HBox label = new HBox(15);
-					label.getChildren().addAll(compareLabel2, compareone);
 					Label compareToLabel2 = new Label("Compare To");
-					dropdown.getChildren().addAll(label,secondCompareFrom,compareToLabel2,secondCompareTo);
-					sideButtons.getChildren().add(1,dropdown2);
-					break;
-				
+					HBox label = new HBox(15);// this adds the enable button
+					label.getChildren().addAll(compareLabel2, compareone);
+					dropdown.getChildren().addAll(compareLabel,compareFrom,compareToLabel, compareTo,
+												label,secondCompareFrom,compareToLabel2,secondCompareTo);
+					break;				
 				}
+				int x=0;
 				for(Button button : buttons){
 					try{
 						button.setText(names.get(x));
 						button.setId("sideButton");
 						button.setOnAction(buttonHandler);
+						if(name.equals("compare") && x==0){
+							sideButtons.getChildren().add(0,button);		
+						}else{
+							sideButtons.getChildren().add(button);
+						}
 					}catch(Exception e){
 						button.setVisible(false);
 					}
-					
 					x++;
 				}
-				
 			}
 
-			private void showDeviceDetails(Rectangle image){
+			private void showDeviceDetails(final Device device){
 				display.getChildren().clear();
-				sixthButton.setVisible(true);
+				
+				Button download = new Button("Download CSV");
+				download.setOnAction(buttonHandler);
+				download.setId("downloadButton");
+				download.setLayoutX(400);
+				download.setLayoutY(40);
+				display.getChildren().addAll(graphType,download); // adds the dropdownbox for selecting different grpahs
 
-
-				final Device device = (Device)image.getUserData();
-				Label text = new Label(((Device) device).getName());
-				text.setId("WelcomeMessage");
-				text.setId("deviceDetails");
-				image.setLayoutX(50);
-				image.setLayoutY(30);
-
-				text.setLayoutX(300);
-				text.setLayoutY(5);
-				System.out.println(device.getId());
-				int rowStuff = device.getId();
-				String rowGet = null;
-				switch(rowStuff)
-				{
-				case 9 : 
-					rowGet = "heat";
-					break;
-				case 12 : 
-					rowGet = "temperature";
-					break;
-				case 13 : 
-					rowGet = "light";
-					break;
-				case 14 : 
-					rowGet = "humidity";
-					break;
-				case 11 : 
-					rowGet = "4in1huehuehue";
-					break;
-				}
-
-				System.out.println(device.readingFromSQL());
 				try {
 					tempArray = new ArrayList<Integer>();
 					ResultSet results = conn.getRows(device.readingFromSQL());
-					System.out.println(results);
+					System.out.println(device.readingFromSQL());
 					while (results.next())
 					{
-						String temp = results.getString(rowGet);
+						String temp = results.getString(device.getReadingName());
 						if(!(temp == null))
 						{
 							int temp2 =  Integer.parseInt(temp);
@@ -461,20 +395,18 @@ public class VeraGUI extends Application{
 						}
 
 					}
-					display.getChildren().addAll(image,text,graphType);
+					display.getChildren().addAll(device.showDeviceDetails().getChildren());
 					Charts chart = new Charts(tempArray, device,"Line Chart");
 					chart.show(display);
 				} 
 				catch (SQLException e1) 
 				{
-
+					Label warning = new Label("Sorry No Graph Data Available");
+					warning.setLayoutX(300);
+					warning.setLayoutY(400);
+					display.getChildren().add(warning);
 				}
-				try {
-					conn.getRows(device.readingFromSQL());
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
+				// this adds a change listener to the drop down box and creates a new graph when you select one.
 				graphType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
 					public void changed(ObservableValue<? extends String> source, String oldValue, String newValue){
 						display.getChildren().remove(display.getChildren().size()-1); // removes old graph 
@@ -482,9 +414,11 @@ public class VeraGUI extends Application{
 						chart.show(display);
 
 					}
-				});	
-
+				});
 			}
 			
+			public void getGraph(LocalDate from, LocalDate to){
+				
+			}
 
 }

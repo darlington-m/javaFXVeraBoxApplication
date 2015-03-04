@@ -1,20 +1,34 @@
 package Devices;
 import java.util.Date;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+
 public class LightSensor extends Device implements Sensor{
     private String light;
     
     public LightSensor(){
-        super.setImage("bulb.png");
+        image = "bulb.png";
+        readingName = "light";
     }
     @Override
     public int getReading(){    	
-        return 0;
+        return Integer.parseInt(light);
     }
     @Override
     public String readingToSQL() {
     	System.out.println(light);
-        return new String("INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, light) VALUES ('" + new Date() + "', '" + getName() + "', '"  + getId() + "',  '"  + getAltid() + "',  '"  + getCategory() + "',  '"  + getSubcategory() + "',  '"  + getRoom() + "',  '"  +getParent() + "',  '"  +getLight()  +  "')");
+        return new String("INSERT INTO Reading"
+        + "(reading_date, reading_device_name, id, altid, category, subcategory, room, parent, light) VALUES ('" 
+    	+ new Date()
+        + "', '" + getName()
+        + "', '"  + getId()
+        + "',  '"  + getAltid()
+        + "',  '"  + getCategory()
+        + "',  '"  + getSubcategory()
+        + "',  '"  + getRoom()
+        + "',  '"  +getParent()
+        + "',  '"  +getReading()+  "')");
     }
     
 	@Override
@@ -26,11 +40,16 @@ public class LightSensor extends Device implements Sensor{
     public String toString(){
     	return super.toString() + " Light: " + light + "Image: " + super.getImage();
     }
-    public int getLight(){
-    	return 0;
-    }
     @Override
     public String getDetails(){
     	return super.getDetails() + "\nLight: " + light;
+    }
+    public Pane getPane(){
+    	Pane pane = super.getPane();
+		Label reading = new Label("Reading: " + getReading());
+		reading.setLayoutX(200);
+		reading.setLayoutY(100);
+		pane.getChildren().addAll(reading);
+		return pane;
     }
 }

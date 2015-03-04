@@ -1,5 +1,8 @@
 package Devices;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+
 public class FourInOne extends Device {
 
 	int batterylevel;
@@ -80,5 +83,19 @@ public class FourInOne extends Device {
 
 	public void setHumiditySensor(HumiditySensor humiditySensor) {
 		this.humiditySensor = humiditySensor;
+	}
+	public Pane getPane(){
+		Pane pane = super.getPane();
+		Label light = new Label("Reading: " + getLightSensor().getReading());
+		light.setLayoutY(75);
+		light.setLayoutX(200);
+		Label temp = new Label("Reading: " + getTemperatureSensor().getReading());
+		temp.setLayoutY(100);
+		temp.setLayoutX(200);
+		Label  humidity = new Label("Reading: " + getHumiditySensor().getReading());
+		humidity.setLayoutY(125);
+		humidity.setLayoutX(200);
+		pane.getChildren().addAll(light,temp,humidity);
+		return pane;
 	}
 }

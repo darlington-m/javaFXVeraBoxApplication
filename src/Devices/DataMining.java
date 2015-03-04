@@ -1,5 +1,8 @@
 package Devices;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+
 
 public class DataMining extends Device implements Sensor{
 	
@@ -27,4 +30,17 @@ public class DataMining extends Device implements Sensor{
     public String getDetails(){
     	return super.getDetails() + "\nCHCNT: " + chcnt;
     }
+    public Pane getPane(){
+    	Pane pane = super.getPane();
+		Label reading = new Label("Reading: " + getReading());
+		reading.setLayoutX(200);
+		reading.setLayoutY(100);
+		pane.getChildren().addAll(reading);
+		return pane;
+    }
+
+	@Override
+	public String readingFromSQL() {
+		return null;
+	}
 }
