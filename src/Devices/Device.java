@@ -120,18 +120,21 @@ public abstract class Device {
 		return pane;
 	}
 	public void renameDevice(String newName) throws MalformedURLException{
-		 String urlString = new String("http://ip_address:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom());
+		 String urlString = new String("http://146.87.65.48:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom());
 		 //remove whitespace
 		 urlString.replaceAll("\\s","");
 		 URL url = new URL(urlString);
-		 URLConnection urlCon = null;
+		 
 		 try {
-			 urlCon = url.openConnection();
+			 url.openConnection();
 		} catch (IOException e) {
 			
 			System.out.println("Cannot connect renaming URL for " + getName());
 		}
 		 
+	}
+	public String renameDeviceURLString(String newName){
+		return new String("http://:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom()).replaceAll("\\s","");
 	}
 	
 }
