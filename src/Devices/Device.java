@@ -1,5 +1,10 @@
 package Devices;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 import GUI.VeraGUI;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -113,6 +118,20 @@ public abstract class Device {
 		text.setLayoutY(5);
 		pane.getChildren().addAll(imageView,text);
 		return pane;
+	}
+	public void renameDevice(String newName) throws MalformedURLException{
+		 String urlString = new String("http://ip_address:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom());
+		 //remove whitespace
+		 urlString.replaceAll("\\s","");
+		 URL url = new URL(urlString);
+		 URLConnection urlCon = null;
+		 try {
+			 urlCon = url.openConnection();
+		} catch (IOException e) {
+			
+			System.out.println("Cannot connect renaming URL for " + getName());
+		}
+		 
 	}
 	
 }
