@@ -1,14 +1,16 @@
 package GUI;
 
+import java.awt.Desktop;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Scanner;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -22,10 +24,12 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +37,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
@@ -50,6 +55,7 @@ public class VeraGUI extends Application{
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
 	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
+	private ArrayList<Long> tempArray2 = new ArrayList<Long>();
 
 	ArrayList<Button> buttons = new ArrayList<Button>();
 
@@ -81,6 +87,8 @@ public class VeraGUI extends Application{
 				}
 				break;
 			case"Back":
+				display.getChildren().clear();
+				changeButtons("mainMenu");
 				displayDevices();
 				break;
 			case"Download CSV":
@@ -100,7 +108,7 @@ public class VeraGUI extends Application{
 
 				stage.setTitle("Vera Box");
 				root = new Pane();
-				scene = new Scene(root, 900, 600);
+				scene = new Scene(root, 1200, 800);
 				stage.setScene(scene);
 				stage.setResizable(false);
 
@@ -152,7 +160,7 @@ public class VeraGUI extends Application{
 				}));
 				timeline.setCycleCount(Animation.INDEFINITE);  
 				timeline.play();  
-				time.setLayoutX(500);
+				time.setLayoutX(topDisplay.getPrefWidth()-140);
 				time.setLayoutY(45);
 
 				topDisplay.getChildren().addAll(welcome,time);
@@ -170,19 +178,49 @@ public class VeraGUI extends Application{
 				compareFrom.setValue(compareTo.getValue().minusDays(1));
 				compareTo.setId("datePicker");
 				compareFrom.setId("datePicker");
-				compareTo.valueProperty().addListener(new ChangeListener<LocalDate>(){
+				ChangeListener<LocalDate> dateChanger = new ChangeListener<LocalDate>(){
 
 					@Override
 					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
-						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
-					}});
-				compareFrom.valueProperty().addListener(new ChangeListener<LocalDate>(){
+						// create graph compareTo.getValue() compareFrom.getValue();
+						SimpleDateFormat format = new SimpleDateFormat("DD MM YYYY");
+						
+						String year = newDate.toString().substring(0, 4);
+						System.out.println(year);
+						String month = newDate.toString().substring(5,7);
+						System.out.println(month);
+						String day = newDate.toString().substring(8,10);
+						System.out.println(day);
+						String date = day+ month+ year;
+						System.out.println(date);
+						
+						
+						
+						System.out.println(" Compare From: " + compareFrom.getValue().toEpochDay());
+						System.out.println(format.format(newDate.toEpochDay()));
+						System.out.println(" Compare To:  " + compareTo.getValue());
 
-					@Override
-					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
-						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
-					}});
-
+					}};
+		
+				compareTo.valueProperty().addListener(dateChanger);
+				compareFrom.valueProperty().addListener(dateChanger);
+				
+				final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+			                @Override
+			                public DateCell call(final DatePicker datePicker) {
+			                    return new DateCell() {
+			                        @Override
+			                        public void updateItem(LocalDate item, boolean empty) {
+			                            super.updateItem(item, empty);
+			                            if (item.isAfter(LocalDate.now())) {
+			                                    setDisable(true);
+			                                    setStyle("-fx-background-color: #ffc0cb;");
+			                            }
+			                    }
+			                };
+			            }
+			        };
+				
 				secondCompareTo = new DatePicker();
 				secondCompareFrom = new DatePicker();
 				secondCompareTo.setValue(LocalDate.now());
@@ -191,18 +229,23 @@ public class VeraGUI extends Application{
 				secondCompareFrom.setId("datePicker");
 				secondCompareTo.setDisable(true);
 				secondCompareFrom.setDisable(true);
-				secondCompareTo.valueProperty().addListener(new ChangeListener<LocalDate>(){
+				
+				ChangeListener<LocalDate> secondChanger = new ChangeListener<LocalDate>(){
 
 					@Override
 					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
-						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
-					}});
-				secondCompareFrom.valueProperty().addListener(new ChangeListener<LocalDate>(){
-
-					@Override
-					public void changed(ObservableValue<? extends LocalDate> arg0,LocalDate oldDate, LocalDate newDate) {
-						System.out.println("Old Date :" + oldDate + "New Date :" + newDate);
-					}});
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("A");
+						LocalDate date = LocalDate.parse(oldDate.toString(), formatter);
+						System.out.println("Old Date :" + date + "New Date :" + newDate);
+					}};
+				
+				secondCompareTo.valueProperty().addListener(secondChanger);
+				secondCompareFrom.valueProperty().addListener(secondChanger);
+				
+			    compareTo.setDayCellFactory(dayCellFactory);
+			    compareFrom.setDayCellFactory(dayCellFactory);
+			    secondCompareTo.setDayCellFactory(dayCellFactory);
+			    secondCompareFrom.setDayCellFactory(dayCellFactory);
 
 				//ToggleGroup group = new ToggleGroup();
 				compareone = new RadioButton("Enabled");
@@ -216,26 +259,27 @@ public class VeraGUI extends Application{
 							secondCompareTo.setDisable(true);
 							secondCompareFrom.setDisable(true);
 						}
-					}});			
+					}});	
+				
 				graphType = new ChoiceBox<String>();
 				graphType.getItems().addAll("Line Chart", "Bar Chart");
-				graphType.setLayoutX(600);
+				graphType.setLayoutX(topDisplay.getPrefWidth()-130);
 				graphType.setLayoutY(20);
-
+				graphType.setTooltip(new Tooltip("Select Type Of Graph"));
+				graphType.getSelectionModel().selectFirst();
 				
-
 				stage.show();
-
 			}
 
 			public void displayDevices(){	
 				Pane paneBackground = new Pane();
 				paneBackground.setStyle("-fx-background-color:white; -fx-pref-width:600; -fx-pref-height: 40;");
-				paneBackground.setLayoutX(45);		
+				paneBackground.setLayoutX(45);
+				paneBackground.setPrefWidth(display.getPrefWidth());
 
 				final Pane sortingPane = new Pane();
-				sortingPane.setPrefSize(600, 40);
-				sortingPane.setLayoutX(45);
+				sortingPane.setPrefSize(display.getPrefWidth()-200, 40);
+				sortingPane.setLayoutX(100);
 				sortingPane.setId("sortingPane");
 
 				HBox hbox = new HBox(10);
@@ -246,12 +290,14 @@ public class VeraGUI extends Application{
 				roomText.setId("sortingLabel");
 				ChoiceBox<String> rooms = new ChoiceBox<String>();
 				rooms.getItems().addAll("Living Room","Kitchen","Study","Bedroom","BathRoom");
+				rooms.getSelectionModel().selectFirst();
 				rooms.setId("sortingDropDown");
 				rooms.setMaxWidth(100);
 				Label devicesText = new Label("\t\tDevices:");
 				devicesText.setId("sortingLabel");
 				ChoiceBox<String> deviceList = new ChoiceBox<String>();
 				deviceList.getItems().addAll("4 in 1 Sensor", "Heat Sensor", "Light Sensor", "Danfoss Radiator");
+				deviceList.getSelectionModel().selectFirst();
 				deviceList.setId("sortingDropDown");
 				deviceList.setMaxWidth(100);
 
@@ -260,14 +306,15 @@ public class VeraGUI extends Application{
 
 				final VBox vb = new VBox(30);
 				vb.setLayoutY(sortingPane.getPrefHeight());
+				vb.setLayoutX(55);
 				vb.setStyle("-fx-padding: 0 0 0 45px");
 
 				ScrollBar sc = new ScrollBar();
-				sc.setLayoutX(696);
-				sc.setPrefHeight(510);
+				sc.setLayoutX(display.getPrefWidth()-12);
+				sc.setPrefHeight(display.getPrefHeight());
 				sc.setOrientation(Orientation.VERTICAL);
 				sc.setMin(0);
-				sc.setMax(1000);
+				sc.setMax(700);
 				sc.valueProperty().addListener(new ChangeListener<Number>() {
 					public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 						vb.setLayoutY(-new_val.doubleValue()+sortingPane.getPrefHeight());
@@ -278,6 +325,7 @@ public class VeraGUI extends Application{
 				ArrayList<Device> devices = test.run();
 				for(final Device device: devices){
 					Pane pane = device.getPane();
+					pane.setPrefWidth(sortingPane.getPrefWidth());
 					System.out.println(device.getDetails());
 					pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
 
@@ -312,15 +360,15 @@ public class VeraGUI extends Application{
 			}
 
 			public void displayAccountInfo(){
-
+				display.getChildren().clear();
 			}
 
 			public void displaySettings(){
-
+				display.getChildren().clear();
 			}
 
 			private void displayScenes(){
-
+				display.getChildren().clear();
 			}
 
 			private void changeButtons(String name){
@@ -344,6 +392,9 @@ public class VeraGUI extends Application{
 					dropdown.setId("dropdown");
 					sideButtons.getChildren().add(dropdown);
 					Label compareLabel = new Label("Compare From");
+					HBox hbox = new HBox(5);
+			
+					
 					Label compareToLabel = new Label("Compare To");
 					Label compareLabel2 = new Label("Compare From");
 					Label compareToLabel2 = new Label("Compare To");
@@ -365,7 +416,8 @@ public class VeraGUI extends Application{
 							sideButtons.getChildren().add(button);
 						}
 					}catch(Exception e){
-						button.setVisible(false);
+						
+						
 					}
 					x++;
 				}
@@ -373,13 +425,8 @@ public class VeraGUI extends Application{
 
 			private void showDeviceDetails(final Device device){
 				display.getChildren().clear();
-				
-				Button download = new Button("Download CSV");
-				download.setOnAction(buttonHandler);
-				download.setId("downloadButton");
-				download.setLayoutX(400);
-				download.setLayoutY(40);
-				display.getChildren().addAll(graphType,download); // adds the dropdownbox for selecting different grpahs
+			
+				display.getChildren().addAll(graphType); // adds the dropdownbox for selecting different grpahs
 
 				try {
 					tempArray = new ArrayList<Integer>();
@@ -388,29 +435,48 @@ public class VeraGUI extends Application{
 					while (results.next())
 					{
 						String temp = results.getString(device.getReadingName());
+						long temp2 = results.getInt("reading_date");
 						if(!(temp == null))
 						{
-							int temp2 =  Integer.parseInt(temp);
-							tempArray.add(temp2);
+							int temp3 =  Integer.parseInt(temp);
+							String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm").format(new java.util.Date (temp2*1000));
+							date = date.replaceAll("/","");
+							date = date.replaceAll(":","");
+							date = date.replaceAll(" ","");
+							Long dateConverted = Long.parseLong(date);
+							System.out.println(dateConverted);
+							
+							String tempS = dateConverted.toString(); // change to string, substring and get last 4 digits (convert back)
+							tempS = tempS.substring(7, 11);
+							dateConverted = Long.parseLong(tempS);
+							System.out.println(tempS);
+							System.out.println();
+							System.out.println(dateConverted);
+							//System.out.println(date);
+							tempArray.add(temp3);
+							tempArray2.add(dateConverted);
 						}
 
 					}
 					display.getChildren().addAll(device.showDeviceDetails().getChildren());
-					Charts chart = new Charts(tempArray, device,"Line Chart");
+					Charts chart = new Charts(tempArray,tempArray2, device,"Line Chart");
 					chart.show(display);
 				} 
 				catch (SQLException e1) 
 				{
 					Label warning = new Label("Sorry No Graph Data Available");
-					warning.setLayoutX(300);
-					warning.setLayoutY(400);
+					warning.setPrefSize(600,300);
+					warning.setId("graphWarning");
+					warning.setLayoutX(50);
+					warning.setLayoutY(150);
 					display.getChildren().add(warning);
+					graphType.setDisable(true);
 				}
 				// this adds a change listener to the drop down box and creates a new graph when you select one.
 				graphType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
 					public void changed(ObservableValue<? extends String> source, String oldValue, String newValue){
 						display.getChildren().remove(display.getChildren().size()-1); // removes old graph 
-						Charts chart = new Charts(tempArray, device,newValue);
+						Charts chart = new Charts(tempArray, tempArray2, device,newValue);
 						chart.show(display);
 
 					}

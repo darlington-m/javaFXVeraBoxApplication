@@ -45,7 +45,7 @@
 }
 
 #devices:hover{
--fx-border-color:blue;
+ -fx-border-color: #12805C;
 }
 
 #devices{
@@ -91,6 +91,30 @@
 -fx-font-size:15px;
 -fx-text-fill: #12805C;
 }
+#graphWarning {
+-fx-background-color: #f4f4f4;
+-fx-text-align: center;
+-fx-font-size:30px;
+-fx-text-fill: red;
+}
+
+#textField {
+    -fx-background-color: transparent;
+    -fx-border: 0px solid;
+    -fx-text-fill: #12805C;
+	-fx-font-size:  20px;
+}
+
+#textField:hover {
+	-fx-border: 1px solid;
+	-fx-border-color: #f4f4f4;
+}
+
+#capsLock{
+-fx-text-fill:red;
+-fx-font-weight: bold;
+}
+
 
 .chart-series-line{
 -fx-stroke-width: 2px;

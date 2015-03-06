@@ -28,10 +28,13 @@ public class Charts {
 	Device device;
 
 	ArrayList<Integer> array;
-	public Charts(ArrayList<Integer> tempArray, Device device, String type){
+	ArrayList<Long> array2;
+	
+	public Charts(ArrayList<Integer> tempArray, ArrayList<Long> tempArray2, Device device, String type){
 		this.array = tempArray;
 		this.device = device;
 		this.type = type;
+		this.array2 = tempArray2;
 	}
 	
 	public void show(Pane pane) 
@@ -45,7 +48,7 @@ public class Charts {
 		{
 			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis);
 			barChart.setId("BarChart");
-			barChartGraph.checkCompare(barChart, array, device);
+			barChartGraph.checkCompare(barChart, array, array2, device);
 			for(Node n:barChart.lookupAll(".default-color0.chart-bar")) 
 			{
 				n.setStyle("-fx-bar-fill: #00AF33;");
@@ -55,7 +58,7 @@ public class Charts {
 			{
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
-			barChart.setPrefSize(700,350);
+			barChart.setPrefSize(1000,550);
 			barChart.setLayoutX(0);
 			barChart.setLayoutY(150);
 			pane.getChildren().add(barChart);
@@ -65,8 +68,8 @@ public class Charts {
 		{
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis);
 			lineChart.setId("BarChart");
-			lineChartGraph.checkCompare(lineChart, array, device);
-			lineChart.setPrefSize(700,350);
+			lineChartGraph.checkCompare(lineChart, array, array2, device);
+			lineChart.setPrefSize(1000,550);
 			lineChart.setLayoutX(0);
 			lineChart.setLayoutY(150);
 			pane.getChildren().add(lineChart);

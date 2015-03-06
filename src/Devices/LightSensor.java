@@ -33,7 +33,7 @@ public class LightSensor extends Device implements Sensor{
     
 	@Override
 	public String readingFromSQL() {
-		return new String("SELECT light FROM Reading WHERE id =  '" + getId() + "'");
+		return new String("SELECT light, date FROM Reading WHERE id =  '" + getId() + "'");
 	}
 	
     @Override

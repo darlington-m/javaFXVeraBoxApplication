@@ -1,16 +1,23 @@
 package Devices;
 
+import java.awt.Toolkit;
+//import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import GUI.VeraGUI;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import GUI.VeraGUI;
 
 public abstract class Device {
 
@@ -106,35 +113,74 @@ public abstract class Device {
 	}
 	public Pane showDeviceDetails(){
 		Pane pane = new Pane();
-		Label text = new Label(getName());
-		text.setId("deviceDetails");
+		
+		final TextField textbox = new TextField();
+		textbox.setText(getName());
+		textbox.setPrefSize(250,50);
+		textbox.setLayoutX(200);
+		textbox.setLayoutY(5);
+		textbox.setId("textField");
+		
+		final Label capsLock = new Label("Caps Lock is on");
+		capsLock.setId("capsLock");
+		capsLock.setLayoutX(225);
+		capsLock.setLayoutY(60);
+		textbox.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent key) {
+				if(key.getCode() == KeyCode.CAPS){
+					if(Toolkit.getDefaultToolkit().getLockingKeyState(20)){
+						capsLock.setText("Caps Lock is on");
+						capsLock.setVisible(true);
+						System.out.println("ON");
+					 }else{
+						capsLock.setText("Caps Lock is off");
+						capsLock.setVisible(false);
+						System.out.println("OFF");
+					 }					
+				}
+			}});
+		
+		textbox.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(textbox.getText().isEmpty()){
+					capsLock.setText("Name Cannot Be Blank");
+					capsLock.setVisible(true);
+				}else{
+					renameDevice(textbox.getText());
+				}				
+			}});
+		capsLock.setVisible(false);
+		
 		Rectangle imageView = new Rectangle(100,100);
 		imageView.setUserData(this);
 		imageView.setFill(new ImagePattern(new Image(VeraGUI.class.getResource("/Resources/"+ getImage()).toExternalForm())));
 		imageView.setLayoutX(50);
 		imageView.setLayoutY(30);
 
-		text.setLayoutX(300);
-		text.setLayoutY(5);
-		pane.getChildren().addAll(imageView,text);
+		pane.getChildren().addAll(textbox,imageView,capsLock);//,text
 		return pane;
 	}
-	public void renameDevice(String newName) throws MalformedURLException{
-		 String urlString = new String("http://146.87.65.48:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom());
+	
+
+	
+	public void renameDevice(String newName) {
+		 String urlString = new String("http://ip_address:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom());
 		 //remove whitespace
 		 urlString.replaceAll("\\s","");
-		 URL url = new URL(urlString);
-		 
 		 try {
+//			 URL url;
+//			 url = new URL(urlString);
+//			 URLConnection urlCon = null;
+//			 urlCon = url.openConnection();
+//			 name = newName;
+			 URL url = new URL(urlString);
 			 url.openConnection();
+			 name = newName;
 		} catch (IOException e) {
-			
 			System.out.println("Cannot connect renaming URL for " + getName());
 		}
 		 
 	}
-	public String renameDeviceURLString(String newName){
-		return new String("http://:3480/data_request?id=device&action=rename&device="+ getId() +"&name="+ newName + "&room=" + getRoom()).replaceAll("\\s","");
-	}
-	
 }

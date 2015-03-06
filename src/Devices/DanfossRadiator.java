@@ -57,7 +57,7 @@ public class DanfossRadiator extends Device implements Sensor{
 	
 	@Override
 	public String readingFromSQL() {
-		return new String("SELECT heat FROM Reading WHERE id =  '" + getId() + "'");
+		return new String("SELECT heat, reading_date FROM Reading WHERE id =  '" + getId() + "'");
 	}
 	
     @Override
