@@ -50,12 +50,14 @@ public class VeraGUI extends Application{
 
 	private Scene scene;
 	private Pane root, display;
+	private ChoiceBox<Integer> compareToHours, compareToMinutes, compareFromHours,compareFromMinutes;
 	private DatePicker compareTo, compareFrom, secondCompareTo, secondCompareFrom;
 	private VBox sideButtons;
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
 	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
 	private ArrayList<Long> tempArray2 = new ArrayList<Long>();
+	private Device selectedDevice;
 
 	ArrayList<Button> buttons = new ArrayList<Button>();
 
@@ -331,8 +333,14 @@ public class VeraGUI extends Application{
 
 						@Override
 						public void handle(MouseEvent arg0) {
-							showDeviceDetails(device);
 							changeButtons("details");
+							selectedDevice = device;
+							try {
+								showDeviceDetails(device);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}});
 					vb.getChildren().add(pane);
 				}
@@ -394,9 +402,13 @@ public class VeraGUI extends Application{
 					Label compareLabel = new Label("Compare From");
 					
 					HBox compareFromRow = new HBox(5);
-					compareFromRow.getChildren().addAll(compareFrom,getBox("hours"),getBox("minutes"));
+					compareFromHours = getBox("hours");
+					compareFromMinutes = getBox("minutes");
+					compareFromRow.getChildren().addAll(compareFrom,compareFromHours,compareFromMinutes);
 					HBox compareToRow = new HBox(5);
-					compareToRow.getChildren().addAll(compareTo,getBox("hours"),getBox("minutes"));
+					compareToHours = getBox("hours");
+					compareToMinutes = getBox("minutes");
+					compareToRow.getChildren().addAll(compareTo,compareToHours,compareToMinutes);
 					
 					HBox compareFromRow2 = new HBox(5);
 					compareFromRow2.getChildren().addAll(secondCompareFrom,getBox("hours"),getBox("minutes"));
@@ -408,8 +420,22 @@ public class VeraGUI extends Application{
 					Label compareToLabel2 = new Label("Compare To");
 					HBox label = new HBox(15);// this adds the enable button
 					label.getChildren().addAll(compareLabel2, compareone);
+					
+					Button submitCompare = new Button("Compare");
+					submitCompare.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							try {
+								showDeviceDetails(selectedDevice, "test");
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+
 					dropdown.getChildren().addAll(compareLabel,compareFromRow,compareToLabel, compareToRow,
-												label,compareFromRow2,compareToLabel2,compareToRow2);
+												label,compareFromRow2,compareToLabel2,compareToRow2, submitCompare);
 					break;				
 				}
 				int x=0;
@@ -431,15 +457,73 @@ public class VeraGUI extends Application{
 				}
 			}
 
-			private void showDeviceDetails(final Device device){
+			private void showDeviceDetails(final Device device) throws SQLException{
+				ResultSet results = conn.getRows(device.readingFromSQL(0,0));
 				display.getChildren().clear();
-			
 				display.getChildren().addAll(graphType); // adds the dropdownbox for selecting different grpahs
-
+				
 				try {
 					tempArray = new ArrayList<Integer>();
-					ResultSet results = conn.getRows(device.readingFromSQL());
-					System.out.println(device.readingFromSQL());
+					while (results.next())
+					{
+						String temp = results.getString(device.getReadingName());
+						long temp2 = results.getInt("reading_date");
+						if(!(temp == null))
+						{
+							int temp3 =  Integer.parseInt(temp);
+							String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm").format(new java.util.Date (temp2*1000));
+							date = date.replaceAll("/","");
+							date = date.replaceAll(":","");
+							date = date.replaceAll(" ","");
+							Long dateConverted = Long.parseLong(date);
+							System.out.println(dateConverted);
+							
+							String tempS = dateConverted.toString(); // change to string, substring and get last 4 digits (convert back)
+							tempS = tempS.substring(7, 11);
+							dateConverted = Long.parseLong(tempS);
+							System.out.println(tempS);
+							System.out.println();
+							System.out.println(dateConverted);
+							//System.out.println(date);
+							tempArray.add(temp3);
+							tempArray2.add(dateConverted);
+						}
+
+					}
+					display.getChildren().addAll(device.showDeviceDetails().getChildren());
+					Charts chart = new Charts(tempArray,tempArray2, device,"Line Chart");
+					chart.show(display);
+				} 
+				catch (SQLException e1) 
+				{
+					Label warning = new Label("Sorry No Graph Data Available");
+					warning.setPrefSize(600,300);
+					warning.setId("graphWarning");
+					warning.setLayoutX(50);
+					warning.setLayoutY(150);
+					display.getChildren().add(warning);
+					graphType.setDisable(true);
+				}
+				// this adds a change listener to the drop down box and creates a new graph when you select one.
+				graphType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
+					public void changed(ObservableValue<? extends String> source, String oldValue, String newValue){
+						display.getChildren().remove(display.getChildren().size()-1); // removes old graph 
+						Charts chart = new Charts(tempArray, tempArray2, device,newValue);
+						chart.show(display);
+
+					}
+				});
+			}
+			
+			private void showDeviceDetails(final Device device, String test) throws SQLException{
+				ResultSet results = conn.getRows(device.readingFromSQL(((compareFrom.getValue().toEpochDay() * 86400) + (compareFromHours.getValue() * 3600) + (compareFromMinutes.getValue() * 60)), (compareTo.getValue().toEpochDay() * 86400 + compareToHours.getValue() * 3600 + compareToMinutes.getValue() * 60)));
+				display.getChildren().clear();
+				display.getChildren().addAll(graphType); // adds the dropdownbox for selecting different grpahs
+				
+				try {
+					System.out.println("Here :" + compareFromHours.getValue());
+					tempArray = new ArrayList<Integer>();
+					System.out.println((compareFrom.getValue().toEpochDay() * 86400) + (compareFromHours.getValue() * 3600) + (compareFromMinutes.getValue() * 60));
 					while (results.next())
 					{
 						String temp = results.getString(device.getReadingName());
@@ -495,7 +579,7 @@ public class VeraGUI extends Application{
 				
 			}
 			
-			private ChoiceBox getBox(String type){
+			private ChoiceBox<Integer> getBox(String type){
 				ChoiceBox<Integer> choicebox = new ChoiceBox<Integer>();
 				choicebox.setId("timeDropDown");
 				switch(type){
@@ -506,7 +590,7 @@ public class VeraGUI extends Application{
 					choicebox.getSelectionModel().selectFirst();
 					break;
 				case"minutes":
-					for(int x=1; x<61; x++){
+					for(int x=0; x<61; x+=5){
 						choicebox.getItems().add(x);
 					}
 					choicebox.getSelectionModel().selectFirst();

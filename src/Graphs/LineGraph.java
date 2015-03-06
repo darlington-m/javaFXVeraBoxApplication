@@ -17,6 +17,7 @@ public class LineGraph
 	
 	public LineChart checkCompare(LineChart chart, ArrayList<Integer> array, ArrayList<Long> array2, Device device)
 	{
+		timePeriod = array.size();
 		String id = "compare2"; // if comparing do this, blah.
 		XYChart.Series<String, Number> readingsOne = new XYChart.Series<String, Number>();
 		readingsOne.setName(device.getName() + " Reading");

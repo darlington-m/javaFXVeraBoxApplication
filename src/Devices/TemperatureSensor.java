@@ -23,8 +23,8 @@ public class TemperatureSensor extends Device implements Sensor{
     }
     
 	@Override
-	public String readingFromSQL() {
-		return new String("SELECT temperature FROM Reading WHERE id =  '" + getId() + "'");
+	public String readingFromSQL(long startDate, long endDate) {
+		return new String("SELECT temperature,reading_date FROM Reading WHERE id =  '" + getId()  + "' AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'");
 	}
     @Override
     public String toString(){

@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Timer;
 
@@ -33,11 +34,13 @@ public class JsonToJava {
 	/**
 	 * This calls the timer method and creates a new Reading timer.
 	 * this calls the get data method and retrieves the data and pj
+	 * @throws SQLException 
 	 *
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		Timer timer = new Timer();
 		timer.schedule(new ReadingTimer(), 0, 360000);
+
 	}
 	
 	
@@ -45,7 +48,7 @@ public class JsonToJava {
 		try{
 			conn = new MySQLConnect();//https://vera-us-oem-relay31.mios.com/https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/016BBB17C64CC3B95EF174BDA508B777CE8E16/port_3480/data_request?id=user_data&rand=0.9910120870918036
 			System.out.println("Attempting url");
-			String url = "https://vera-us-oem-relay31.mios.com/relay/relay/relay/device/35111004/session/016FAD729649A31F425F9B2751ED8ED4D0744C/port_3480/data_request?id=user_data&rand=0.7669941254425794";
+			String url = "http://146.87.65.48:3480/data_request?id=sdata&output_format=JSON";
 			Reader reader = new InputStreamReader(new URL(url).openStream(), "UTF-8");
 			Gson gson = new Gson();
 			//creates a class Data Object Holds 2 arrays: devices and rooms.

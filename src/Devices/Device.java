@@ -86,7 +86,7 @@ public abstract class Device {
 		this.image = image;
 	}
 	
-	public abstract String readingFromSQL();
+	public abstract String readingFromSQL(long startDate, long endDate);
 	
 	public String getReadingName(){
 		return readingName;

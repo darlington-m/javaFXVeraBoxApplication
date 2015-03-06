@@ -40,7 +40,7 @@ public class DataMining extends Device implements Sensor{
     }
 
 	@Override
-	public String readingFromSQL() {
+	public String readingFromSQL(long startDate, long endDate) {
 		return null;
 	}
 }

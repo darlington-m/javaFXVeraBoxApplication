@@ -50,8 +50,8 @@ public class FourInOne extends Device {
 	}
     
 	@Override
-	public String readingFromSQL() {
-		return new String("SELECT humidity,light,heat FROM Reading WHERE id =  '" + getId() + "'");
+	public String readingFromSQL(long startDate, long endDate) {
+		return new String("SELECT humidity,light,heat, reading_date FROM Reading WHERE id =  '" + getId()  + "' AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'");
 	}
 	
     @Override
