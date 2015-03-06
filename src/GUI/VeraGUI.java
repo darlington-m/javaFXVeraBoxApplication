@@ -392,16 +392,24 @@ public class VeraGUI extends Application{
 					dropdown.setId("dropdown");
 					sideButtons.getChildren().add(dropdown);
 					Label compareLabel = new Label("Compare From");
-					HBox hbox = new HBox(5);
-			
+					
+					HBox compareFromRow = new HBox(5);
+					compareFromRow.getChildren().addAll(compareFrom,getBox("hours"),getBox("minutes"));
+					HBox compareToRow = new HBox(5);
+					compareToRow.getChildren().addAll(compareTo,getBox("hours"),getBox("minutes"));
+					
+					HBox compareFromRow2 = new HBox(5);
+					compareFromRow2.getChildren().addAll(secondCompareFrom,getBox("hours"),getBox("minutes"));
+					HBox compareToRow2 = new HBox(5);
+					compareToRow2.getChildren().addAll(secondCompareTo,getBox("hours"),getBox("minutes"));					
 					
 					Label compareToLabel = new Label("Compare To");
 					Label compareLabel2 = new Label("Compare From");
 					Label compareToLabel2 = new Label("Compare To");
 					HBox label = new HBox(15);// this adds the enable button
 					label.getChildren().addAll(compareLabel2, compareone);
-					dropdown.getChildren().addAll(compareLabel,compareFrom,compareToLabel, compareTo,
-												label,secondCompareFrom,compareToLabel2,secondCompareTo);
+					dropdown.getChildren().addAll(compareLabel,compareFromRow,compareToLabel, compareToRow,
+												label,compareFromRow2,compareToLabel2,compareToRow2);
 					break;				
 				}
 				int x=0;
@@ -485,6 +493,26 @@ public class VeraGUI extends Application{
 			
 			public void getGraph(LocalDate from, LocalDate to){
 				
+			}
+			
+			private ChoiceBox getBox(String type){
+				ChoiceBox<Integer> choicebox = new ChoiceBox<Integer>();
+				choicebox.setId("timeDropDown");
+				switch(type){
+				case"hours":
+					for(int x=1; x<25; x++){
+						choicebox.getItems().add(x);
+					}
+					choicebox.getSelectionModel().selectFirst();
+					break;
+				case"minutes":
+					for(int x=1; x<61; x++){
+						choicebox.getItems().add(x);
+					}
+					choicebox.getSelectionModel().selectFirst();
+					break;
+				}
+				return choicebox;
 			}
 
 }
