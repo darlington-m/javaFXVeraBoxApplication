@@ -13,7 +13,7 @@ import DataRetrival.MySQLConnect;
 
 public final class CSV {
 	
-	public void toCSV(int id, long startDate, long endDate) throws SQLException, IOException{
+	public void toCSV(File file, int id, long startDate, long endDate) throws SQLException, IOException{
 		
 		//CSV csv = new CSV();
 		//csv.toCSV(14, 1425583201, 1425585602); // Specific id and date.
@@ -23,10 +23,10 @@ public final class CSV {
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 		
-		File file = new File(dateFormat.format(date) + ".csv");
-		if (!file.exists()) {
-			file.createNewFile();
-		}
+//		File file = new File(dateFormat.format(date) + ".csv");
+//		if (!file.exists()) {
+//			file.createNewFile();
+//		}
 		FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		
