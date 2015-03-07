@@ -54,7 +54,7 @@ public class VeraGUI extends Application {
 	private Scene scene;
 	private Stage stage;
 	private Pane root, display;
-	private ChoiceBox<Integer> compareToHours, compareToMinutes,
+	private ChoiceBox<String> compareToHours, compareToMinutes,
 			compareFromHours, compareFromMinutes, 
 			secondCompareFromHours, secondCompareFromMinutes,
 			secondCompareFromHours2, secondCompareFromMinutes2;
@@ -108,11 +108,11 @@ public class VeraGUI extends Application {
 
 				saveToCSV(selectedDevice.getId(), 
 								((compareFrom.getValue().toEpochDay() * 86400)
-								+ (compareFromHours.getValue() * 3600) 
-								+ (compareFromMinutes.getValue() * 60)),
+								+ (Long.parseLong(compareFromHours.getValue()) * 3600) 
+								+ (Long.parseLong(compareFromMinutes.getValue()) * 60)),
 								((compareTo.getValue().toEpochDay() * 86400)
-								+ (compareToHours.getValue() * 3600) 
-								+ (compareToMinutes.getValue() * 60)));
+								+ (Long.parseLong(compareToHours.getValue()) * 3600) 
+								+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60));
 				break;
 			}
 		}
@@ -201,7 +201,9 @@ public class VeraGUI extends Application {
 		root.getChildren().addAll(display, sideDisplay, topDisplay);
 
 		compareTo = new DatePicker();
+		compareTo.setMaxWidth(101);
 		compareFrom = new DatePicker();
+		compareFrom.setMaxWidth(110);
 		compareTo.setValue(LocalDate.now());
 		compareFrom.setValue(compareTo.getValue().minusDays(1));
 		compareTo.setId("datePicker");
@@ -308,7 +310,10 @@ public class VeraGUI extends Application {
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
 
+		
+		Label colonLabel = new Label(":");
 		secondCompareFromHours = getBox("hours");
+		secondCompareFromHours.setMaxWidth(10);
 		secondCompareFromMinutes = getBox("minutes");
 		secondCompareFromMinutes.setDisable(true);
 		secondCompareFromHours.setDisable(true);
@@ -456,15 +461,22 @@ public class VeraGUI extends Application {
 			sideButtons.getChildren().add(dropdown);
 			Label compareLabel = new Label("Compare From");
 
+			Label colonLabel = new Label(":");
+			Label colonLabel2 = new Label(":");
+			
 			HBox compareFromRow = new HBox(5);
 			compareFromHours = getBox("hours");
+			compareFromHours.setMaxWidth(2);
 			compareFromMinutes = getBox("minutes");
-			compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
+			compareFromMinutes.setMaxWidth(2);
+			compareFromRow.getChildren().addAll(compareFrom, compareFromHours, colonLabel,
 					compareFromMinutes);
 			HBox compareToRow = new HBox(5);
 			compareToHours = getBox("hours");
+			compareToHours.setMaxWidth(2);
 			compareToMinutes = getBox("minutes");
-			compareToRow.getChildren().addAll(compareTo, compareToHours,
+			compareToMinutes.setMaxWidth(2);
+			compareToRow.getChildren().addAll(compareTo, compareToHours, colonLabel2,
 					compareToMinutes);
 
 			HBox compareFromRow2 = new HBox(5);
@@ -594,11 +606,11 @@ public class VeraGUI extends Application {
 		ResultSet results = conn
 				.getRows(device.readingFromSQL(
 						((compareFrom.getValue().toEpochDay() * 86400)
-								+ (compareFromHours.getValue() * 3600) 
-								+ (compareFromMinutes.getValue() * 60)),
+								+ (Long.parseLong(compareFromHours.getValue()) * 3600) 
+								+ (Long.parseLong(compareFromMinutes.getValue()) * 60)),
 								((compareTo.getValue().toEpochDay() * 86400)
-								+ (compareToHours.getValue() * 3600) 
-								+ (compareToMinutes.getValue() * 60))));
+								+ (Long.parseLong(compareToHours.getValue()) * 3600) 
+								+ (Long.parseLong(compareToMinutes.getValue())* 60) + 60)));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the drop down box for
 													// selecting different
@@ -668,19 +680,27 @@ public class VeraGUI extends Application {
 				});
 	}
 
-	private ChoiceBox<Integer> getBox(String type) {
-		ChoiceBox<Integer> choicebox = new ChoiceBox<Integer>();
+	private ChoiceBox<String> getBox(String type) {
+		ChoiceBox<String> choicebox = new ChoiceBox<String>();
 		choicebox.setId("timeDropDown");
 		switch (type) {
 		case "hours":
 			for (int x = 1; x < 25; x++) {
-				choicebox.getItems().add(x);
+				if (x < 10){
+					choicebox.getItems().add("0" + x);
+				} else {
+					choicebox.getItems().add("" + x);
+				}
 			}
 			choicebox.getSelectionModel().selectFirst();
 			break;
 		case "minutes":
 			for (int x = 0; x < 61; x += 5) {
-				choicebox.getItems().add(x);
+				if (x < 10){
+					choicebox.getItems().add("0" + x);
+				} else {
+					choicebox.getItems().add("" + x);
+				}
 			}
 			choicebox.getSelectionModel().selectFirst();
 			break;
