@@ -55,7 +55,9 @@ public class VeraGUI extends Application {
 	private Stage stage;
 	private Pane root, display;
 	private ChoiceBox<Integer> compareToHours, compareToMinutes,
-			compareFromHours, compareFromMinutes;
+			compareFromHours, compareFromMinutes, 
+			secondCompareFromHours, secondCompareFromMinutes,
+			secondCompareFromHours2, secondCompareFromMinutes2;
 	private DatePicker compareTo, compareFrom, secondCompareTo,
 			secondCompareFrom;
 	private VBox sideButtons;
@@ -261,11 +263,10 @@ public class VeraGUI extends Application {
 
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> arg0,
-					LocalDate oldDate, LocalDate newDate) {
+				LocalDate oldDate, LocalDate newDate) {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("A");
 				LocalDate date = LocalDate.parse(oldDate.toString(), formatter);
-				System.out
-						.println("Old Date :" + date + "New Date :" + newDate);
+				System.out.println("Old Date :" + date + "New Date :" + newDate);
 			}
 		};
 
@@ -285,9 +286,17 @@ public class VeraGUI extends Application {
 				if (((RadioButton) arg0.getSource()).isSelected()) {
 					secondCompareTo.setDisable(false);
 					secondCompareFrom.setDisable(false);
+					secondCompareFromHours.setDisable(false);
+					secondCompareFromMinutes.setDisable(false);
+					secondCompareFromHours2.setDisable(false);
+					secondCompareFromMinutes2.setDisable(false);
 				} else {
 					secondCompareTo.setDisable(true);
 					secondCompareFrom.setDisable(true);
+					secondCompareFromHours.setDisable(true);
+					secondCompareFromMinutes.setDisable(true);
+					secondCompareFromHours2.setDisable(true);
+					secondCompareFromMinutes2.setDisable(true);
 				}
 			}
 		});
@@ -299,6 +308,15 @@ public class VeraGUI extends Application {
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
 
+		secondCompareFromHours = getBox("hours");
+		secondCompareFromMinutes = getBox("minutes");
+		secondCompareFromMinutes.setDisable(true);
+		secondCompareFromHours.setDisable(true);
+		secondCompareFromHours2 = getBox("hours");
+		secondCompareFromMinutes2 = getBox("minutes");
+		secondCompareFromMinutes2.setDisable(true);
+		secondCompareFromHours2.setDisable(true);
+		
 		stage.show();
 	}
 
@@ -451,10 +469,10 @@ public class VeraGUI extends Application {
 
 			HBox compareFromRow2 = new HBox(5);
 			compareFromRow2.getChildren().addAll(secondCompareFrom,
-					getBox("hours"), getBox("minutes"));
+					secondCompareFromHours, secondCompareFromMinutes);
 			HBox compareToRow2 = new HBox(5);
 			compareToRow2.getChildren().addAll(secondCompareTo,
-					getBox("hours"), getBox("minutes"));
+					secondCompareFromHours2, secondCompareFromMinutes2);
 
 			Label compareToLabel = new Label("Compare To");
 			Label compareLabel2 = new Label("Compare From");
@@ -648,10 +666,6 @@ public class VeraGUI extends Application {
 
 					}
 				});
-	}
-
-	public void getGraph(LocalDate from, LocalDate to) {
-
 	}
 
 	private ChoiceBox<Integer> getBox(String type) {

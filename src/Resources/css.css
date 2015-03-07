@@ -72,7 +72,7 @@
 }
 
 #datePicker{
--fx-pref-width: 170px;
+-fx-pref-width: 90px;
 -fx-pref-height: 25px;
 }
 
@@ -113,6 +113,10 @@
 #capsLock{
 -fx-text-fill:red;
 -fx-font-weight: bold;
+}
+
+#timeDropDown{
+-fx-pref-width:30;
 }
 
 
