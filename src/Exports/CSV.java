@@ -19,10 +19,6 @@ public final class CSV {
 		//csv.toCSV(14, 1425583201, 1425585602); // Specific id and date.
 		//csv.toCSV(-1, 0000000000, 9999999999L); // Will retrieve everything.
 		
-		DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd_HH.mm.ss");
-		Date date = new Date();
-		System.out.println(dateFormat.format(date));
-		
 //		File file = new File(dateFormat.format(date) + ".csv");
 //		if (!file.exists()) {
 //			file.createNewFile();

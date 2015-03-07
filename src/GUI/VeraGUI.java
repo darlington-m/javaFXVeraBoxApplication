@@ -104,8 +104,13 @@ public class VeraGUI extends Application {
 						+ "\n Date 2:" + compareFrom.getValue());
 				System.out.println(turnDateToLong(compareFrom.getValue()));
 
-				saveToCSV(selectedDevice.getId(), compareFrom.getValue(),
-						compareTo.getValue());
+				saveToCSV(selectedDevice.getId(), 
+								((compareFrom.getValue().toEpochDay() * 86400)
+								+ (compareFromHours.getValue() * 3600) 
+								+ (compareFromMinutes.getValue() * 60)),
+								((compareTo.getValue().toEpochDay() * 86400)
+								+ (compareToHours.getValue() * 3600) 
+								+ (compareToMinutes.getValue() * 60)));
 				break;
 			}
 		}
@@ -420,7 +425,7 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Compare", "Download CSV", "Back", "Logout" };
+			String[] words2 = { "Compare", "Back", "Logout" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "compare":
@@ -571,22 +576,19 @@ public class VeraGUI extends Application {
 		ResultSet results = conn
 				.getRows(device.readingFromSQL(
 						((compareFrom.getValue().toEpochDay() * 86400)
-								+ (compareFromHours.getValue() * 3600) + (compareFromMinutes
-								.getValue() * 60)),
-						(compareTo.getValue().toEpochDay() * 86400
-								+ compareToHours.getValue() * 3600 + compareToMinutes
-								.getValue() * 60)));
+								+ (compareFromHours.getValue() * 3600) 
+								+ (compareFromMinutes.getValue() * 60)),
+								((compareTo.getValue().toEpochDay() * 86400)
+								+ (compareToHours.getValue() * 3600) 
+								+ (compareToMinutes.getValue() * 60))));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the drop down box for
 													// selecting different
 													// graphs
-
+		
 		try {
-			System.out.println("Here :" + compareFromHours.getValue());
 			tempArray = new ArrayList<Integer>();
-			System.out.println((compareFrom.getValue().toEpochDay() * 86400)
-					+ (compareFromHours.getValue() * 3600)
-					+ (compareFromMinutes.getValue() * 60));
+			tempArray2 = new ArrayList<Long>();
 			while (results.next()) {
 				String temp = results.getString(device.getReadingName());
 				long temp2 = results.getInt("reading_date");
@@ -599,7 +601,6 @@ public class VeraGUI extends Application {
 					date = date.replaceAll(":", "");
 					date = date.replaceAll(" ", "");
 					Long dateConverted = Long.parseLong(date);
-					System.out.println(dateConverted);
 
 					String tempS = dateConverted.toString(); // change to
 																// string,
@@ -610,14 +611,12 @@ public class VeraGUI extends Application {
 																// back)
 					tempS = tempS.substring(7, 11);
 					dateConverted = Long.parseLong(tempS);
-					System.out.println(tempS);
-					System.out.println();
-					System.out.println(dateConverted);
-					// System.out.println(date);
+					 System.out.println(date);
 					tempArray.add(temp3);
 					tempArray2.add(dateConverted);
 				}
-
+				System.out.println(tempArray);
+				System.out.println(tempArray2);
 			}
 			display.getChildren().addAll(
 					device.showDeviceDetails().getChildren());
@@ -675,11 +674,8 @@ public class VeraGUI extends Application {
 		return choicebox;
 	}
 
-	private void saveToCSV(int id, LocalDate compareFrom, LocalDate compareTo) {
+	private void saveToCSV(int id, long compareFrom, long compareTo) {
 		// TODO Auto-generated method stub
-
-		Long newFromDate = turnDateToLong(compareFrom);
-		Long newToDate = turnDateToLong(compareTo);
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
@@ -693,7 +689,7 @@ public class VeraGUI extends Application {
 
 		CSV csv = new CSV();
 		try {
-			csv.toCSV(file, id, newFromDate, newToDate);
+			csv.toCSV(file, id, compareFrom, compareTo);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

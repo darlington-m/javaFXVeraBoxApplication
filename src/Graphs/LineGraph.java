@@ -11,17 +11,16 @@ import javafx.scene.chart.XYChart;
 public class LineGraph
 {
 	private Long readings;
-	int timePeriod = 61; // amount of plots on the graph
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	
 	public LineChart checkCompare(LineChart chart, ArrayList<Integer> array, ArrayList<Long> array2, Device device)
 	{
-		timePeriod = array.size();
+		int timePeriod = array.size();
 		String id = "compare2"; // if comparing do this, blah.
 		XYChart.Series<String, Number> readingsOne = new XYChart.Series<String, Number>();
 		readingsOne.setName(device.getName() + " Reading");
-		int i = array.size()-timePeriod;
+		int i = 0;
 		int lastReadings = 0;
 		timePeriod = array.size();
 
@@ -60,6 +59,8 @@ public class LineGraph
 					readingsTwo.getData().add(new XYChart.Data(Long.toString(readings), random));
 					readingsOne.setName(device.getName() + " Reading One"); // second reading (replace with primary readings or comparison setting)
 					readingsTwo.setName(device.getName() + " Reading Two"); // second reading (replace with comparison setting)
+					System.out.println("Last Readings: " + array.get(i));
+					System.out.println("readings: " + array2.get(i));
 					i++;
 				}
 				chart.getData().addAll(readingsOne, readingsTwo); // add one
