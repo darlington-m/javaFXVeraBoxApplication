@@ -1,4 +1,5 @@
 package DataRetrival;
+
 import java.sql.*;
 
 public class MySQLConnect {
@@ -15,7 +16,7 @@ public class MySQLConnect {
 	private Statement stmt = null;
 	private ResultSet resultSet = null;
 
-	public MySQLConnect(){
+	public MySQLConnect() {
 	}
 
 	public void insertRow(String sql) {
@@ -32,18 +33,18 @@ public class MySQLConnect {
 			// Handle errors for Class.forName
 			e.printStackTrace();
 		} finally {
-//			// finally block used to close resources
-//			try {
-//			//	if (stmt != null)
-//			//		conn.close();
-//			} catch (SQLException se) {
-//			}// do nothing
-//			try {
-//			//	if (conn != null)
-//			//		conn.close();
-//			} catch (SQLException se) {
-//				se.printStackTrace();
-//			}// end finally try
+			// // finally block used to close resources
+			// try {
+			// // if (stmt != null)
+			// // conn.close();
+			// } catch (SQLException se) {
+			// }// do nothing
+			// try {
+			// // if (conn != null)
+			// // conn.close();
+			// } catch (SQLException se) {
+			// se.printStackTrace();
+			// }// end finally try
 		}// end try
 	}
 

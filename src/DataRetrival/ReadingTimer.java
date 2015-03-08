@@ -1,14 +1,14 @@
 package DataRetrival;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.TimerTask;
 
-import GUI.VeraGUI;
+//import GUI.VeraGUI;
 
+public class ReadingTimer extends TimerTask {
 
-public class ReadingTimer extends TimerTask{
-	
 	@Override
 	public void run() {
 		try {

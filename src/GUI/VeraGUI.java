@@ -55,9 +55,9 @@ public class VeraGUI extends Application {
 	private Stage stage;
 	private Pane root, display;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
-			compareFromHours, compareFromMinutes, 
-			secondCompareFromHours, secondCompareFromMinutes,
-			secondCompareFromHours2, secondCompareFromMinutes2;
+			compareFromHours, compareFromMinutes, secondCompareFromHours,
+			secondCompareFromMinutes, secondCompareFromHours2,
+			secondCompareFromMinutes2;
 	private DatePicker compareTo, compareFrom, secondCompareTo,
 			secondCompareFrom;
 	private VBox sideButtons;
@@ -106,12 +106,13 @@ public class VeraGUI extends Application {
 						+ "\n Date 2:" + compareFrom.getValue());
 				System.out.println(turnDateToLong(compareFrom.getValue()));
 
-				saveToCSV(selectedDevice.getId(), 
-								((compareFrom.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareFromHours.getValue()) * 3600) 
-								+ (Long.parseLong(compareFromMinutes.getValue()) * 60)),
-								((compareTo.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareToHours.getValue()) * 3600) 
+				saveToCSV(
+						selectedDevice.getId(),
+						((compareFrom.getValue().toEpochDay() * 86400)
+								+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
+								.parseLong(compareFromMinutes.getValue()) * 60)),
+						((compareTo.getValue().toEpochDay() * 86400)
+								+ (Long.parseLong(compareToHours.getValue()) * 3600)
 								+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60));
 				break;
 			}
@@ -265,10 +266,11 @@ public class VeraGUI extends Application {
 
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> arg0,
-				LocalDate oldDate, LocalDate newDate) {
+					LocalDate oldDate, LocalDate newDate) {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("A");
 				LocalDate date = LocalDate.parse(oldDate.toString(), formatter);
-				System.out.println("Old Date :" + date + "New Date :" + newDate);
+				System.out
+						.println("Old Date :" + date + "New Date :" + newDate);
 			}
 		};
 
@@ -310,7 +312,6 @@ public class VeraGUI extends Application {
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
 
-		
 		Label colonLabel = new Label(":");
 		secondCompareFromHours = getBox("hours");
 		secondCompareFromHours.setMaxWidth(10);
@@ -321,7 +322,7 @@ public class VeraGUI extends Application {
 		secondCompareFromMinutes2 = getBox("minutes");
 		secondCompareFromMinutes2.setDisable(true);
 		secondCompareFromHours2.setDisable(true);
-		
+
 		stage.show();
 	}
 
@@ -463,21 +464,21 @@ public class VeraGUI extends Application {
 
 			Label colonLabel = new Label(":");
 			Label colonLabel2 = new Label(":");
-			
+
 			HBox compareFromRow = new HBox(5);
 			compareFromHours = getBox("hours");
 			compareFromHours.setMaxWidth(2);
 			compareFromMinutes = getBox("minutes");
 			compareFromMinutes.setMaxWidth(2);
-			compareFromRow.getChildren().addAll(compareFrom, compareFromHours, colonLabel,
-					compareFromMinutes);
+			compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
+					colonLabel, compareFromMinutes);
 			HBox compareToRow = new HBox(5);
 			compareToHours = getBox("hours");
 			compareToHours.setMaxWidth(2);
 			compareToMinutes = getBox("minutes");
 			compareToMinutes.setMaxWidth(2);
-			compareToRow.getChildren().addAll(compareTo, compareToHours, colonLabel2,
-					compareToMinutes);
+			compareToRow.getChildren().addAll(compareTo, compareToHours,
+					colonLabel2, compareToMinutes);
 
 			HBox compareFromRow2 = new HBox(5);
 			compareFromRow2.getChildren().addAll(secondCompareFrom,
@@ -606,16 +607,16 @@ public class VeraGUI extends Application {
 		ResultSet results = conn
 				.getRows(device.readingFromSQL(
 						((compareFrom.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareFromHours.getValue()) * 3600) 
-								+ (Long.parseLong(compareFromMinutes.getValue()) * 60)),
-								((compareTo.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareToHours.getValue()) * 3600) 
-								+ (Long.parseLong(compareToMinutes.getValue())* 60) + 60)));
+								+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
+								.parseLong(compareFromMinutes.getValue()) * 60)),
+						((compareTo.getValue().toEpochDay() * 86400)
+								+ (Long.parseLong(compareToHours.getValue()) * 3600)
+								+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60)));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the drop down box for
 													// selecting different
 													// graphs
-		
+
 		try {
 			tempArray = new ArrayList<Integer>();
 			tempArray2 = new ArrayList<Long>();
@@ -641,7 +642,7 @@ public class VeraGUI extends Application {
 																// back)
 					tempS = tempS.substring(7, 11);
 					dateConverted = Long.parseLong(tempS);
-					 System.out.println(date);
+					System.out.println(date);
 					tempArray.add(temp3);
 					tempArray2.add(dateConverted);
 				}
@@ -686,7 +687,7 @@ public class VeraGUI extends Application {
 		switch (type) {
 		case "hours":
 			for (int x = 1; x < 25; x++) {
-				if (x < 10){
+				if (x < 10) {
 					choicebox.getItems().add("0" + x);
 				} else {
 					choicebox.getItems().add("" + x);
@@ -696,7 +697,7 @@ public class VeraGUI extends Application {
 			break;
 		case "minutes":
 			for (int x = 0; x < 61; x += 5) {
-				if (x < 10){
+				if (x < 10) {
 					choicebox.getItems().add("0" + x);
 				} else {
 					choicebox.getItems().add("" + x);
@@ -713,7 +714,8 @@ public class VeraGUI extends Application {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
-		fileChooser.setInitialFileName("veraData_" + compareFrom + "_to_" + compareTo + ".csv");
+		fileChooser.setInitialFileName("veraData_" + compareFrom + "_to_"
+				+ compareTo + ".csv");
 		// Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 				"CSV files (*.csv)", "*.csv");

@@ -15,51 +15,66 @@ public class FourInOne extends Device {
 	String comment;
 	int tripped;
 	int lasttrip;
-	
-	public FourInOne(){
-        super.setImage("4in1.png");
-    }
-	
-	public String toString(){
-		return super.toString() + " Battery Level: " + batterylevel + " Temperature: " + getTemperatureSensor().getReading() + " Light: " + getLightSensor().getReading() + " Humidity: " + getHumiditySensor().getReading() + " ArmedTripped: " + armedtripped + " Armed: " + armed + " State: " + state + " Comment: " + comment + " Tripped: " + tripped + " LastTrip: " + lasttrip; 
+
+	public FourInOne() {
+		super.setImage("4in1.png");
 	}
-	public TemperatureSensor getTemp(){
+
+	public String toString() {
+		return super.toString() + " Battery Level: " + batterylevel
+				+ " Temperature: " + getTemperatureSensor().getReading()
+				+ " Light: " + getLightSensor().getReading() + " Humidity: "
+				+ getHumiditySensor().getReading() + " ArmedTripped: "
+				+ armedtripped + " Armed: " + armed + " State: " + state
+				+ " Comment: " + comment + " Tripped: " + tripped
+				+ " LastTrip: " + lasttrip;
+	}
+
+	public TemperatureSensor getTemp() {
 		return getTemperatureSensor();
 	}
-	public LightSensor getLight(){
+
+	public LightSensor getLight() {
 		return getLightSensor();
 	}
-	public HumiditySensor getHumidity(){
+
+	public HumiditySensor getHumidity() {
 		return getHumiditySensor();
 	}
-	
-	public void setTemp(TemperatureSensor temperatureSensor){
-		this.setTemperatureSensor(temperatureSensor);		
+
+	public void setTemp(TemperatureSensor temperatureSensor) {
+		this.setTemperatureSensor(temperatureSensor);
 	}
-	public void setLight(LightSensor lightSensor){
+
+	public void setLight(LightSensor lightSensor) {
 		this.setLightSensor(lightSensor);
 	}
-	public void setHumidity(HumiditySensor humiditySensor){
+
+	public void setHumidity(HumiditySensor humiditySensor) {
 		this.setHumiditySensor(humiditySensor);
 	}
-	
-	public String readingToSQL(){
-		return 	getTemperatureSensor().readingToSQL() + ";" + 
-		lightSensor.readingToSQL() + "," +
-		humiditySensor.readingToSQL();
+
+	public String readingToSQL() {
+		return getTemperatureSensor().readingToSQL() + ";"
+				+ lightSensor.readingToSQL() + ","
+				+ humiditySensor.readingToSQL();
 	}
-    
+
 	@Override
 	public String readingFromSQL(long startDate, long endDate) {
-		return new String("SELECT humidity,light,heat, reading_date FROM Reading WHERE id =  '" + getId()  + "' AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'");
+		return new String(
+				"SELECT humidity,light,heat, reading_date FROM Reading WHERE id =  '"
+						+ getId() + "' AND reading_date >='" + startDate
+						+ "' AND reading_date <='" + endDate + "'");
 	}
-	
-    @Override
-    public String getDetails(){
-    	return super.getDetails() + "\nTemperature: " + getTemperatureSensor().getReading() + 
-    			"\nLight: " + getLightSensor().getReading() + 
-    			"\nHumidity: " + getHumiditySensor().getReading();
-    }
+
+	@Override
+	public String getDetails() {
+		return super.getDetails() + "\nTemperature: "
+				+ getTemperatureSensor().getReading() + "\nLight: "
+				+ getLightSensor().getReading() + "\nHumidity: "
+				+ getHumiditySensor().getReading();
+	}
 
 	public LightSensor getLightSensor() {
 		return lightSensor;
@@ -84,18 +99,21 @@ public class FourInOne extends Device {
 	public void setHumiditySensor(HumiditySensor humiditySensor) {
 		this.humiditySensor = humiditySensor;
 	}
-	public Pane getPane(){
+
+	public Pane getPane() {
 		Pane pane = super.getPane();
 		Label light = new Label("Reading: " + getLightSensor().getReading());
 		light.setLayoutY(75);
 		light.setLayoutX(200);
-		Label temp = new Label("Reading: " + getTemperatureSensor().getReading());
+		Label temp = new Label("Reading: "
+				+ getTemperatureSensor().getReading());
 		temp.setLayoutY(100);
 		temp.setLayoutX(200);
-		Label  humidity = new Label("Reading: " + getHumiditySensor().getReading());
+		Label humidity = new Label("Reading: "
+				+ getHumiditySensor().getReading());
 		humidity.setLayoutY(125);
 		humidity.setLayoutX(200);
-		pane.getChildren().addAll(light,temp,humidity);
+		pane.getChildren().addAll(light, temp, humidity);
 		return pane;
 	}
 }
