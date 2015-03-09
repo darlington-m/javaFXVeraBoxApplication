@@ -577,7 +577,12 @@ public class VeraGUI extends Application {
 	}
 
 	private void showDeviceDetails(final Device device) throws SQLException {
-		ResultSet results = conn.getRows(device.readingFromSQL(0, 0));
+		Date currentDate = new Date();
+		String trimmedCurrentDate = Long.toString(currentDate.getTime());
+		trimmedCurrentDate = trimmedCurrentDate.substring(0,10); 
+		System.out.println(trimmedCurrentDate);
+		
+		ResultSet results = conn.getRows(device.readingFromSQL(Long.parseLong(trimmedCurrentDate) - 86400,Long.parseLong(trimmedCurrentDate) ));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the dropdownbox for
 													// selecting different

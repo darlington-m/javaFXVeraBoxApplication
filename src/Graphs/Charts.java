@@ -53,7 +53,7 @@ public class Charts {
 			for (Node n : barChart.lookupAll(".default-color1.chart-bar")) {
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
-			barChart.setPrefSize(1000, 550);
+			barChart.setPrefSize(800, 400);
 			barChart.setLayoutX(0);
 			barChart.setLayoutY(150);
 			pane.getChildren().add(barChart);
@@ -63,7 +63,7 @@ public class Charts {
 					xAxis, yAxis);
 			lineChart.setId("BarChart");
 			lineChartGraph.checkCompare(lineChart, array, array2, device);
-			lineChart.setPrefSize(1000, 550);
+			lineChart.setPrefSize(800, 400);
 			lineChart.setLayoutX(0);
 			lineChart.setLayoutY(150);
 			pane.getChildren().add(lineChart);

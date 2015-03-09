@@ -54,7 +54,7 @@ public class LineGraph {
 							new XYChart.Data(Long.toString(readings),
 									lastReadings));
 					readingsTwo.getData().add(
-							new XYChart.Data(Long.toString(readings), random));
+							new XYChart.Data(Long.toString(readings), lastReadings));
 					readingsOne.setName(device.getName() + " Reading One"); // second
 																			// reading
 																			// (replace
