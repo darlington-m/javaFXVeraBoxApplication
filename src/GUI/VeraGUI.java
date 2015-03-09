@@ -128,7 +128,7 @@ public class VeraGUI extends Application {
 
 		stage.setTitle("Vera Box");
 		root = new Pane();
-		scene = new Scene(root, 1200, 800);
+		scene = new Scene(root, 1000, 666);
 		stage.setScene(scene);
 		stage.setResizable(false);
 
@@ -187,7 +187,7 @@ public class VeraGUI extends Application {
 				}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
-		time.setLayoutX(topDisplay.getPrefWidth() - 140);
+		time.setLayoutX(topDisplay.getPrefWidth() - 180);
 		time.setLayoutY(45);
 
 		topDisplay.getChildren().addAll(welcome, time);
