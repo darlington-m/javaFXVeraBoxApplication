@@ -23,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -44,6 +45,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
+import Devices.Room;
 import Exports.CSV;
 import Graphs.Charts;
 
@@ -324,12 +326,12 @@ public class VeraGUI extends Application {
 		secondCompareFromHours2.setDisable(true);
 
 		stage.show();
+		displayDevices();
 	}
 
 	public void displayDevices() {
 		Pane paneBackground = new Pane();
-		paneBackground
-				.setStyle("-fx-background-color:white; -fx-pref-width:600; -fx-pref-height: 40;");
+		paneBackground.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
@@ -373,7 +375,7 @@ public class VeraGUI extends Application {
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
 		sc.setMin(0);
-		sc.setMax(700);
+		sc.setMax(1000);
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 					Number old_val, Number new_val) {
@@ -381,30 +383,74 @@ public class VeraGUI extends Application {
 						+ sortingPane.getPrefHeight());
 			}
 		});
-		// TESTING DOESNT ADD TO DATABASE CAN BE RAN FROM HOME
 		Test test = new Test();
-		ArrayList<Device> devices = test.run();
-		for (final Device device : devices) {
-			Pane pane = device.getPane();
-			pane.setPrefWidth(sortingPane.getPrefWidth());
-			System.out.println(device.getDetails());
-			pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+		//ArrayList<Device> devices = test.run();
+		ArrayList<Room> roomsList = test.run();
+		for(Room room : roomsList){
+			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
+			VBox deviceBox = new VBox(10);
+			deviceBox.setLayoutX(50);
+			deviceBox.setLayoutY(50);
+			for (final Device device : room.getDevices()) {
+				System.out.println("test");
+				Pane pane = device.getPane();
+				pane.setPrefWidth(sortingPane.getPrefWidth()-100);
+				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
-				@Override
-				public void handle(MouseEvent arg0) {
-					changeButtons("details");
-					selectedDevice = device;
-					try {
-						showDeviceDetails(device);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					@Override
+					public void handle(MouseEvent arg0) {
+						changeButtons("details");
+						selectedDevice = device;
+						try {
+							showDeviceDetails(device);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-				}
-			});
-			vb.getChildren().add(pane);
+				});
+				deviceBox.getChildren().add(pane);
+			}
+			roomPane.getChildren().add(deviceBox);
+			vb.getChildren().add(roomPane);
 		}
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
+	}
+//			roomPane.setId("roomPane");
+//			VBox deviceBox = new VBox(10);
+//			roomPane.setPrefWidth(sortingPane.getPrefWidth());
+//			deviceBox.setLayoutX(50);
+//			deviceBox.setLayoutY(50);
+//			Label roomName = new Label("Room : " + room.getName());
+//			roomName.setLayoutX(20);
+//			roomName.setLayoutY(15);
+//			roomName.setId("roomName");
+//			roomPane.getChildren().add(roomName);
+//			for (final Device device : room.getDevices()) {
+//				Pane pane = device.getPane();
+//				pane.setPrefWidth(sortingPane.getPrefWidth()-100);
+//				System.out.println(device.getDetails());
+//				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//
+//					@Override
+//					public void handle(MouseEvent arg0) {
+//						changeButtons("details");
+//						selectedDevice = device;
+//						try {
+//							showDeviceDetails(device);
+//						} catch (SQLException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//					}
+//				});
+//				deviceBox.getChildren().add(pane);
+//			}
+//			roomPane.getChildren().add(deviceBox);
+			
+//		}
+
+	
 		// END OF TESTING
 
 		// UN COMMENT WHEN ADDING TO DB AND ABLE TO GET DATA
@@ -425,7 +471,7 @@ public class VeraGUI extends Application {
 		// e.printStackTrace();
 		// }
 
-	}
+//	}
 
 	public void displayAccountInfo() {
 		display.getChildren().clear();

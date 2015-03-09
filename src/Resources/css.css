@@ -28,6 +28,11 @@
 -fx-background-color: white;
 }
 
+#roomPane{
+-fx-border-color: #f4f4f4;
+-fx-border-width: 5px;
+}
+
 #WelcomeMessage{
 -fx-font-size: 40px;
 -fx-text-fill:#12805C;
@@ -47,9 +52,13 @@
 #devices:hover{
  -fx-border-color: #12805C;
 }
+#roomName {
+-fx-text-fill: #12805C;
+-fx-font-size:18px;
+}
 
 #devices{
--fx-border-color: #918f8f;
+-fx-border-color: #f4f4f4;
 -fx-border-width: 5px;
 }
 

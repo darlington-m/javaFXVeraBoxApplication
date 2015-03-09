@@ -1,6 +1,14 @@
 package Devices;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import GUI.VeraGUI;
+import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 public class Room {
 	private String name;
@@ -39,5 +47,19 @@ public class Room {
 
 	public ArrayList<Device> getDevices() {
 		return devices;
+	}
+	
+	public Pane getPane(double length){
+		Pane roomPane = new Pane();
+		roomPane.setId("roomPane");
+		roomPane.setPrefWidth(length);
+		
+		Label roomName = new Label("Room : " + getName());
+		roomName.setLayoutX(20);
+		roomName.setLayoutY(15);
+		roomName.setId("roomName");
+		
+		roomPane.getChildren().addAll(roomName);
+		return roomPane;
 	}
 }
