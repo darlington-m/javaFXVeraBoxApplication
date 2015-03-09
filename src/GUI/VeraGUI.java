@@ -330,6 +330,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayDevices() {
+		display.getChildren().clear();
 		Pane paneBackground = new Pane();
 		paneBackground.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
 		paneBackground.setLayoutX(45);
