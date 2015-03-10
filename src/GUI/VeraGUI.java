@@ -117,7 +117,7 @@ public class VeraGUI extends Application {
 				System.out.println(turnDateToLong(compareFrom.getValue()));
 
 				saveToCSV(
-						selectedDevice.getId(),
+						selectedDevice,
 						((compareFrom.getValue().toEpochDay() * 86400)
 								+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
 								.parseLong(compareFromMinutes.getValue()) * 60)),
@@ -825,7 +825,7 @@ public class VeraGUI extends Application {
 		return choicebox;
 	}
 
-	private void saveToCSV(int id, long compareFrom, long compareTo) {
+	private void saveToCSV(Device device, long compareFrom, long compareTo) {
 		// TODO Auto-generated method stub
 
 		FileChooser fileChooser = new FileChooser();
@@ -841,7 +841,7 @@ public class VeraGUI extends Application {
 
 		CSV csv = new CSV();
 		try {
-			csv.toCSV(file, id, compareFrom, compareTo);
+			csv.toCSV(file, device, compareFrom, compareTo);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

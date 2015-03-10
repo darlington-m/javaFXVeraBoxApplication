@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import DataRetrival.MySQLConnect;
+import Devices.Device;
 
 public final class CSV {
 
-	public void toCSV(File file, int id, long startDate, long endDate)
+	public void toCSV(File file, Device device, long startDate, long endDate)
 			throws SQLException, IOException {
 
 		// CSV csv = new CSV();
@@ -23,9 +24,9 @@ public final class CSV {
 		MySQLConnect conn;
 		conn = new MySQLConnect();
 
-		String sqlStatement = "SELECT * FROM Reading WHERE ";
-		if (id != -1) {
-			sqlStatement += "id = '" + id + "' AND ";
+		String sqlStatement = "SELECT reading_date," + device.getReadingName() +  " FROM Reading WHERE ";
+		if (device.getId() != -1) {
+			sqlStatement += "id = '" + device.getId() + "' AND ";
 		}
 		sqlStatement += "reading_date >='" + startDate
 				+ "' AND reading_date <='" + endDate + "'";
@@ -37,12 +38,12 @@ public final class CSV {
 
 		results.first();
 		bufferedWriter
-				.write("reading_id,reading_date,reading_device_name,id,altid,category,subcategory,room,parent,batterylevel,temperature,light,humidity,armedtripped,armed,lasttripped,tripped,state,reading_comment,setpoint,heat,cool,status,commands,reading_mode,chcnt\n");
+				.write("reading_date," + device.getReadingName() + "\n");
 		do {
 			int i = 1;
-			for (i = 1; i < 27; i++) {
+			for (i = 1; i < 3; i++) {
 				bufferedWriter.append(results.getString(i));
-				if (i < 26) {
+				if (i < 2) {
 					bufferedWriter.append(",");
 				}
 			}
