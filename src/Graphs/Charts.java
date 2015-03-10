@@ -14,64 +14,59 @@ import javafx.scene.layout.Pane;
 public class Charts {
 
 	String type = "test";
-
-	// chart stuff
+	//Instantiate the Line/Bar graphs + device
 	BarChartGraph barChartGraph = new BarChartGraph();
 	LineGraph lineChartGraph = new LineGraph();
-
+	Device device;
+	//Instantiate the X/Y Axis of the charts
 	final CategoryAxis xAxis = new CategoryAxis();
 	final NumberAxis yAxis = new NumberAxis();
+	
 	Scene scene = new Scene(xAxis, 0, 0);
-	Device device;
 
-	ArrayList<Integer> array;
-	ArrayList<Long> array2;
+	ArrayList<Integer> lineOneReadings; // Array storing readings for line one
+	ArrayList<Long> lineOneDates; // Array storing dates for line one
 
-	public Charts(ArrayList<Integer> tempArray, ArrayList<Long> tempArray2,
-			Device device, String type) {
-		this.array = tempArray;
-		this.device = device;
-		this.type = type;
-		this.array2 = tempArray2;
+	public Charts(ArrayList<Integer> tempArray, ArrayList<Long> tempArray2,Device device, String type) 
+	{
+		this.lineOneReadings = tempArray; //store the readings
+		this.lineOneDates = tempArray2; // store the dates
+		this.device = device; // the device
+		this.type = type; // the type
 	}
 
-	public void show(Pane pane) {
+	public void show(Pane pane) 
+	{
+		xAxis.setLabel("Timescale");
+		yAxis.setLabel("Readings"); // Change to make more dynamic, heat = C(o) etc... <------------ change
 
-		// stage.setTitle("Relevant shit");
-		xAxis.setLabel("The time in which the reading was recorded");
-		yAxis.setLabel("Whatever measurement you're reading in");
-
-		if (type.equalsIgnoreCase("Bar Chart")) {
-			final BarChart<String, Number> barChart = new BarChart<String, Number>(
-					xAxis, yAxis);
-			barChart.setId("BarChart");
-			barChartGraph.checkCompare(barChart, array, array2, device);
-			for (Node n : barChart.lookupAll(".default-color0.chart-bar")) {
+		if (type.equalsIgnoreCase("Bar Chart")) // if user select bar chart, do this
+		{
+			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis); // set Axis's
+			barChart.setId("BarChart"); // set ID for CSS
+			barChartGraph.checkCompare(barChart, lineOneReadings, lineOneDates, device); // send the data over to bar chart to be added to the chart
+			for (Node n : barChart.lookupAll(".default-color0.chart-bar")) // Set the colour of the bar in the chart
+			{
 				n.setStyle("-fx-bar-fill: #00AF33;");
-
 			}
-			for (Node n : barChart.lookupAll(".default-color1.chart-bar")) {
+			for (Node n : barChart.lookupAll(".default-color1.chart-bar")) // Set the colour of the bar in the chart
+			{
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
 			barChart.setPrefSize(800, 400);
 			barChart.setLayoutX(0);
 			barChart.setLayoutY(150);
 			pane.getChildren().add(barChart);
-			// scene = new Scene(barChart, 800, 600);
-		} else if (type.equalsIgnoreCase("Line Chart")) {
-			final LineChart<String, Number> lineChart = new LineChart<String, Number>(
-					xAxis, yAxis);
-			lineChart.setId("BarChart");
-			lineChartGraph.checkCompare(lineChart, array, array2, device);
+		} 
+		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
+		{
+			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
+			lineChartGraph.checkCompare(lineChart, lineOneReadings, lineOneDates, device);  // send the data over to bar chart to be added to the chart
 			lineChart.setPrefSize(800, 400);
 			lineChart.setLayoutX(0);
 			lineChart.setLayoutY(150);
 			pane.getChildren().add(lineChart);
-			// scene = new Scene(lineChart, 800, 600);
 		}
-		// stage.setScene(scene);
-		// scene.getStylesheets().add(Charts.class.getResource("/Resources/css.css").toExternalForm());
-		// stage.show();
 	}
 
 }
