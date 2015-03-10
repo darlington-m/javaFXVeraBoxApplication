@@ -57,6 +57,7 @@ public class VeraGUI extends Application {
 	private Scene scene;
 	private Stage stage;
 	private Pane root, display;
+	private long lastCompareToDate, lastCompareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
 			compareFromHours, compareFromMinutes, secondCompareFromHours,
 			secondCompareFromMinutes, secondCompareFromHours2,
@@ -116,14 +117,7 @@ public class VeraGUI extends Application {
 						+ "\n Date 2:" + compareFrom.getValue());
 				System.out.println(turnDateToLong(compareFrom.getValue()));
 
-				saveToCSV(
-						selectedDevice,
-						((compareFrom.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
-								.parseLong(compareFromMinutes.getValue()) * 60)),
-						((compareTo.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareToHours.getValue()) * 3600)
-								+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60));
+				saveToCSV(selectedDevice);
 				break;
 			}
 		}
@@ -552,7 +546,7 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Compare", "Back", "Logout" };
+			String[] words2 = { "Compare", "Download CSV", "Back", "Logout" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "settings":
@@ -644,9 +638,10 @@ public class VeraGUI extends Application {
 		Date currentDate = new Date();
 		String trimmedCurrentDate = Long.toString(currentDate.getTime());
 		trimmedCurrentDate = trimmedCurrentDate.substring(0,10); 
-		System.out.println(trimmedCurrentDate);
-		
-		ResultSet results = conn.getRows(device.readingFromSQL(Long.parseLong(trimmedCurrentDate) - 86400,Long.parseLong(trimmedCurrentDate) ));
+		lastCompareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
+		lastCompareToDate = Long.parseLong(trimmedCurrentDate);
+		ResultSet results = conn
+				.getRows(device.readingFromSQL(lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the dropdownbox for
 													// selecting different
@@ -718,16 +713,16 @@ public class VeraGUI extends Application {
 				});
 	}
 
-	private void showDeviceDetails(final Device device, String test)
+	private void showDeviceDetails(final Device device, String userSet) //This string parameter is not used and is simply to have a seperate method, one which is user defined(this one) and one that is automatically 24 hours(the other method).
 			throws SQLException {
+		lastCompareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
+				+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
+				.parseLong(compareFromMinutes.getValue()) * 60);
+		lastCompareToDate = (compareTo.getValue().toEpochDay() * 86400)
+				+ (Long.parseLong(compareToHours.getValue()) * 3600)
+				+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
 		ResultSet results = conn
-				.getRows(device.readingFromSQL(
-						((compareFrom.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
-								.parseLong(compareFromMinutes.getValue()) * 60)),
-						((compareTo.getValue().toEpochDay() * 86400)
-								+ (Long.parseLong(compareToHours.getValue()) * 3600)
-								+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60)));
+				.getRows(device.readingFromSQL(lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the drop down box for
 													// selecting different
@@ -825,13 +820,13 @@ public class VeraGUI extends Application {
 		return choicebox;
 	}
 
-	private void saveToCSV(Device device, long compareFrom, long compareTo) {
+	private void saveToCSV(Device device) {
 		// TODO Auto-generated method stub
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
-		fileChooser.setInitialFileName("veraData_" + compareFrom + "_to_"
-				+ compareTo + ".csv");
+		fileChooser.setInitialFileName("veraData_" + lastCompareFromDate + "_to_"
+				+ lastCompareToDate + ".csv");
 		// Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 				"CSV files (*.csv)", "*.csv");
@@ -841,7 +836,7 @@ public class VeraGUI extends Application {
 
 		CSV csv = new CSV();
 		try {
-			csv.toCSV(file, device, compareFrom, compareTo);
+			csv.toCSV(file, device, lastCompareFromDate, lastCompareToDate);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
