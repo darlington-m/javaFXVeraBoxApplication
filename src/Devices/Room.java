@@ -1,14 +1,14 @@
 package Devices;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import GUI.VeraGUI;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 public class Room {
 	private String name;
@@ -61,5 +61,58 @@ public class Room {
 		
 		roomPane.getChildren().addAll(roomName);
 		return roomPane;
+	}
+	public Pane getDetailsPane(){
+		final Pane pane = new Pane();
+		pane.setPrefSize(600,70);
+		pane.setId("roomDetails");
+		
+		final Label nameLabel = new Label(getName());
+		nameLabel.setLayoutY(25);
+		final Label deviceNum = new Label("Holds " + devices.size() + " devices");
+		deviceNum.setLayoutX(250);
+		deviceNum.setLayoutY(25);
+		final Button button = new Button("Edit");
+		button.setLayoutX(600);
+		button.setLayoutY(25);
+		button.setTooltip(new Tooltip("Click to edit the name"));
+		final TextField editName = new TextField(getName());
+		editName.setVisible(false);
+		editName.setLayoutY(20);
+		final Label warning = new Label("Name cannot be empty");
+		warning.setVisible(false);
+		warning.setLayoutY(44);
+		warning.setStyle("-fx-text-fill:red");
+		
+		button.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(nameLabel.isVisible()){
+					nameLabel.setVisible(false);
+					editName.setVisible(true);						
+				}else{
+					nameLabel.setVisible(true);
+					editName.setVisible(false);	
+				}
+			}});
+		
+		editName.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(editName.getText().matches("[a-zA-z]")){
+					name = editName.getText();
+					nameLabel.setText(name);
+					nameLabel.setVisible(true);
+					editName.setVisible(false);
+					warning.setVisible(false);
+				}else{
+					warning.setVisible(true);
+				}
+				
+			}});
+		pane.getChildren().addAll(nameLabel,deviceNum,button,editName,warning);
+		return pane;
 	}
 }

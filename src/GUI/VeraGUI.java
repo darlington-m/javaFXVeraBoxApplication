@@ -23,7 +23,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -32,6 +31,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -80,6 +81,7 @@ public class VeraGUI extends Application {
 				displayDevices();
 				break;
 			case "Settings":
+				changeButtons("settings");
 				displaySettings();
 				break;
 			case "Account":
@@ -103,6 +105,12 @@ public class VeraGUI extends Application {
 				changeButtons("mainMenu");
 				displayDevices();
 				break;
+			case "Cancel":
+				displaySettings();
+				break;
+			case "Add a room":
+				changeButtons("addRoom");				
+				break;
 			case "Download CSV":
 				System.out.println("Date 1:" + compareTo.getValue()
 						+ "\n Date 2:" + compareFrom.getValue());
@@ -120,7 +128,7 @@ public class VeraGUI extends Application {
 			}
 		}
 	};
-
+	
 	public static void main(String[] args) throws IOException {
 		launch(args);
 	}
@@ -473,6 +481,27 @@ public class VeraGUI extends Application {
 		// }
 
 //	}
+	
+	public void addARoom(){
+		display.getChildren().clear();
+		final Label addRoom = new Label("Add a new room");
+		final Label enterDetails = new Label("Please enter a name below");
+		final Label warning = new Label("Please Enter a name");
+		warning.setVisible(false);
+		final TextField input = new TextField();
+		final Button add = new Button("Add room");
+		add.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(input.getText().matches("[a-zA-Z]*")){
+					// create room into database
+				}else{
+					warning.setVisible(true);
+				}
+			}});
+		display.getChildren().addAll(addRoom,enterDetails,warning,input,add);
+	}
 
 	public void displayAccountInfo() {
 		display.getChildren().clear();
@@ -480,6 +509,33 @@ public class VeraGUI extends Application {
 
 	public void displaySettings() {
 		display.getChildren().clear();
+		VBox list = new VBox();
+		list.setLayoutX(60);
+		Pane pane = new Pane();
+		
+		Label roomName = new Label("Name");
+		roomName.setId("DeviceName");
+		roomName.setLayoutY(50);
+		Label number = new Label("Number of devices");
+		number.setId("DeviceName");
+		number.setLayoutX(250);
+		number.setLayoutY(50);
+		Label action = new Label("Action");
+		action.setId("DeviceName");
+		action.setLayoutX(600);
+		action.setLayoutY(50);		
+		Separator separator = new Separator();
+		separator.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+		pane.getChildren().addAll(roomName,number,action);
+		list.getChildren().addAll(pane,separator);
+		
+		Test test = new Test();
+		ArrayList<Room> rooms = test.run();
+		
+		for(Room room : rooms){
+			list.getChildren().add(room.getDetailsPane());
+		}
+		display.getChildren().add(list);
 	}
 
 	private void displayScenes() {
@@ -498,6 +554,14 @@ public class VeraGUI extends Application {
 		case "details":
 			String[] words2 = { "Compare", "Back", "Logout" };
 			names = Arrays.<String> asList(words2);
+			break;
+		case "settings":
+			String[] words4 = { "Add a room", "Back", "Logout" };
+			names = Arrays.<String> asList(words4);
+			break;
+		case "addRoom":
+			String[] words5 = {"Cancel", "Logout" };
+			names = Arrays.<String> asList(words5);
 			break;
 		case "compare":
 
