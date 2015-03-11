@@ -104,6 +104,7 @@ public class VeraGUI extends Application {
 			case "Back":
 				display.getChildren().clear();
 				changeButtons("mainMenu");
+				graphType.setValue("Line Chart");
 				displayDevices();
 				break;
 			case "Cancel":
@@ -797,7 +798,7 @@ public class VeraGUI extends Application {
 		choicebox.setId("timeDropDown");
 		switch (type) {
 		case "hours":
-			for (int x = 1; x < 25; x++) {
+			for (int x = 0; x < 24; x++) {
 				if (x < 10) {
 					choicebox.getItems().add("0" + x);
 				} else {
@@ -807,7 +808,7 @@ public class VeraGUI extends Application {
 			choicebox.getSelectionModel().selectFirst();
 			break;
 		case "minutes":
-			for (int x = 0; x < 61; x += 5) {
+			for (int x = 0; x < 56; x += 5) {
 				if (x < 10) {
 					choicebox.getItems().add("0" + x);
 				} else {
@@ -854,5 +855,4 @@ public class VeraGUI extends Application {
 		long l = res.getTime() / 1000;
 		return l;
 	}
-
 }
