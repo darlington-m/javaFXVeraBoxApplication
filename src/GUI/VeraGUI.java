@@ -554,7 +554,7 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words4);
 			break;
 		case "addRoom":
-			String[] words5 = {"Cancel", "Logout" };
+			String[] words5 = {"Cancel", "Back", "Logout" };
 			names = Arrays.<String> asList(words5);
 			break;
 		case "compare":
