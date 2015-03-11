@@ -605,6 +605,7 @@ public class VeraGUI extends Application {
 				public void handle(ActionEvent event) {
 					try {
 						showDeviceDetails(selectedDevice, "test");
+						graphType.getSelectionModel().selectFirst();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -636,11 +637,25 @@ public class VeraGUI extends Application {
 	}
 
 	private void showDeviceDetails(final Device device) throws SQLException {
-		Date currentDate = new Date();
-		String trimmedCurrentDate = Long.toString(currentDate.getTime());
+		changeButtons("compare");
+		Calendar currentDate = Calendar.getInstance();
+		
+		compareFromHours.getSelectionModel().select(currentDate.get(Calendar.HOUR_OF_DAY));
+		compareToHours.getSelectionModel().select(currentDate.get(Calendar.HOUR_OF_DAY));
+		if (currentDate.get(Calendar.MINUTE) < 55){
+			compareFromMinutes.getSelectionModel().select((int) currentDate.get(Calendar.MINUTE) / 5 + 1);
+			compareToMinutes.getSelectionModel().select((int) currentDate.get(Calendar.MINUTE) / 5 + 1);
+		} else {
+			compareFromMinutes.getSelectionModel().select(0);
+			compareToMinutes.getSelectionModel().select(0);
+		}
+		
+		String trimmedCurrentDate = Long.toString(currentDate.getTimeInMillis() / 1000);
 		trimmedCurrentDate = trimmedCurrentDate.substring(0,10); 
+		
 		lastCompareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
 		lastCompareToDate = Long.parseLong(trimmedCurrentDate);
+
 		ResultSet results = conn
 				.getRows(device.readingFromSQL(lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
