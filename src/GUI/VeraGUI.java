@@ -375,9 +375,11 @@ public class VeraGUI extends Application {
 		vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - 12);
+		sc.setLayoutX(display.getPrefWidth() - 22);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
+		sc.setMinWidth(12);
+		sc.setMaxWidth(12);
 		sc.setMin(0);
 		sc.setMax(1000);
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
