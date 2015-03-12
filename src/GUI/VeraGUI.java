@@ -44,6 +44,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import DataRetrival.CurrentReadings;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
 import Devices.Room;
@@ -68,7 +69,7 @@ public class VeraGUI extends Application {
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
 	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
-	private ArrayList<Long> tempArray2 = new ArrayList<Long>();
+	private ArrayList<String> tempArray2 = new ArrayList<String>();
 	private Device selectedDevice;
 
 	ArrayList<Button> buttons = new ArrayList<Button>();
@@ -389,9 +390,8 @@ public class VeraGUI extends Application {
 						+ sortingPane.getPrefHeight());
 			}
 		});
-		Test test = new Test();
-		//ArrayList<Device> devices = test.run();
-		ArrayList<Room> roomsList = test.run();
+		CurrentReadings currentReadings  = new CurrentReadings();
+		ArrayList<Room> roomsList = currentReadings.getCurrentReadings();
 		for(Room room : roomsList){
 			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
 			VBox deviceBox = new VBox(10);
@@ -678,7 +678,7 @@ public class VeraGUI extends Application {
 					date = date.replaceAll("/", "");
 					date = date.replaceAll(":", "");
 					date = date.replaceAll(" ", "");
-					Long dateConverted = Long.parseLong(date);
+					String dateConverted = date;
 					System.out.println(dateConverted);
 
 					String tempS = dateConverted.toString(); // change to
@@ -688,8 +688,8 @@ public class VeraGUI extends Application {
 																// digits
 																// (convert
 																// back)
-					tempS = tempS.substring(7, 11);
-					dateConverted = Long.parseLong(tempS);
+					tempS = tempS.substring(8, 12);
+					dateConverted = tempS;
 					System.out.println(tempS);
 					System.out.println();
 					System.out.println(dateConverted);
@@ -748,7 +748,7 @@ public class VeraGUI extends Application {
 
 		try {
 			tempArray = new ArrayList<Integer>();
-			tempArray2 = new ArrayList<Long>();
+			tempArray2 = new ArrayList<String>();
 			while (results.next()) {
 				String temp = results.getString(device.getReadingName());
 				long temp2 = results.getInt("reading_date");
@@ -760,7 +760,7 @@ public class VeraGUI extends Application {
 					date = date.replaceAll("/", "");
 					date = date.replaceAll(":", "");
 					date = date.replaceAll(" ", "");
-					Long dateConverted = Long.parseLong(date);
+					String dateConverted = date;
 
 					String tempS = dateConverted.toString(); // change to
 																// string,
@@ -769,8 +769,8 @@ public class VeraGUI extends Application {
 																// digits
 																// (convert
 																// back)
-					tempS = tempS.substring(7, 11);
-					dateConverted = Long.parseLong(tempS);
+					tempS = tempS.substring(8, 12);
+					dateConverted = tempS;
 					System.out.println(date);
 					tempArray.add(temp3);
 					tempArray2.add(dateConverted);
@@ -859,7 +859,6 @@ public class VeraGUI extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // Specific id and date.
-
 	}
 
 	private Long turnDateToLong(LocalDate locDate) {

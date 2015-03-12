@@ -27,7 +27,7 @@ public class AllTests {
 		Data data;
 
 		// Factory to be tested
-		GSONObjectFactory factory = new GSONObjectFactory();
+	//	GSONObjectFactory factory = new GSONObjectFactory();
 
 		// object to be tested
 		Device testObj = null;
@@ -41,7 +41,7 @@ public class AllTests {
 			// get added item from array
 			for (JsonElement x : data.getDevices()) {
 
-				testObj = factory.toDeviceObject(x);
+		//		testObj = factory.toDeviceObject(x);
 			}
 
 		} catch (IOException e) {

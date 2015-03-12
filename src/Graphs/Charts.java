@@ -25,9 +25,9 @@ public class Charts {
 	Scene scene = new Scene(xAxis, 0, 0);
 
 	ArrayList<Integer> lineOneReadings; // Array storing readings for line one
-	ArrayList<Long> lineOneDates; // Array storing dates for line one
+	ArrayList<String> lineOneDates; // Array storing dates for line one
 
-	public Charts(ArrayList<Integer> tempArray, ArrayList<Long> tempArray2,Device device, String type) 
+	public Charts(ArrayList<Integer> tempArray, ArrayList<String> tempArray2,Device device, String type) 
 	{
 		this.lineOneReadings = tempArray; //store the readings
 		this.lineOneDates = tempArray2; // store the dates

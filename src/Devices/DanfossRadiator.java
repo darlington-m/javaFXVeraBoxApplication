@@ -14,10 +14,15 @@ public class DanfossRadiator extends Device implements Sensor {
 	String mode;
 	int state;
 	String comment;
+	
+	public DanfossRadiator(){
+		this.image = "radiator.jpg";
+		this.readingName = "heat";
+	}
 
-	public DanfossRadiator() {
-		image = "radiator.jpg";
-		readingName = "heat";
+	public DanfossRadiator(String name, int id, String altid, int category,
+			int subcategory, int room, int parent, int currentReading) {
+		super(name, id, altid, category, subcategory, room, parent, "radiator.jpg", "heat", currentReading);
 	}
 
 	@Override

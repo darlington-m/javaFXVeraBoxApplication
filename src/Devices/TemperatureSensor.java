@@ -12,8 +12,13 @@ public class TemperatureSensor extends Device implements Sensor {
 	public TemperatureSensor() {
 		super.setImage("temperature.png");
 		readingName = "temperature";
-
 	}
+	
+	public TemperatureSensor(String name, int id, String altid, int category,
+			int subcategory, int room, int parent, int currentReading) {
+		super(name, id, altid, category, subcategory, room, parent, "temperature.jpg", "temperature", currentReading);
+	}
+
 
 	@Override
 	public int getReading() {
@@ -37,7 +42,11 @@ public class TemperatureSensor extends Device implements Sensor {
 						+ getSubcategory()
 						+ "',  '"
 						+ getRoom()
-						+ "',  '" + getParent() + "',  '" + getReading() + "')");
+						+ "',  '" 
+						+ getParent() 
+						+ "',  '" 
+						+ getReading() 
+						+ "')");
 	}
     
 	@Override

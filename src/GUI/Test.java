@@ -73,17 +73,17 @@ public class Test {
 			br = new BufferedReader(new FileReader(humidityFile));
 			HumiditySensor humidity2 = new HumiditySensor();
 			humidity2 = gson.fromJson(br, HumiditySensor.class);
-			fourinOne.setHumidity(humidity2);
+			//fourinOne.setHumidity(humidity2);
 			
 			br = new BufferedReader(new FileReader(tempFile));
 			TemperatureSensor temp2 = new TemperatureSensor(); 
 			temp2 = gson.fromJson(br, TemperatureSensor.class);
-			fourinOne.setTemp(temp2);
+			//fourinOne.setTemp(temp2);
 			
 			br = new BufferedReader(new FileReader(lightFile));
 			LightSensor light2 = new LightSensor();
 			light2 = gson.fromJson(br, LightSensor.class);
-			fourinOne.setLight(light2);
+			//fourinOne.setLight(light2);
 			
 			list.add(fourinOne);
 			

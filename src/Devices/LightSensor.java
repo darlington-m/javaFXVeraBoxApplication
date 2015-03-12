@@ -6,16 +6,21 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 public class LightSensor extends Device implements Sensor {
-	private String light;
+	private int light;
 
 	public LightSensor() {
 		image = "bulb.png";
 		readingName = "light";
 	}
+	
+	public LightSensor(String name, int id, String altid, int category,
+			int subcategory, int room, int parent, int currentReading) {
+		super(name, id, altid, category, subcategory, room, parent, "bulb.jpg", "light", currentReading);
+	}
 
 	@Override
 	public int getReading() {
-		return Integer.parseInt(light);
+		return currentReading;
 	}
 
 	@Override

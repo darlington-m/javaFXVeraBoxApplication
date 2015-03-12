@@ -27,6 +27,27 @@ public abstract class Device {
 	int parent;
 	String image = "";
 	String readingName;
+	int currentReading;
+	
+	public Device(){
+		
+	}
+
+	public Device(String name, int id, String altid, int category,
+			int subcategory, int room, int parent, String image,
+			String readingName, int currentReading) {
+		super();
+		this.name = name;
+		this.id = id;
+		this.altid = altid;
+		this.category = category;
+		this.subcategory = subcategory;
+		this.room = room;
+		this.parent = parent;
+		this.image = null;
+		this.readingName = readingName;
+		this.currentReading = currentReading;
+	}
 
 	@Override
 	public String toString() {
@@ -91,7 +112,7 @@ public abstract class Device {
 		Rectangle imageView = new Rectangle(100, 100);
 		imageView.setUserData(this);
 		imageView.setFill(new ImagePattern(new Image(VeraGUI.class.getResource(
-				"/Resources/" + getImage()).toExternalForm())));
+				"/Resources/radiator.jpg").toExternalForm())));
 		imageView.setLayoutX(30);
 		imageView.setLayoutY(30);
 

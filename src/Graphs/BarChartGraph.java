@@ -8,10 +8,10 @@ import javafx.scene.chart.XYChart;
 
 public class BarChartGraph 
 {
-	private long datesRecorded;
+	private String datesRecorded;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public BarChart checkCompare(BarChart chart, ArrayList<Integer> array,ArrayList<Long> array2, Device device) 
+	public BarChart checkCompare(BarChart chart, ArrayList<Integer> array,ArrayList<String> array2, Device device) 
 	{
 		int numberOfDisplayedPointsOfData = array.size(); // How many points on the graph to be shown
 		String id = "dontCompare"; //compare checker, if compare radio button not active "dontCompare" a single line, else show 2 lines on graph
@@ -30,7 +30,7 @@ public class BarChartGraph
 				{
 					lineOneReadings = array.get(i);
 					datesRecorded = array2.get(i);
-					readingsOne.getData().add(new XYChart.Data(Integer.toString((int) datesRecorded),lineOneReadings));
+					readingsOne.getData().add(new XYChart.Data(datesRecorded,lineOneReadings));
 					i++;
 				}
 				chart.getData().add(readingsOne); // add one
@@ -52,8 +52,8 @@ public class BarChartGraph
 				{
 					lineOneReadings = array.get(i);
 					datesRecorded = array2.get(i); // get recorded time here
-					readingsOne.getData().add(new XYChart.Data(Integer.toString((int) datesRecorded),numberOfDisplayedPointsOfData)); // results 1
-					readingsTwo.getData().add(new XYChart.Data(Integer.toString((int) datesRecorded),numberOfDisplayedPointsOfData)); // results 2
+					readingsOne.getData().add(new XYChart.Data(datesRecorded,numberOfDisplayedPointsOfData)); // results 1
+					readingsTwo.getData().add(new XYChart.Data(datesRecorded,numberOfDisplayedPointsOfData)); // results 2
 					i++;
 				}
 			}

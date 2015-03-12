@@ -12,6 +12,11 @@ public class HumiditySensor extends Device implements Sensor {
 		super.setImage("humidity.jpg");
 		readingName = "humidity";
 	}
+	
+	public HumiditySensor(String name, int id, String altid, int category,
+			int subcategory, int room, int parent, int currentReading) {
+		super(name, id, altid, category, subcategory, room, parent, "humidity.jpg", "humidity", currentReading);
+	}
 
 	@Override
 	public int getReading() {
@@ -58,7 +63,7 @@ public class HumiditySensor extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label("Reading: " + getReading());
+		Label reading = new Label("Reading: " + currentReading);
 		reading.setLayoutX(200);
 		reading.setLayoutY(100);
 		pane.getChildren().addAll(reading);

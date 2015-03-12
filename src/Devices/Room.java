@@ -16,7 +16,7 @@ public class Room {
 	private int section;
 	private ArrayList<Device> devices = new ArrayList<Device>();
 
-	Room(String name, int id) {
+	public Room(String name, int id) {
 		this.name = name;
 		this.id = id;
 	}
