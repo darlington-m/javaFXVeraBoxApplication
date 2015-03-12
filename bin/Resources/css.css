@@ -13,6 +13,15 @@
 -fx-text-fill: white;
 }
 
+#roomDetails {
+-fx-border-color: black;
+-fx-border-width: 0 0 1px 0;
+}
+
+#roomDetails:hover {
+-fx-background-color: #f4f4f4;
+}
+
 #sidePane{
 -fx-background-color: #F4F4F4;
 -fx-pref-width: 200px;
@@ -37,6 +46,7 @@
 -fx-font-size: 40px;
 -fx-text-fill:#12805C;
 }
+
 #time{
 -fx-background-color:#f4f4f4;
 -fx-background-radius: 15px;
@@ -44,6 +54,7 @@
 -fx-font-size:20px;
 -fx-text-fill: #12805C;
 }
+
 #sortingPane{
 -fx-background-color: #12805C;
 -fx-background-radius: 20px 20px 0 0;
@@ -66,6 +77,7 @@
 -fx-font-size: 30px;
 -fx-text-fill: #12805C;
 }
+
 #sortingLabel{
 -fx-font-size: 15px;
 -fx-text-fill: white;
@@ -100,6 +112,7 @@
 -fx-font-size:15px;
 -fx-text-fill: #12805C;
 }
+
 #graphWarning {
 -fx-background-color: #f4f4f4;
 -fx-text-align: center;

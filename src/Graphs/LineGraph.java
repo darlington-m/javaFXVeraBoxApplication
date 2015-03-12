@@ -12,9 +12,17 @@ public class LineGraph
 	private String datesRecorded;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public LineChart checkCompare(LineChart chart, ArrayList<Integer> array,ArrayList<String> array2, Device device) 
+	public LineChart checkCompare(LineChart chart, ArrayList<Integer> readingsArrayForDeviceOne,ArrayList<String> dateArray, Device device) 
 	{
-		int numberOfDisplayedPointsOfData = array.size(); // How many points on the graph to be shown
+		int numberOfDisplayedPointsOfData = readingsArrayForDeviceOne.size(); // How many points on the graph to be shown
+		if(numberOfDisplayedPointsOfData > 572)
+		{
+			int i = 0;
+			while(i < 34)
+			{
+				
+			}
+		}
 		String id = "dontCompare"; //compare checker, if compare radio button not active "dontCompare" a single line, else show 2 lines on graph
 		int i = 0;
 		int lineOneReadings = 0;
@@ -28,10 +36,10 @@ public class LineGraph
 		{
 			try 
 			{
-				while (i < array.size()-1)  // while there's still data in the array
+				while (i < readingsArrayForDeviceOne.size()-1)  // while there's still data in the array
 				{
-					lineOneReadings = array.get(i); // get the readings through all index 0-array.size()-1 and add them into the arraylist
-					datesRecorded = array2.get(i);  // get all the dates for the readings and store them exactly the same way as the readings, same index's
+					lineOneReadings = readingsArrayForDeviceOne.get(i); // get the readings through all index 0-array.size()-1 and add them into the arraylist
+					datesRecorded = dateArray.get(i);  // get all the dates for the readings and store them exactly the same way as the readings, same index's
 					readingsOne.getData().add(new XYChart.Data(datesRecorded,lineOneReadings)); // add the data to the chart
 					i++;
 				}
@@ -39,8 +47,8 @@ public class LineGraph
 			} 
 			catch (IndexOutOfBoundsException e)
 			{
-				numberOfDisplayedPointsOfData = array.size(); // default retrieval, can't get an error.
-				checkCompare(chart, array, array2, device); // Pass everything back to the method and try again.
+				numberOfDisplayedPointsOfData = readingsArrayForDeviceOne.size(); // default retrieval, can't get an error.
+				checkCompare(chart, readingsArrayForDeviceOne, dateArray, device); // Pass everything back to the method and try again.
 			}
 		}
 		else if (id.equalsIgnoreCase("compare2")) // If there's multiple readings being compared, use this
@@ -50,10 +58,10 @@ public class LineGraph
 			readingsTwo.setName(device.getName() + " Reading");  // Legend (bottom colour indicator) name
 			try 
 			{
-				while (i < array.size()-1) // while there's still data in the array
+				while (i < readingsArrayForDeviceOne.size()-1) // while there's still data in the array
 				{
-					lineOneReadings = array.get(i);  // get the readings through all index 0-array.size()-1 and add them into the arraylist
-					datesRecorded = array2.get(i); // get recorded time here
+					lineOneReadings = readingsArrayForDeviceOne.get(i);  // get the readings through all index 0-array.size()-1 and add them into the arraylist
+					datesRecorded = dateArray.get(i); // get recorded time here
 					readingsOne.getData().add(new XYChart.Data(datesRecorded,lineOneReadings));
 					readingsTwo.getData().add(new XYChart.Data(datesRecorded, lineOneReadings));
 					i++;
@@ -62,8 +70,8 @@ public class LineGraph
 			}
 			catch (IndexOutOfBoundsException e) 
 			{
-				numberOfDisplayedPointsOfData = array.size(); // default retrieval, can't get an error.
-				checkCompare(chart, array, array2, device); // Pass everything back to the method and try again.
+				numberOfDisplayedPointsOfData = readingsArrayForDeviceOne.size(); // default retrieval, can't get an error.
+				checkCompare(chart, readingsArrayForDeviceOne, dateArray, device); // Pass everything back to the method and try again.
 			}
 		} 
 
