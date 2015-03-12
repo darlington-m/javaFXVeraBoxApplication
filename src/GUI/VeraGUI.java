@@ -760,23 +760,12 @@ public class VeraGUI extends Application {
 					date = date.replaceAll("/", "");
 					date = date.replaceAll(":", "");
 					date = date.replaceAll(" ", "");
-					String dateConverted = date;
-
-					String tempS = dateConverted.toString(); // change to
-																// string,
-																// substring and
-																// get last 4
-																// digits
-																// (convert
-																// back)
-					tempS = tempS.substring(8, 12);
-					dateConverted = tempS;
-					System.out.println(date);
+					String dateHours = date.substring(8, 10);
+					String dateMinutes = date.substring(10, 12);
+					date = dateHours + ":" + dateMinutes;
 					readingsArray.add(temp3);
-					dateArray.add(dateConverted);
+					dateArray.add(date);
 				}
-				System.out.println(readingsArray);
-				System.out.println(dateArray);
 			}
 			display.getChildren().addAll(
 					device.showDeviceDetails().getChildren());
