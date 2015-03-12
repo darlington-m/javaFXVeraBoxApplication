@@ -15,7 +15,7 @@ public class LightSensor extends Device implements Sensor {
 	
 	public LightSensor(String name, int id, String altid, int category,
 			int subcategory, int room, int parent, int currentReading) {
-		super(name, id, altid, category, subcategory, room, parent, "bulb.jpg", "light", currentReading);
+		super(name, id, altid, category, subcategory, room, parent, "bulb.png", "light", currentReading);
 	}
 
 	@Override

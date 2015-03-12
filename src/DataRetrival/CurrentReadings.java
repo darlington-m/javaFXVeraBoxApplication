@@ -35,7 +35,8 @@ public class CurrentReadings {
 				// Check for heat and not humidity to tell the difference
 				// between 4in1 sensor and radiator
 				if (resultSetReadings.getString("heat") != null
-						&& resultSetReadings.getString("humidity") == null) {
+						&& resultSetReadings.getString("humidity") == null 
+						&& resultSetReadings.getString("light") == null) {
 					devices.add(new DanfossRadiator(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -49,7 +50,8 @@ public class CurrentReadings {
 					// Check for light and not humidity to tell the difference
 					// between 4in1 sensor and light sensor
 				} else if (resultSetReadings.getString("light") != null
-						&& resultSetReadings.getString("humidity") == null) {
+						&& resultSetReadings.getString("humidity") == null
+						&& resultSetReadings.getString("temperature") == null) {
 					devices.add(new LightSensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -65,7 +67,8 @@ public class CurrentReadings {
 				// Check for humidity and not heat to tell the difference
 				// between 4in1 sensor and humidity sensor
 				else if (resultSetReadings.getString("humidity") != null
-						&& resultSetReadings.getString("heat") == null) {
+						&& resultSetReadings.getString("heat") == null
+						&& resultSetReadings.getString("light") == null){
 					devices.add(new HumiditySensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -81,7 +84,8 @@ public class CurrentReadings {
 				// Check for temperature and not humidity to tell the difference
 				// between 4in1 sensor and temperature sensor
 				else if (resultSetReadings.getString("temperature") != null
-						&& resultSetReadings.getString("humidity") == null) {
+						&& resultSetReadings.getString("humidity") == null
+						&& resultSetReadings.getString("light") == null) {
 					devices.add(new TemperatureSensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings

@@ -16,7 +16,7 @@ public class TemperatureSensor extends Device implements Sensor {
 	
 	public TemperatureSensor(String name, int id, String altid, int category,
 			int subcategory, int room, int parent, int currentReading) {
-		super(name, id, altid, category, subcategory, room, parent, "temperature.jpg", "temperature", currentReading);
+		super(name, id, altid, category, subcategory, room, parent, "temperature.png", "temperature", currentReading);
 	}
 
 

@@ -25,7 +25,7 @@ public abstract class Device {
 	int subcategory;
 	int room;
 	int parent;
-	String image = "";
+	String image = null;
 	String readingName;
 	int currentReading;
 	
@@ -44,7 +44,7 @@ public abstract class Device {
 		this.subcategory = subcategory;
 		this.room = room;
 		this.parent = parent;
-		this.image = null;
+		this.image = image;
 		this.readingName = readingName;
 		this.currentReading = currentReading;
 	}
@@ -112,7 +112,7 @@ public abstract class Device {
 		Rectangle imageView = new Rectangle(100, 100);
 		imageView.setUserData(this);
 		imageView.setFill(new ImagePattern(new Image(VeraGUI.class.getResource(
-				"/Resources/radiator.jpg").toExternalForm())));
+				"/Resources/" + getImage()).toExternalForm())));
 		imageView.setLayoutX(30);
 		imageView.setLayoutY(30);
 

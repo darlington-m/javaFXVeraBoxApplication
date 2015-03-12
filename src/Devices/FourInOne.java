@@ -24,7 +24,7 @@ public class FourInOne extends Device {
 	
 	public FourInOne(String name, int id, String altid, int category,
 			int subcategory, int room, int parent, int temperature, int light, int humidity) {
-		super(name, id, altid, category, subcategory, room, parent, "4in1.jpg", "", 0);
+		super(name, id, altid, category, subcategory, room, parent, "4in1.png", "", 0);
 	}
 
 	public String toString() {
