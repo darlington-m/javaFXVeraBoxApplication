@@ -114,7 +114,6 @@ public class CurrentReadings {
 									.getInt("light"), resultSetReadings
 									.getInt("humidity")));
 					System.out.println("4in1 created");
-
 				}
 			}
 
