@@ -42,6 +42,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
@@ -52,6 +53,7 @@ import Exports.CSV;
 import Graphs.Charts;
 
 public class VeraGUI extends Application {
+
 
 	MySQLConnect conn = new MySQLConnect();
 
@@ -113,6 +115,9 @@ public class VeraGUI extends Application {
 				break;
 			case "Add a room":
 				changeButtons("addRoom");
+				break;
+			case "Set Temperature":
+				setRadiatorTemp();
 				break;
 			case "Download CSV":
 				System.out.println("Date 1:" + compareTo.getValue()
@@ -740,35 +745,7 @@ public class VeraGUI extends Application {
 				});
 	}
 
-	private void showDeviceDetails(final Device device, String userSet) // This
-																		// string
-																		// parameter
-																		// is
-																		// not
-																		// used
-																		// and
-																		// is
-																		// simply
-																		// to
-																		// have
-																		// a
-																		// seperate
-																		// method,
-																		// one
-																		// which
-																		// is
-																		// user
-																		// defined(this
-																		// one)
-																		// and
-																		// one
-																		// that
-																		// is
-																		// automatically
-																		// 24
-																		// hours(the
-																		// other
-																		// method).
+	private void showDeviceDetails(final Device device, String userSet) 
 			throws SQLException {
 		lastCompareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
 				+ (Long.parseLong(compareFromHours.getValue()) * 3600)
@@ -907,5 +884,58 @@ public class VeraGUI extends Application {
 		Date res = Date.from(instant);
 		long l = res.getTime() / 1000;
 		return l;
+	}
+	
+	
+	private void setRadiatorTemp() {
+		// TODO Auto-generated method stub
+		
+		System.out.println("Clicked to change temp");
+		
+		
+		final Stage newStage = new Stage();
+		VBox comp = new VBox();
+
+		Pane pane = new Pane();
+		pane.setPrefSize(300, 300);
+		pane.setLayoutX(0);
+		pane.setStyle("-fx-background-color: #3399cc");
+		comp.getChildren().add(pane);
+
+		final TextField wantedSetPoint = new TextField("Enter Temp");
+		wantedSetPoint.setMinSize(200, 40);
+		wantedSetPoint.setMaxSize(200, 40);
+		wantedSetPoint.setLayoutX(50);
+		wantedSetPoint.setLayoutY(50);
+		wantedSetPoint.setStyle("-fx-font-size: 20");
+		
+		Button saveBtn = new Button("Save Temp");
+		saveBtn.setLayoutX(88);
+		saveBtn.setLayoutY(130);
+		saveBtn.setMinSize(124, 40);
+		saveBtn.setMaxSize(124, 40);
+		saveBtn.setStyle("-fx-font-weight: bold");
+		saveBtn.setStyle("-fx-font-size: 20");
+
+		pane.getChildren().addAll(wantedSetPoint, saveBtn);
+		Scene stageScene = new Scene(comp, 300, 300);
+		newStage.setScene(stageScene);
+		newStage.show();
+
+		saveBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				newStage.close();
+			}
+		});
+
+		newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent t) {
+				newStage.close();
+			}
+		});
 	}
 }
