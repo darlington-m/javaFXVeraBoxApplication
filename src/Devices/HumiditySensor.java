@@ -22,6 +22,11 @@ public class HumiditySensor extends Device implements Sensor {
 	public int getReading() {
 		return humidityReading;
 	}
+	
+	@Override
+	public String getName() {
+		return name.substring(0, 15);
+	}
 
 	@Override
 	public String readingToSQL() {

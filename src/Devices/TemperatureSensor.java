@@ -18,7 +18,13 @@ public class TemperatureSensor extends Device implements Sensor {
 			int subcategory, int room, int parent, int currentReading) {
 		super(name, id, altid, category, subcategory, room, parent, "temperature.png", "temperature", currentReading);
 	}
-
+	
+	
+	@Override
+	public String getName() {
+		return name.substring(0, 11) + " Sensor";
+	}
+	
 
 	@Override
 	public int getReading() {
