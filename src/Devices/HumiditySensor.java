@@ -20,7 +20,7 @@ public class HumiditySensor extends Device implements Sensor {
 
 	@Override
 	public int getReading() {
-		return humidityReading;
+		return currentReading;
 	}
 	
 	@Override

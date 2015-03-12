@@ -28,7 +28,7 @@ public class TemperatureSensor extends Device implements Sensor {
 
 	@Override
 	public int getReading() {
-		return temperature;
+		return currentReading;
 	}
 
 	@Override

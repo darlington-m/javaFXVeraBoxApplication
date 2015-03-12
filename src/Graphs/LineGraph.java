@@ -3,6 +3,7 @@ package Graphs;
 import java.util.ArrayList;
 
 import Devices.Device;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
@@ -19,6 +20,7 @@ public class LineGraph
 		int lineOneReadings = 0;
 		
 		// Information for line one displayed on the graph
+		
 		XYChart.Series<String, Number> readingsOne = new XYChart.Series<String, Number>(); // Default first line, second line added if id = compare2
 		readingsOne.setName(device.getName() + " Reading"); // Legend (bottom colour indicator) name
 
@@ -63,7 +65,8 @@ public class LineGraph
 				numberOfDisplayedPointsOfData = array.size(); // default retrieval, can't get an error.
 				checkCompare(chart, array, array2, device); // Pass everything back to the method and try again.
 			}
-		}
+		} 
+
 		chart.setCreateSymbols(false); // remove symbols displayed on the graph
 		chart.setLegendVisible(true); // show the icons to indicate which line is which
 		return chart;

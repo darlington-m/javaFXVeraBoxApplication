@@ -25,6 +25,9 @@ public class FourInOne extends Device {
 	public FourInOne(String name, int id, String altid, int category,
 			int subcategory, int room, int parent, int temperature, int light, int humidity) {
 		super(name, id, altid, category, subcategory, room, parent, "4in1.png", "", 0);
+		this.temperature = temperature;
+		this.light = light;
+		this.humidity = humidity;
 	}
 
 	public String toString() {
@@ -81,14 +84,14 @@ public class FourInOne extends Device {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label light = new Label("Reading: " + this.light);
+		Label light = new Label("Light: " + this.light);
 		light.setLayoutY(75);
 		light.setLayoutX(200);
-		Label temp = new Label("Reading: "
+		Label temp = new Label("Temperature: "
 				+ this.temperature);
 		temp.setLayoutY(100);
 		temp.setLayoutX(200);
-		Label humidity = new Label("Reading: "
+		Label humidity = new Label("Humidity: "
 				+ this.humidity);
 		humidity.setLayoutY(125);
 		humidity.setLayoutX(200);

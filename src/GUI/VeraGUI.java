@@ -89,7 +89,7 @@ public class VeraGUI extends Application {
 			case "Account":
 				displayAccountInfo();
 				break;
-			case "Logout":
+			case "Quit":
 				System.exit(0);
 				break;
 			case "Scenes":
@@ -380,8 +380,8 @@ public class VeraGUI extends Application {
 		sc.setLayoutX(display.getPrefWidth() - 22);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(12);
-		sc.setMaxWidth(12);
+		sc.setMinWidth(22);
+		sc.setMaxWidth(22);
 		sc.setMin(0);
 		sc.setMax(1000);
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
@@ -548,25 +548,24 @@ public class VeraGUI extends Application {
 		java.util.List<String> names = new ArrayList<String>();
 		switch (name) {
 		case "mainMenu":
-			String[] words = { "Dashboard", "Settings", "Account Info",
-					"Scenes", "Logout" };
+			String[] words = { "Dashboard", "Settings", "Scenes", "Quit" };
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Compare", "Download CSV", "Back", "Logout" };
+			String[] words2 = { "Compare", "Download CSV", "Back", "Quit" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "settings":
-			String[] words4 = { "Add a room", "Back", "Logout" };
+			String[] words4 = { "Add a room", "Back", "Quit" };
 			names = Arrays.<String> asList(words4);
 			break;
 		case "addRoom":
-			String[] words5 = { "Cancel", "Back", "Logout" };
+			String[] words5 = { "Cancel", "Back", "Quit" };
 			names = Arrays.<String> asList(words5);
 			break;
 		case "compare":
 
-			String[] words3 = { "Compare", "Download CSV", "Back", "Logout" };
+			String[] words3 = { "Compare", "Download CSV", "Back", "Quit" };
 			names = Arrays.<String> asList(words3);
 
 			VBox dropdown = new VBox(5);

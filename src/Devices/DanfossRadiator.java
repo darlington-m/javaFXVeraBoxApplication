@@ -35,7 +35,7 @@ public class DanfossRadiator extends Device implements Sensor {
 
 	@Override
 	public int getReading() {
-		return heat;
+		return currentReading;
 	}
 
 	@Override

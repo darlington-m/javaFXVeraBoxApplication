@@ -20,7 +20,7 @@ public class Charts {
 	Device device;
 	//Instantiate the X/Y Axis of the charts
 	final CategoryAxis xAxis = new CategoryAxis();
-	final NumberAxis yAxis = new NumberAxis();
+	NumberAxis yAxis = new NumberAxis();
 	
 	Scene scene = new Scene(xAxis, 0, 0);
 
@@ -59,7 +59,7 @@ public class Charts {
 			pane.getChildren().add(barChart);
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
-		{
+		{			
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, lineOneReadings, lineOneDates, device);  // send the data over to bar chart to be added to the chart
 			lineChart.setPrefSize(800, 400);
