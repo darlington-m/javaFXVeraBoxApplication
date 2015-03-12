@@ -112,7 +112,7 @@ public class VeraGUI extends Application {
 				displaySettings();
 				break;
 			case "Add a room":
-				changeButtons("addRoom");				
+				changeButtons("addRoom");
 				break;
 			case "Download CSV":
 				System.out.println("Date 1:" + compareTo.getValue()
@@ -124,7 +124,7 @@ public class VeraGUI extends Application {
 			}
 		}
 	};
-	
+
 	public static void main(String[] args) throws IOException {
 		launch(args);
 	}
@@ -336,7 +336,8 @@ public class VeraGUI extends Application {
 	public void displayDevices() {
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
-		paneBackground.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
+		paneBackground
+				.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
@@ -390,9 +391,9 @@ public class VeraGUI extends Application {
 						+ sortingPane.getPrefHeight());
 			}
 		});
-		CurrentReadings currentReadings  = new CurrentReadings();
-		ArrayList<Room> roomsList = currentReadings.getCurrentReadings();
-		for(Room room : roomsList){
+		CurrentReadings currentReadings = new CurrentReadings();
+
+		for (Room room : currentReadings.getRooms()) {
 			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
 			VBox deviceBox = new VBox(10);
 			deviceBox.setLayoutX(50);
@@ -400,7 +401,7 @@ public class VeraGUI extends Application {
 			for (final Device device : room.getDevices()) {
 				System.out.println("test");
 				Pane pane = device.getPane();
-				pane.setPrefWidth(sortingPane.getPrefWidth()-100);
+				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 					@Override
@@ -422,64 +423,64 @@ public class VeraGUI extends Application {
 		}
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
-//			roomPane.setId("roomPane");
-//			VBox deviceBox = new VBox(10);
-//			roomPane.setPrefWidth(sortingPane.getPrefWidth());
-//			deviceBox.setLayoutX(50);
-//			deviceBox.setLayoutY(50);
-//			Label roomName = new Label("Room : " + room.getName());
-//			roomName.setLayoutX(20);
-//			roomName.setLayoutY(15);
-//			roomName.setId("roomName");
-//			roomPane.getChildren().add(roomName);
-//			for (final Device device : room.getDevices()) {
-//				Pane pane = device.getPane();
-//				pane.setPrefWidth(sortingPane.getPrefWidth()-100);
-//				System.out.println(device.getDetails());
-//				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
-//
-//					@Override
-//					public void handle(MouseEvent arg0) {
-//						changeButtons("details");
-//						selectedDevice = device;
-//						try {
-//							showDeviceDetails(device);
-//						} catch (SQLException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//					}
-//				});
-//				deviceBox.getChildren().add(pane);
-//			}
-//			roomPane.getChildren().add(deviceBox);
-			
-//		}
 
-	
-		// END OF TESTING
+	// roomPane.setId("roomPane");
+	// VBox deviceBox = new VBox(10);
+	// roomPane.setPrefWidth(sortingPane.getPrefWidth());
+	// deviceBox.setLayoutX(50);
+	// deviceBox.setLayoutY(50);
+	// Label roomName = new Label("Room : " + room.getName());
+	// roomName.setLayoutX(20);
+	// roomName.setLayoutY(15);
+	// roomName.setId("roomName");
+	// roomPane.getChildren().add(roomName);
+	// for (final Device device : room.getDevices()) {
+	// Pane pane = device.getPane();
+	// pane.setPrefWidth(sortingPane.getPrefWidth()-100);
+	// System.out.println(device.getDetails());
+	// pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+	//
+	// @Override
+	// public void handle(MouseEvent arg0) {
+	// changeButtons("details");
+	// selectedDevice = device;
+	// try {
+	// showDeviceDetails(device);
+	// } catch (SQLException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// deviceBox.getChildren().add(pane);
+	// }
+	// roomPane.getChildren().add(deviceBox);
 
-		// UN COMMENT WHEN ADDING TO DB AND ABLE TO GET DATA
-		// try {
-		// for(Device device: JsonToJava.getData()){
-		// Pane pane = device.getPane();
-		// pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
-		// @Override
-		// public void handle(MouseEvent arg0) {
-		// showDeviceDetails(device);
-		// changeButtons("details");
-		// }});
-		// vb.getChildren().add(device.getPane());
-		// }
-		//
-		// display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
+	// }
 
-//	}
-	
-	public void addARoom(){
+	// END OF TESTING
+
+	// UN COMMENT WHEN ADDING TO DB AND ABLE TO GET DATA
+	// try {
+	// for(Device device: JsonToJava.getData()){
+	// Pane pane = device.getPane();
+	// pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
+	// @Override
+	// public void handle(MouseEvent arg0) {
+	// showDeviceDetails(device);
+	// changeButtons("details");
+	// }});
+	// vb.getChildren().add(device.getPane());
+	// }
+	//
+	// display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+
+	// }
+
+	public void addARoom() {
 		display.getChildren().clear();
 		final Label addRoom = new Label("Add a new room");
 		final Label enterDetails = new Label("Please enter a name below");
@@ -487,17 +488,19 @@ public class VeraGUI extends Application {
 		warning.setVisible(false);
 		final TextField input = new TextField();
 		final Button add = new Button("Add room");
-		add.setOnAction(new EventHandler<ActionEvent>(){
+		add.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(input.getText().matches("[a-zA-Z]*")){
+				if (input.getText().matches("[a-zA-Z]*")) {
 					// create room into database
-				}else{
+				} else {
 					warning.setVisible(true);
 				}
-			}});
-		display.getChildren().addAll(addRoom,enterDetails,warning,input,add);
+			}
+		});
+		display.getChildren()
+				.addAll(addRoom, enterDetails, warning, input, add);
 	}
 
 	public void displayAccountInfo() {
@@ -509,7 +512,7 @@ public class VeraGUI extends Application {
 		VBox list = new VBox();
 		list.setLayoutX(60);
 		Pane pane = new Pane();
-		
+
 		Label roomName = new Label("Name");
 		roomName.setId("DeviceName");
 		roomName.setLayoutY(50);
@@ -520,16 +523,17 @@ public class VeraGUI extends Application {
 		Label action = new Label("Action");
 		action.setId("DeviceName");
 		action.setLayoutX(600);
-		action.setLayoutY(50);		
+		action.setLayoutY(50);
 		Separator separator = new Separator();
-		separator.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
-		pane.getChildren().addAll(roomName,number,action);
-		list.getChildren().addAll(pane,separator);
-		
+		separator
+				.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+		pane.getChildren().addAll(roomName, number, action);
+		list.getChildren().addAll(pane, separator);
+
 		Test test = new Test();
 		ArrayList<Room> rooms = test.run();
-		
-		for(Room room : rooms){
+
+		for (Room room : rooms) {
 			list.getChildren().add(room.getDetailsPane());
 		}
 		display.getChildren().add(list);
@@ -557,7 +561,7 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words4);
 			break;
 		case "addRoom":
-			String[] words5 = {"Cancel", "Back", "Logout" };
+			String[] words5 = { "Cancel", "Back", "Logout" };
 			names = Arrays.<String> asList(words5);
 			break;
 		case "compare":
@@ -641,25 +645,30 @@ public class VeraGUI extends Application {
 	private void showDeviceDetails(final Device device) throws SQLException {
 		changeButtons("compare");
 		Calendar currentDate = Calendar.getInstance();
-		
-		compareFromHours.getSelectionModel().select(currentDate.get(Calendar.HOUR_OF_DAY));
-		compareToHours.getSelectionModel().select(currentDate.get(Calendar.HOUR_OF_DAY));
-		if (currentDate.get(Calendar.MINUTE) < 55){
-			compareFromMinutes.getSelectionModel().select((int) currentDate.get(Calendar.MINUTE) / 5 + 1);
-			compareToMinutes.getSelectionModel().select((int) currentDate.get(Calendar.MINUTE) / 5 + 1);
+
+		compareFromHours.getSelectionModel().select(
+				currentDate.get(Calendar.HOUR_OF_DAY));
+		compareToHours.getSelectionModel().select(
+				currentDate.get(Calendar.HOUR_OF_DAY));
+		if (currentDate.get(Calendar.MINUTE) < 55) {
+			compareFromMinutes.getSelectionModel().select(
+					(int) currentDate.get(Calendar.MINUTE) / 5 + 1);
+			compareToMinutes.getSelectionModel().select(
+					(int) currentDate.get(Calendar.MINUTE) / 5 + 1);
 		} else {
 			compareFromMinutes.getSelectionModel().select(0);
 			compareToMinutes.getSelectionModel().select(0);
 		}
-		
-		String trimmedCurrentDate = Long.toString(currentDate.getTimeInMillis() / 1000);
-		trimmedCurrentDate = trimmedCurrentDate.substring(0,10); 
-		
+
+		String trimmedCurrentDate = Long
+				.toString(currentDate.getTimeInMillis() / 1000);
+		trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
+
 		lastCompareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
 		lastCompareToDate = Long.parseLong(trimmedCurrentDate);
 
-		ResultSet results = conn
-				.getRows(device.readingFromSQL(lastCompareFromDate, lastCompareToDate));
+		ResultSet results = conn.getRows(device.readingFromSQL(
+				lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the dropdownbox for
 													// selecting different
@@ -731,16 +740,44 @@ public class VeraGUI extends Application {
 				});
 	}
 
-	private void showDeviceDetails(final Device device, String userSet) //This string parameter is not used and is simply to have a seperate method, one which is user defined(this one) and one that is automatically 24 hours(the other method).
+	private void showDeviceDetails(final Device device, String userSet) // This
+																		// string
+																		// parameter
+																		// is
+																		// not
+																		// used
+																		// and
+																		// is
+																		// simply
+																		// to
+																		// have
+																		// a
+																		// seperate
+																		// method,
+																		// one
+																		// which
+																		// is
+																		// user
+																		// defined(this
+																		// one)
+																		// and
+																		// one
+																		// that
+																		// is
+																		// automatically
+																		// 24
+																		// hours(the
+																		// other
+																		// method).
 			throws SQLException {
 		lastCompareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
-				+ (Long.parseLong(compareFromHours.getValue()) * 3600) + (Long
-				.parseLong(compareFromMinutes.getValue()) * 60);
+				+ (Long.parseLong(compareFromHours.getValue()) * 3600)
+				+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
 		lastCompareToDate = (compareTo.getValue().toEpochDay() * 86400)
 				+ (Long.parseLong(compareToHours.getValue()) * 3600)
 				+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
-		ResultSet results = conn
-				.getRows(device.readingFromSQL(lastCompareFromDate, lastCompareToDate));
+		ResultSet results = conn.getRows(device.readingFromSQL(
+				lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
 		display.getChildren().addAll(graphType); // adds the drop down box for
 													// selecting different
@@ -843,8 +880,8 @@ public class VeraGUI extends Application {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
-		fileChooser.setInitialFileName("veraData_" + lastCompareFromDate + "_to_"
-				+ lastCompareToDate + ".csv");
+		fileChooser.setInitialFileName("veraData_" + lastCompareFromDate
+				+ "_to_" + lastCompareToDate + ".csv");
 		// Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 				"CSV files (*.csv)", "*.csv");
