@@ -70,8 +70,8 @@ public class VeraGUI extends Application {
 	private VBox sideButtons;
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType;
-	private ArrayList<Integer> tempArray = new ArrayList<Integer>();
-	private ArrayList<String> tempArray2 = new ArrayList<String>();
+	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
+	private ArrayList<String> dateArray = new ArrayList<String>();
 	private Device selectedDevice;
 
 	ArrayList<Button> buttons = new ArrayList<Button>();
@@ -680,7 +680,7 @@ public class VeraGUI extends Application {
 													// grpahs
 
 		try {
-			tempArray = new ArrayList<Integer>();
+			readingsArray = new ArrayList<Integer>();
 			while (results.next()) {
 				String temp = results.getString(device.getReadingName());
 				long temp2 = results.getInt("reading_date");
@@ -692,30 +692,16 @@ public class VeraGUI extends Application {
 					date = date.replaceAll("/", "");
 					date = date.replaceAll(":", "");
 					date = date.replaceAll(" ", "");
-					String dateConverted = date;
-					System.out.println(dateConverted);
-
-					String tempS = dateConverted.toString(); // change to
-																// string,
-																// substring and
-																// get last 4
-																// digits
-																// (convert
-																// back)
-					tempS = tempS.substring(8, 12);
-					dateConverted = tempS;
-					System.out.println(tempS);
-					System.out.println();
-					System.out.println(dateConverted);
-					// System.out.println(date);
-					tempArray.add(temp3);
-					tempArray2.add(dateConverted);
+					String dateHours = date.substring(8, 10);
+					String dateMinutes = date.substring(10, 12);
+					date = dateHours + ":" + dateMinutes;
+					readingsArray.add(temp3);
+					dateArray.add(date);
 				}
-
 			}
 			display.getChildren().addAll(
 					device.showDeviceDetails().getChildren());
-			Charts chart = new Charts(tempArray, tempArray2, device,
+			Charts chart = new Charts(readingsArray, dateArray, device,
 					"Line Chart");
 			chart.show(display);
 		} catch (SQLException e1) {
@@ -737,7 +723,7 @@ public class VeraGUI extends Application {
 						display.getChildren().remove(
 								display.getChildren().size() - 1); // removes
 																	// old graph
-						Charts chart = new Charts(tempArray, tempArray2,
+						Charts chart = new Charts(readingsArray, dateArray,
 								device, newValue);
 						chart.show(display);
 
@@ -761,8 +747,8 @@ public class VeraGUI extends Application {
 													// graphs
 
 		try {
-			tempArray = new ArrayList<Integer>();
-			tempArray2 = new ArrayList<String>();
+			readingsArray = new ArrayList<Integer>();
+			dateArray = new ArrayList<String>();
 			while (results.next()) {
 				String temp = results.getString(device.getReadingName());
 				long temp2 = results.getInt("reading_date");
@@ -786,15 +772,15 @@ public class VeraGUI extends Application {
 					tempS = tempS.substring(8, 12);
 					dateConverted = tempS;
 					System.out.println(date);
-					tempArray.add(temp3);
-					tempArray2.add(dateConverted);
+					readingsArray.add(temp3);
+					dateArray.add(dateConverted);
 				}
-				System.out.println(tempArray);
-				System.out.println(tempArray2);
+				System.out.println(readingsArray);
+				System.out.println(dateArray);
 			}
 			display.getChildren().addAll(
 					device.showDeviceDetails().getChildren());
-			Charts chart = new Charts(tempArray, tempArray2, device,
+			Charts chart = new Charts(readingsArray, dateArray, device,
 					"Line Chart");
 			chart.show(display);
 		} catch (SQLException e1) {
@@ -816,7 +802,7 @@ public class VeraGUI extends Application {
 						display.getChildren().remove(
 								display.getChildren().size() - 1); // removes
 																	// old graph
-						Charts chart = new Charts(tempArray, tempArray2,
+						Charts chart = new Charts(readingsArray, dateArray,
 								device, newValue);
 						chart.show(display);
 
