@@ -174,7 +174,7 @@ public class VeraGUI extends Application {
 				(scene.getWidth() - sideDisplay.getPrefWidth() + 10), 100);
 		topDisplay.setId("topDisplay");
 
-		Label welcome = new Label("Welcome User");
+		Label welcome = new Label("Welcome");
 		welcome.setId("WelcomeMessage");
 		welcome.setLayoutX(20);
 		welcome.setLayoutY(35);
