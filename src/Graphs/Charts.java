@@ -60,6 +60,9 @@ public class Charts {
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
 		{			
+			int lowerBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) - lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
+			int upperBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) + lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
+			yAxis = new NumberAxis(lowerBound, upperBound,20);
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, lineOneReadings, lineOneDates, device);  // send the data over to bar chart to be added to the chart
 			lineChart.setPrefSize(800, 400);
