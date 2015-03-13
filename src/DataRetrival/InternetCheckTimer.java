@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 
 //import GUI.VeraGUI;
 
-public class ReadingTimer extends TimerTask {
+public class InternetCheckTimer extends TimerTask {
 
 	@Override
 	public void run() {
