@@ -42,6 +42,10 @@
 -fx-border-width: 5px;
 }
 
+#roomPane:hover {
+-fx-border-color: #12805C;
+}
+
 #WelcomeMessage{
 -fx-font-size: 40px;
 -fx-text-fill:#12805C;
@@ -93,7 +97,7 @@
 }
 
 #datePicker{
--fx-pref-width: 90px;
+-fx-pref-width: 120px;
 -fx-pref-height: 25px;
 }
 

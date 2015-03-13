@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -37,6 +40,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -89,8 +93,8 @@ public class VeraGUI extends Application {
 				changeButtons("settings");
 				displaySettings();
 				break;
-			case "Account":
-				displayAccountInfo();
+			case "Graphs":
+				displayGraphs();
 				break;
 			case "Quit":
 				System.exit(0);
@@ -397,36 +401,50 @@ public class VeraGUI extends Application {
 						+ sortingPane.getPrefHeight());
 			}
 		});
-		CurrentReadings currentReadings = new CurrentReadings();
+		//PLACE AFTER THE SCROLLBAR
 
-		for (Room room : currentReadings.getRooms()) {
-			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
-			VBox deviceBox = new VBox(10);
-			deviceBox.setLayoutX(50);
-			deviceBox.setLayoutY(50);
-			for (final Device device : room.getDevices()) {
-				System.out.println("test");
-				Pane pane = device.getPane();
-				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
-				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+		final CurrentReadings currentReadings = new CurrentReadings();
 
-					@Override
-					public void handle(MouseEvent arg0) {
-						changeButtons("details");
-						selectedDevice = device;
-						try {
-							showDeviceDetails(device);
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-				deviceBox.getChildren().add(pane);
-			}
-			roomPane.getChildren().add(deviceBox);
-			vb.getChildren().add(roomPane);
-		}
+		Timer timer = new java.util.Timer();
+		timer.schedule(new TimerTask() {
+		    public void run() {
+		         Platform.runLater(new Runnable() {
+		            public void run() {
+		            	vb.getChildren().clear();
+		            	//System.out.println("Test");
+		        		for (Room room : currentReadings.getRooms()) {
+		        			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
+		        			VBox deviceBox = new VBox(10);
+		        			deviceBox.setLayoutX(50);
+		        			deviceBox.setLayoutY(50);
+		        			for (final Device device : room.getDevices()) {
+		        				Pane pane = device.getPane();
+		        				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
+		        				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+		        					@Override
+		        					public void handle(MouseEvent arg0) {
+		        						changeButtons("details");
+		        						selectedDevice = device;
+		        						try {
+		        							showDeviceDetails(device);
+		        						} catch (SQLException e) {
+		        							// TODO Auto-generated catch block
+		        							e.printStackTrace();
+		        						}
+		        					}
+		        				});
+		        				deviceBox.getChildren().add(pane);
+		        			}
+		        			roomPane.getChildren().add(deviceBox);
+		        			vb.getChildren().add(roomPane);
+		        		}
+		            }
+		        });
+		    }
+		}, 0, 300000);
+		
+
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
 
@@ -455,8 +473,26 @@ public class VeraGUI extends Application {
 				.addAll(addRoom, enterDetails, warning, input, add);
 	}
 
-	public void displayAccountInfo() {
+	public void displayGraphs() 
+	{
 		display.getChildren().clear();
+		
+		FlowPane graphSettingsContainer = new FlowPane();
+		
+		Pane devicePane = new Pane();
+		Pane comparePane = new Pane();
+		Pane submitPane = new Pane();
+
+		 devicePane.setStyle("-fx-background-color: black;");
+		 comparePane.setStyle("-fx-background-color: red;");
+		 submitPane.setStyle("-fx-background-color: blue;");
+		 
+		 devicePane.setPrefSize(800, display.getHeight()/3);
+		 comparePane.setPrefSize(800, display.getHeight()/3);
+		 submitPane.setPrefSize(800, display.getHeight()/3);
+		 
+		 graphSettingsContainer.getChildren().addAll(devicePane, comparePane, submitPane);
+		 display.getChildren().add(graphSettingsContainer);
 	}
 
 	public void displaySettings() {
@@ -495,7 +531,7 @@ public class VeraGUI extends Application {
 		java.util.List<String> names = new ArrayList<String>();
 		switch (name) {
 		case "mainMenu":
-			String[] words = { "Dashboard", "Settings", "Scenes", "Quit" };
+			String[] words = { "Dashboard","Graphs", "Settings", "Scenes", "Quit" };
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
