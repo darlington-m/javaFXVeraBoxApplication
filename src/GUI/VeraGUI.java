@@ -430,61 +430,7 @@ public class VeraGUI extends Application {
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
 
-	// roomPane.setId("roomPane");
-	// VBox deviceBox = new VBox(10);
-	// roomPane.setPrefWidth(sortingPane.getPrefWidth());
-	// deviceBox.setLayoutX(50);
-	// deviceBox.setLayoutY(50);
-	// Label roomName = new Label("Room : " + room.getName());
-	// roomName.setLayoutX(20);
-	// roomName.setLayoutY(15);
-	// roomName.setId("roomName");
-	// roomPane.getChildren().add(roomName);
-	// for (final Device device : room.getDevices()) {
-	// Pane pane = device.getPane();
-	// pane.setPrefWidth(sortingPane.getPrefWidth()-100);
-	// System.out.println(device.getDetails());
-	// pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
-	//
-	// @Override
-	// public void handle(MouseEvent arg0) {
-	// changeButtons("details");
-	// selectedDevice = device;
-	// try {
-	// showDeviceDetails(device);
-	// } catch (SQLException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// deviceBox.getChildren().add(pane);
-	// }
-	// roomPane.getChildren().add(deviceBox);
-
-	// }
-
-	// END OF TESTING
-
-	// UN COMMENT WHEN ADDING TO DB AND ABLE TO GET DATA
-	// try {
-	// for(Device device: JsonToJava.getData()){
-	// Pane pane = device.getPane();
-	// pane.setOnMouseReleased(new EventHandler<MouseEvent>(){
-	// @Override
-	// public void handle(MouseEvent arg0) {
-	// showDeviceDetails(device);
-	// changeButtons("details");
-	// }});
-	// vb.getChildren().add(device.getPane());
-	// }
-	//
-	// display.getChildren().addAll(vb,paneBackground,sortingPane,sc);
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-
-	// }
+	
 
 	public void addARoom() {
 		display.getChildren().clear();
@@ -536,12 +482,7 @@ public class VeraGUI extends Application {
 		pane.getChildren().addAll(roomName, number, action);
 		list.getChildren().addAll(pane, separator);
 
-		Test test = new Test();
-		ArrayList<Room> rooms = test.run();
-
-		for (Room room : rooms) {
-			list.getChildren().add(room.getDetailsPane());
-		}
+		
 		display.getChildren().add(list);
 	}
 
