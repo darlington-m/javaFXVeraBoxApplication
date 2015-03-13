@@ -53,6 +53,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
+import DataRetrival.InternetCheckTimer;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
 import Devices.Room;
@@ -344,6 +345,7 @@ public class VeraGUI extends Application {
 
 		stage.show();
 		displayDevices();
+
 	}
 
 	public void displayDevices() {

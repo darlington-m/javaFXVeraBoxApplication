@@ -28,12 +28,11 @@ public class InternetCheckTimer extends TimerTask {
 		try {
 			try {
 				URL url = new URL("http://www.csesalford.com");
-				System.out.println(url.getHost());
 				HttpURLConnection con = (HttpURLConnection) url
 						.openConnection();
 				con.connect();
 				if (con.getResponseCode() == 200) {
-					System.out.println("Connection established!!");
+					System.out.println("Internet Connection Available");
 				}
 			} catch (Exception exception) {
 				System.out.println("No Connection");
