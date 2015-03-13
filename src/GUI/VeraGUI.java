@@ -348,6 +348,7 @@ public class VeraGUI extends Application {
 
 	public void displayDevices() {
 		display.getChildren().clear();
+		final CurrentReadings currentReadings = new CurrentReadings();
 		Pane paneBackground = new Pane();
 		paneBackground
 				.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
@@ -390,13 +391,16 @@ public class VeraGUI extends Application {
 		vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - 26);
+		sc.setLayoutX(display.getPrefWidth() - 22);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(15);
-		sc.setMaxWidth(15);
-		sc.setMin(0);
-		sc.setMax(1000);
+		sc.setMinWidth(25);
+		sc.setMaxWidth(25);
+		sc.setVisibleAmount(160);
+		sc.setUnitIncrement(160);
+		sc.setBlockIncrement(160);
+		sc.setMax(currentReadings.getAllDevices().size()*160);
+		// number of devices * 160 pixels in scolling
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 					Number old_val, Number new_val) {
@@ -405,8 +409,6 @@ public class VeraGUI extends Application {
 			}
 		});
 		//PLACE AFTER THE SCROLLBAR
-
-		final CurrentReadings currentReadings = new CurrentReadings();
 
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
@@ -491,21 +493,12 @@ public class VeraGUI extends Application {
 		 submitPane.setPrefSize(display.getWidth()/2, display.getHeight()/3*1.5);
 		 
 		 CurrentReadings currentReadings = new CurrentReadings();
-		 ArrayList<Room> rooms = currentReadings.getRooms(); // array of rooms
-		 ArrayList<Device> devices = new ArrayList<Device>(); // array of devices
-
-		 for (int i = 0; i < rooms.size(); i++ ) // for all rooms
-		 {
-			 for (int j = 0; j < rooms.get(i).getDevices().size(); j++ ) //get all devices for each room
-			 {
-				devices.add(rooms.get(i).getDevices().get(j));  // add the devices to a device array
-			 }
-		 }
+		 ArrayList<Device> deviceList = currentReadings.getAllDevices();
 		 
-		 for (int i = 0; i < devices.size(); i++ ) // for each device add to the pane
+		 for (int i = 0; i < deviceList.size(); i++ ) // for each device add to the pane
 		 {
 			final ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
-					"/Resources/" + devices.get(i).getImage()).toExternalForm())); //add the image
+					"/Resources/" + deviceList.get(i).getImage()).toExternalForm())); //add the image
 			
 			image.setFitHeight(150); //image sizing
 			image.setFitWidth(150);

@@ -143,6 +143,11 @@ public class CurrentReadings {
 	public ArrayList<Room> getRooms() {
 		return rooms;
 	}
+	
+
+	public ArrayList<Device> getAllDevices() {
+		return devices;
+	}
 
 	public void setRooms(ArrayList<Room> rooms) {
 		this.rooms = rooms;
