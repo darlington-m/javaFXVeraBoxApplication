@@ -505,7 +505,7 @@ public class VeraGUI extends Application {
 			 deviceImage.setFitWidth(100);
 			 
 			 deviceImage.setLayoutX(25); //image layout
-			 deviceImage.setLayoutY(10);
+			 deviceImage.setLayoutY(20);
 
 			 final Label deviceLabel = new Label(devices.get(i).getName()); // name of the device
 			 
@@ -515,6 +515,8 @@ public class VeraGUI extends Application {
 			 deviceLabel.setLayoutY(120);
 
 			 final Pane imagePane = new Pane(); //pane to contain the image and the label
+			 imagePane.setLayoutY(30);
+			 imagePane.setStyle("-fx-border-color:red; -fx-border-width: 1; -fx-border-style: solid;");
 		     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 		     ft.setFromValue(0.3);
 		     ft.setToValue(0.3);
@@ -522,7 +524,7 @@ public class VeraGUI extends Application {
 		     ft.setAutoReverse(false);
 		     
 		     ft.play();
-			 imagePane.setPrefSize(135, 135); // sizing the pane
+			 imagePane.setPrefSize(144, 145); // sizing the pane
 
 			 imagePane.setOnMouseClicked(new EventHandler<Event>() { // when the pane is clicked
 				 /*
@@ -535,13 +537,11 @@ public class VeraGUI extends Application {
 				  */
 				 @Override
 				 public void handle(Event event) {
-					 if (imagePane.getWidth() == 135){ 
-						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 5; -fx-border-style: solid;");
+					 if (imagePane.getWidth() == 144){ 
+						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 1; -fx-border-style: solid;");
 						 imagePane.setPrefSize(145, 145);
 						 selectedDevices.add(deviceLabel.getText());
-						 
-						 
-					     FadeTransition ft = new FadeTransition(Duration.millis(2000), imagePane);
+					     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 					     ft.setFromValue(0.3);
 					     ft.setToValue(1);
 					     ft.setCycleCount(1);
@@ -550,10 +550,9 @@ public class VeraGUI extends Application {
 					     ft.play();
 					     
 					 } else {
-						 imagePane.setStyle("-fx-border-color:white; -fx-border-width: 5; -fx-border-style: solid;");
-						 imagePane.setPrefSize(135, 135);
+						 imagePane.setStyle("-fx-border-color:red; -fx-border-width: 1; -fx-border-style: solid;");
 						 selectedDevices.remove(deviceLabel.getText());
-						 
+						 imagePane.setPrefSize(144, 145);
 					     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 					     ft.setFromValue(1.0);
 					     ft.setToValue(0.3);
@@ -565,7 +564,7 @@ public class VeraGUI extends Application {
 				 }
 			 });
 
-			 imagePane.setLayoutX(i * 150 + 10); // x layout position spread
+			 imagePane.setLayoutX(i * 150 + 30); // x layout position spread
 			 
 			 imagePane.getChildren().addAll(deviceImage, deviceLabel); // add image and label to the pane.
 
