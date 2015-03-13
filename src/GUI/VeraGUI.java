@@ -17,6 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -341,6 +342,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayDevices() {
+		final CurrentReadings currentReadings = new CurrentReadings();
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
 		paneBackground
@@ -384,13 +386,15 @@ public class VeraGUI extends Application {
 		vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - 26);
+		sc.setLayoutX(display.getPrefWidth() - 20);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(15);
-		sc.setMaxWidth(15);
-		sc.setMin(0);
-		sc.setMax(1000);
+		sc.setMinWidth(20);
+		sc.setMaxWidth(20);
+		sc.setVisibleAmount(160);
+		sc.setUnitIncrement(160);
+		sc.setBlockIncrement(160);
+		sc.setMax(currentReadings.getAllDevices().size()*160);
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 					Number old_val, Number new_val) {
@@ -399,8 +403,6 @@ public class VeraGUI extends Application {
 			}
 		});
 		//PLACE AFTER THE SCROLLBAR
-
-		final CurrentReadings currentReadings = new CurrentReadings();
 
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
@@ -513,6 +515,13 @@ public class VeraGUI extends Application {
 			 deviceLabel.setLayoutY(120);
 
 			 final Pane imagePane = new Pane(); //pane to contain the image and the label
+		     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
+		     ft.setFromValue(0.3);
+		     ft.setToValue(0.3);
+		     ft.setCycleCount(1);
+		     ft.setAutoReverse(false);
+		     
+		     ft.play();
 			 imagePane.setPrefSize(135, 135); // sizing the pane
 
 			 imagePane.setOnMouseClicked(new EventHandler<Event>() { // when the pane is clicked
@@ -530,10 +539,28 @@ public class VeraGUI extends Application {
 						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 5; -fx-border-style: solid;");
 						 imagePane.setPrefSize(145, 145);
 						 selectedDevices.add(deviceLabel.getText());
+						 
+						 
+					     FadeTransition ft = new FadeTransition(Duration.millis(2000), imagePane);
+					     ft.setFromValue(0.3);
+					     ft.setToValue(1);
+					     ft.setCycleCount(1);
+					     ft.setAutoReverse(false);
+					     
+					     ft.play();
+					     
 					 } else {
 						 imagePane.setStyle("-fx-border-color:white; -fx-border-width: 5; -fx-border-style: solid;");
 						 imagePane.setPrefSize(135, 135);
 						 selectedDevices.remove(deviceLabel.getText());
+						 
+					     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
+					     ft.setFromValue(1.0);
+					     ft.setToValue(0.3);
+					     ft.setCycleCount(1);
+					     ft.setAutoReverse(true);
+					     
+					     ft.play();
 					 }
 				 }
 			 });
