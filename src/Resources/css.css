@@ -1,7 +1,7 @@
 #sideButton  {
 -fx-font-weight: bold;
 -fx-background-color: #F4F4F4;
--fx-pref-width: 200px;
+-fx-pref-width: 240px;
 -fx-pref-height: 50px;
 -fx-alignment: center-left;
 -fx-border-width: 0 0 1px 0;
@@ -40,6 +40,10 @@
 #roomPane{
 -fx-border-color: #f4f4f4;
 -fx-border-width: 5px;
+}
+
+#roomPane:hover {
+-fx-border-color: #12805C;
 }
 
 #WelcomeMessage{
@@ -93,7 +97,7 @@
 }
 
 #datePicker{
--fx-pref-width: 90px;
+-fx-pref-width: 120px;
 -fx-pref-height: 25px;
 }
 
