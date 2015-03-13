@@ -30,6 +30,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -47,13 +48,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
-import DataRetrival.InternetCheckTimer;
 import DataRetrival.MySQLConnect;
 import Devices.Device;
 import Devices.Room;
@@ -116,7 +117,6 @@ public class VeraGUI extends Application {
 			case "Back":
 				display.getChildren().clear();
 				changeButtons("mainMenu");
-				graphType.setValue("Line Chart");
 				displayDevices();
 				break;
 			case "Cancel":
@@ -325,13 +325,6 @@ public class VeraGUI extends Application {
 			}
 		});
 
-		graphType = new ChoiceBox<String>();
-		graphType.getItems().addAll("Line Chart", "Bar Chart");
-		graphType.setLayoutX(topDisplay.getPrefWidth() - 130);
-		graphType.setLayoutY(20);
-		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
-		graphType.getSelectionModel().selectFirst();
-
 		Label colonLabel = new Label(":");
 		secondCompareFromHours = getBox("hours");
 		secondCompareFromHours.setMaxWidth(10);
@@ -345,12 +338,10 @@ public class VeraGUI extends Application {
 
 		stage.show();
 		displayDevices();
-
 	}
 
 	public void displayDevices() {
 		display.getChildren().clear();
-		final CurrentReadings currentReadings = new CurrentReadings();
 		Pane paneBackground = new Pane();
 		paneBackground
 				.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
@@ -393,16 +384,13 @@ public class VeraGUI extends Application {
 		vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - 22);
+		sc.setLayoutX(display.getPrefWidth() - 26);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(25);
-		sc.setMaxWidth(25);
-		sc.setVisibleAmount(160);
-		sc.setUnitIncrement(160);
-		sc.setBlockIncrement(160);
-		sc.setMax(currentReadings.getAllDevices().size()*160);
-		// number of devices * 160 pixels in scolling
+		sc.setMinWidth(15);
+		sc.setMaxWidth(15);
+		sc.setMin(0);
+		sc.setMax(1000);
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 					Number old_val, Number new_val) {
@@ -411,6 +399,8 @@ public class VeraGUI extends Application {
 			}
 		});
 		//PLACE AFTER THE SCROLLBAR
+
+		final CurrentReadings currentReadings = new CurrentReadings();
 
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
@@ -434,7 +424,7 @@ public class VeraGUI extends Application {
 		        						changeButtons("details");
 		        						selectedDevice = device;
 		        						try {
-		        							showDeviceDetails(device);
+		        							showDeviceDetailsPastDay(device);
 		        						} catch (SQLException e) {
 		        							// TODO Auto-generated catch block
 		        							e.printStackTrace();
@@ -483,41 +473,202 @@ public class VeraGUI extends Application {
 	{
 		display.getChildren().clear();
 		
-		FlowPane graphSettingsContainer = new FlowPane();
+		FlowPane graphSettingsContainer = new FlowPane(); // Contains the 3 panes the make the  graph settings page
 		
-		Pane devicePane = new Pane();
-		Pane comparePane = new Pane();
-		Pane submitPane = new Pane();
+		Pane devicesPane = new Pane(); // Holds the images which the user can select to add to the graph
+		Pane comparePane = new Pane(); // Holds the combo boxes that allow the user to select which dates they want the graph to display between
+		Pane submitPane = new Pane(); // Holds the drop down box for the user to decide which graph they want to display and the button to commit
 
 		 
-		 devicePane.setPrefSize(display.getWidth(), display.getHeight()/3*1.5); // just sizing, can be adjusted
+		 devicesPane.setPrefSize(display.getWidth(), display.getHeight()/3*1.5); // sets the layout of 1 pane on the top and two below, evenly spaces
 		 comparePane.setPrefSize(display.getWidth()/2, display.getHeight()/3*1.5);
 		 submitPane.setPrefSize(display.getWidth()/2, display.getHeight()/3*1.5);
 		 
+		
+		 // -------------------------------- Setting up the devicesPane -----------------------------------------------------
+		
 		 CurrentReadings currentReadings = new CurrentReadings();
-		 ArrayList<Device> deviceList = currentReadings.getAllDevices();
+
+		 final ArrayList<Device> devices = new ArrayList<Device>(); // array of devices
+		 final ArrayList<String> selectedDevices = new ArrayList<String>(); // array of names of the selected devices 
+		 		 
+		 devices.addAll(currentReadings.getAllDevices());
 		 
-		 for (int i = 0; i < deviceList.size(); i++ ) // for each device add to the pane
+		 for (int i = 0; i < devices.size(); i++ ) // for each device create a pane with an image and a label
 		 {
-			final ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
-					"/Resources/" + deviceList.get(i).getImage()).toExternalForm())); //add the image
-			
-			image.setFitHeight(150); //image sizing
-			image.setFitWidth(150);
-			
-			image.setOnMouseClicked(new EventHandler<Event>() {
-				@Override
-				public void handle(Event event) {
-					image.setFitHeight(300);
-				}
-			
-			});
-			
-			image.setLayoutX(i * 150 + 10); // x layout position spread
-			
-			devicePane.getChildren().add(image); // add
+			 final ImageView deviceImage = new ImageView(new Image(VeraGUI.class.getResource(
+					 "/Resources/" + devices.get(i).getImage()).toExternalForm())); //add the image
+
+			 deviceImage.setFitHeight(100); //image sizing
+			 deviceImage.setFitWidth(100);
+			 
+			 deviceImage.setLayoutX(25); //image layout
+			 deviceImage.setLayoutY(10);
+
+			 final Label deviceLabel = new Label(devices.get(i).getName()); // name of the device
+			 
+			 deviceLabel.setPrefWidth(100); //label sizing
+			 
+			 deviceLabel.setLayoutX(20); //label layout
+			 deviceLabel.setLayoutY(120);
+
+			 final Pane imagePane = new Pane(); //pane to contain the image and the label
+			 imagePane.setPrefSize(135, 135); // sizing the pane
+
+			 imagePane.setOnMouseClicked(new EventHandler<Event>() { // when the pane is clicked
+				 /*
+				  * As we are making the program dynamic this needs to account for any number of devices being
+				  * added. To do this we cannot have hard coded panes. A way around needing to do this is to
+				  * change the width of the image page to be able to tell if the image has been selected or not
+				  * 135 stands for false, 145 stands for true. So when you click on the image pane it will highlight 
+				  * around the pane and set the size to 145. When clicked again it will unhighlight and set the 
+				  * size back to 135.
+				  */
+				 @Override
+				 public void handle(Event event) {
+					 if (imagePane.getWidth() == 135){ 
+						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 5; -fx-border-style: solid;");
+						 imagePane.setPrefSize(145, 145);
+						 selectedDevices.add(deviceLabel.getText());
+					 } else {
+						 imagePane.setStyle("-fx-border-color:white; -fx-border-width: 5; -fx-border-style: solid;");
+						 imagePane.setPrefSize(135, 135);
+						 selectedDevices.remove(deviceLabel.getText());
+					 }
+				 }
+			 });
+
+			 imagePane.setLayoutX(i * 150 + 10); // x layout position spread
+			 
+			 imagePane.getChildren().addAll(deviceImage, deviceLabel); // add image and label to the pane.
+
+			 devicesPane.getChildren().add(imagePane); // add image panes to the devices pane.
 		 }
-		 graphSettingsContainer.getChildren().addAll(devicePane, comparePane, submitPane);
+		 
+		 // -------------------------------- Setting up the comparePane -----------------------------------------------------
+			
+			ChangeListener<LocalDate> dateChanger = new ChangeListener<LocalDate>() {
+				@Override
+				public void changed(ObservableValue<? extends LocalDate> arg0,
+						LocalDate oldDate, LocalDate newDate) {
+					SimpleDateFormat format = new SimpleDateFormat("DD MM YYYY");
+
+					String year = newDate.toString().substring(0, 4);
+					System.out.println(year);
+					String month = newDate.toString().substring(5, 7);
+					System.out.println(month);
+					String day = newDate.toString().substring(8, 10);
+					System.out.println(day);
+					String date = day + month + year;
+					System.out.println(date);
+
+					System.out.println(" Compare From: "
+							+ compareFrom.getValue().toEpochDay());
+					System.out.println(format.format(newDate.toEpochDay()));
+					System.out.println(" Compare To:  " + compareTo.getValue());
+				}
+			};
+
+			final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+				@Override
+				public DateCell call(final DatePicker datePicker) {
+					return new DateCell() {
+						@Override
+						public void updateItem(LocalDate item, boolean empty) {
+							super.updateItem(item, empty);
+							if (item.isAfter(LocalDate.now())) {
+								setDisable(true);
+								setStyle("-fx-background-color: #ffc0cb;");
+							}
+						}
+					};
+				}
+			}; 
+			
+		 Label compareLabel = new Label("Compare From"); // compare from label
+		 compareLabel.setLayoutX(40);
+		 compareLabel.setLayoutY(10);
+		 
+		 HBox compareFromRow = new HBox(5); // hbox for the compare from elements
+		 compareFromRow.setLayoutX(40);
+		 compareFromRow.setLayoutY(40);
+		 
+		 compareFrom = new DatePicker(); // allows to pick a date
+		 compareFrom.setMaxWidth(110);
+		 compareFrom.setValue(compareTo.getValue().minusDays(1));
+		 compareFrom.setId("datePicker");
+		 
+		 compareFrom.valueProperty().addListener(dateChanger); 
+		 
+		 compareFromHours = getBox("hours"); // allows to pick an hour
+		 compareFromHours.setMaxWidth(2);
+		 
+		 Label colonLabel = new Label(":");
+		 
+		 compareFromMinutes = getBox("minutes"); // allows to pick a minute
+		 compareFromMinutes.setMaxWidth(2);
+		 
+		 compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
+				 colonLabel, compareFromMinutes); // adds the date picker and hour and minute pickers
+		 
+		 
+		 Label compareToLabel = new Label("Compare To"); // compare to label
+		 compareToLabel.setLayoutX(40);
+		 compareToLabel.setLayoutY(110);
+		 
+		 HBox compareToRow = new HBox(5); // hbox for the compare from elements
+		 compareToRow.setLayoutX(40);
+		 compareToRow.setLayoutY(150);
+		 
+		 compareTo = new DatePicker(); // allows to pick a date
+		 compareTo.setMaxWidth(101);
+		 compareTo.setValue(LocalDate.now());
+		 compareTo.setId("datePicker");
+		 compareTo.valueProperty().addListener(dateChanger);
+		 
+		 compareToHours = getBox("hours"); // allows to pick an hour
+		 compareToHours.setMaxWidth(2);
+		 
+		 Label colonLabel2 = new Label(":");
+		 
+		 compareToMinutes = getBox("minutes"); // allows to pick an minute
+		 compareToMinutes.setMaxWidth(2);
+		 
+		 compareToRow.getChildren().addAll(compareTo, compareToHours,
+				 colonLabel2, compareToMinutes); // adds the date picker and hour and minute pickers
+		 
+		 comparePane.getChildren().addAll(compareLabel, compareFromRow,
+					compareToLabel, compareToRow); // adds labels and rows to the compare pane
+		 
+		 // -------------------------------- Setting up the submitPane -----------------------------------------------------
+
+		 graphType = new ChoiceBox<String>(); // creates a combo box to select the type of graph
+		 graphType.getItems().addAll("Line Chart", "Bar Chart");
+		 graphType.setTooltip(new Tooltip("Select Type Of Graph"));
+		 graphType.getSelectionModel().selectFirst();
+		 graphType.setLayoutX(100);
+		 graphType.setLayoutY(10);
+		 
+		 Button createGraphButton = new Button("Generate Graph"); // creates a button used to generate the graph
+		 createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when button is pressed call the showDeviceDetails method
+			 @Override
+			 public void handle(ActionEvent arg0) {
+				 try {
+					showDeviceDetails(devices.get(2)); //<-- this currently takes in the device that is second in the devices
+				} catch (SQLException e) {			   // array. This will change to the devices that are selected in the devicesPane
+					e.printStackTrace();
+				}
+			 }
+		 }
+				 );
+		 createGraphButton.setLayoutX(95); // layout of the button
+		 createGraphButton.setLayoutY(60);
+		 
+		 submitPane.getChildren().addAll(graphType, createGraphButton); // add graph selecter and button to the submitPane
+		 
+		 // -------------------------------- Setting up the graphSettingsContainer -----------------------------------------------------
+		 
+		 graphSettingsContainer.getChildren().addAll(devicesPane, comparePane, submitPane);
 		 display.getChildren().add(graphSettingsContainer);
 	}
 
@@ -577,7 +728,7 @@ public class VeraGUI extends Application {
 			String[] words3 = { "Compare", "Download CSV", "Back", "Quit" };
 			names = Arrays.<String> asList(words3);
 
-			VBox dropdown = new VBox(5);
+/*			VBox dropdown = new VBox(5);
 			dropdown.setId("dropdown");
 			sideButtons.getChildren().add(dropdown);
 			Label compareLabel = new Label("Compare From");
@@ -629,7 +780,7 @@ public class VeraGUI extends Application {
 
 			dropdown.getChildren().addAll(compareLabel, compareFromRow,
 					compareToLabel, compareToRow, label, compareFromRow2,
-					compareToLabel2, compareToRow2, submitCompare);
+					compareToLabel2, compareToRow2, submitCompare);*/
 			break;
 		}
 		int x = 0;
@@ -650,23 +801,9 @@ public class VeraGUI extends Application {
 		}
 	}
 
-	private void showDeviceDetails(final Device device) throws SQLException {
+	private void showDeviceDetailsPastDay(final Device device) throws SQLException {
 		changeButtons("compare");
 		Calendar currentDate = Calendar.getInstance();
-
-		compareFromHours.getSelectionModel().select(
-				currentDate.get(Calendar.HOUR_OF_DAY));
-		compareToHours.getSelectionModel().select(
-				currentDate.get(Calendar.HOUR_OF_DAY));
-		if (currentDate.get(Calendar.MINUTE) < 55) {
-			compareFromMinutes.getSelectionModel().select(
-					(int) currentDate.get(Calendar.MINUTE) / 5 + 1);
-			compareToMinutes.getSelectionModel().select(
-					(int) currentDate.get(Calendar.MINUTE) / 5 + 1);
-		} else {
-			compareFromMinutes.getSelectionModel().select(0);
-			compareToMinutes.getSelectionModel().select(0);
-		}
 
 		String trimmedCurrentDate = Long
 				.toString(currentDate.getTimeInMillis() / 1000);
@@ -678,7 +815,7 @@ public class VeraGUI extends Application {
 		ResultSet results = conn.getRows(device.readingFromSQL(
 				lastCompareFromDate, lastCompareToDate));
 		display.getChildren().clear();
-		display.getChildren().addAll(graphType); // adds the dropdownbox for
+		display.getChildren().addAll(); // adds the dropdownbox for
 													// selecting different
 													// grpahs
 
@@ -714,41 +851,28 @@ public class VeraGUI extends Application {
 			warning.setLayoutX(50);
 			warning.setLayoutY(150);
 			display.getChildren().add(warning);
-			graphType.setDisable(true);
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
-		graphType.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					public void changed(
-							ObservableValue<? extends String> source,
-							String oldValue, String newValue) {
-						display.getChildren().remove(
-								display.getChildren().size() - 1); // removes
-																	// old graph
-						Charts chart = new Charts(readingsArray, dateArray,
-								device, newValue);
-						chart.show(display);
-
-					}
-				});
 	}
 
-	private void showDeviceDetails(final Device device, String userSet) 
+	private void showDeviceDetails(final Device device) 
 			throws SQLException {
-		lastCompareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
+		
+		long compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
 				+ (Long.parseLong(compareFromHours.getValue()) * 3600)
 				+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
-		lastCompareToDate = (compareTo.getValue().toEpochDay() * 86400)
+		long compareToDate = (compareTo.getValue().toEpochDay() * 86400)
 				+ (Long.parseLong(compareToHours.getValue()) * 3600)
 				+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
+		
 		ResultSet results = conn.getRows(device.readingFromSQL(
-				lastCompareFromDate, lastCompareToDate));
+				compareFromDate, compareToDate));
+		
 		display.getChildren().clear();
-		display.getChildren().addAll(graphType); // adds the drop down box for
+		display.getChildren().addAll(); // adds the drop down box for
 													// selecting different
 													// graphs
-
 		try {
 			readingsArray = new ArrayList<Integer>();
 			dateArray = new ArrayList<String>();
@@ -782,24 +906,9 @@ public class VeraGUI extends Application {
 			warning.setLayoutX(50);
 			warning.setLayoutY(150);
 			display.getChildren().add(warning);
-			graphType.setDisable(true);
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
-		graphType.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					public void changed(
-							ObservableValue<? extends String> source,
-							String oldValue, String newValue) {
-						display.getChildren().remove(
-								display.getChildren().size() - 1); // removes
-																	// old graph
-						Charts chart = new Charts(readingsArray, dateArray,
-								device, newValue);
-						chart.show(display);
-
-					}
-				});
 	}
 
 	private ChoiceBox<String> getBox(String type) {
