@@ -24,6 +24,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -34,11 +35,13 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -482,14 +485,43 @@ public class VeraGUI extends Application {
 		Pane comparePane = new Pane();
 		Pane submitPane = new Pane();
 
-		 devicePane.setStyle("-fx-background-color: black;");
-		 comparePane.setStyle("-fx-background-color: red;");
-		 submitPane.setStyle("-fx-background-color: blue;");
 		 
-		 devicePane.setPrefSize(800, display.getHeight()/3);
-		 comparePane.setPrefSize(800, display.getHeight()/3);
-		 submitPane.setPrefSize(800, display.getHeight()/3);
+		 devicePane.setPrefSize(display.getWidth(), display.getHeight()/3*1.5); // just sizing, can be adjusted
+		 comparePane.setPrefSize(display.getWidth()/2, display.getHeight()/3*1.5);
+		 submitPane.setPrefSize(display.getWidth()/2, display.getHeight()/3*1.5);
 		 
+		 CurrentReadings currentReadings = new CurrentReadings();
+		 ArrayList<Room> rooms = currentReadings.getRooms(); // array of rooms
+		 ArrayList<Device> devices = new ArrayList<Device>(); // array of devices
+
+		 for (int i = 0; i < rooms.size(); i++ ) // for all rooms
+		 {
+			 for (int j = 0; j < rooms.get(i).getDevices().size(); j++ ) //get all devices for each room
+			 {
+				devices.add(rooms.get(i).getDevices().get(j));  // add the devices to a device array
+			 }
+		 }
+		 
+		 for (int i = 0; i < devices.size(); i++ ) // for each device add to the pane
+		 {
+			final ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
+					"/Resources/" + devices.get(i).getImage()).toExternalForm())); //add the image
+			
+			image.setFitHeight(150); //image sizing
+			image.setFitWidth(150);
+			
+			image.setOnMouseClicked(new EventHandler<Event>() {
+				@Override
+				public void handle(Event event) {
+					image.setFitHeight(300);
+				}
+			
+			});
+			
+			image.setLayoutX(i * 150 + 10); // x layout position spread
+			
+			devicePane.getChildren().add(image); // add
+		 }
 		 graphSettingsContainer.getChildren().addAll(devicePane, comparePane, submitPane);
 		 display.getChildren().add(graphSettingsContainer);
 	}
