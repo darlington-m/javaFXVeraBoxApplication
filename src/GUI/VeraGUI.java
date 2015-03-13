@@ -443,7 +443,7 @@ public class VeraGUI extends Application {
 		        });
 		    }
 		}, 0, 300000);
-		
+ 		
 
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
