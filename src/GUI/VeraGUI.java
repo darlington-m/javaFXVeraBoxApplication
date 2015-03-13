@@ -430,7 +430,6 @@ public class VeraGUI extends Application {
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
 
-	
 
 	public void addARoom() {
 		display.getChildren().clear();
