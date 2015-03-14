@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import Devices.Device;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
 public class LineGraph 
@@ -16,14 +18,6 @@ public class LineGraph
 	public LineChart checkCompare(LineChart chart, ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices) 
 	{
 		int numberOfDisplayedPointsOfData = readings.get(0).size(); // How many points on the graph to be shown
-		if(numberOfDisplayedPointsOfData > 572)
-		{
-			int i = 0;
-			while(i < 34)
-			{
-				
-			}
-		}
 		String id = "dontCompare"; //compare checker, if compare radio button not active "dontCompare" a single line, else show 2 lines on graph
 		int i = 0;
 		int lineReadings = 0;
@@ -37,11 +31,12 @@ public class LineGraph
 			try 
 			{
 				i = 0;
+	
 				while (i < readings.get(j).size()-1)  // while there's still data in the array
 				{
 					int yAxisReadings = (int) readings.get(j).get(i); // get the readings through all index 0-array.size()-1 and add them into the arraylist
 					String xAxisReadings = (String) dates.get(j).get(i);  // get all the dates for the readings and store them exactly the same way as the readings, same index's
-					lineOfReadings.getData().add(new XYChart.Data(xAxisReadings, yAxisReadings)); // add the data to the chart
+					lineOfReadings.getData().add(new XYChart.Data(xAxisReadings, yAxisReadings)); // add the data to the chart					
 					i++;
 				}
 				readingsList.add(lineOfReadings); // return the data back to charts to be displayed
@@ -52,6 +47,7 @@ public class LineGraph
 				checkCompare(chart, readings, dates, devices); // Pass everything back to the method and try again.
 			}
 		}
+		
 		chart.getData().addAll(readingsList);
 		chart.setCreateSymbols(false); // remove symbols displayed on the graph
 		chart.setLegendVisible(true); // show the icons to indicate which line is which

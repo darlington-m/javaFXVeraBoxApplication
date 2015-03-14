@@ -9,6 +9,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Pane;
 
 public class Charts {
@@ -71,11 +72,8 @@ public class Charts {
 			pane.getChildren().add(barChart);
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
-		{			
-			/*int lowerBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) - lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
-			int upperBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) + lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
-			yAxis = new NumberAxis(lowerBound, upperBound,20);*/
-			
+		{				
+			getYAxis(); // Checks all of the readings to find what the bounds of the axis should be
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, readings, dates, devices);  // send the data over to bar chart to be added to the chart
 			lineChart.setPrefSize(800, (500/(size))); // Size of the chart will decrease when the number of charts needed increases
@@ -83,6 +81,31 @@ public class Charts {
 			lineChart.setLayoutY(50 + ((550 / size) * position)); // calculation to determine y position. If you want to change where the charts
 			pane.getChildren().add(lineChart); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
 		}
+	}
+	
+	public void getYAxis(){
+		int lowerBound = (int) readings.get(0).get(0);
+		int upperBound = (int) readings.get(0).get(0);
+		
+		// Information for line one displayed on the graph
+		for (int j = 0; j < devices.size(); j++){ // for each device
+			int i = 0;
+
+			while (i < readings.get(j).size()-1)  // for each reading for the device
+			{
+				int yAxisReadings = (int) readings.get(j).get(i); // check the reading
+
+				if (yAxisReadings < lowerBound) { // if lower than the current lowest value, make the lower bound
+					lowerBound = yAxisReadings;
+				}
+				if (yAxisReadings > upperBound) {// if higher than the current highest value, make the upper bound
+					upperBound = yAxisReadings;
+				}
+
+				i++;
+			}
+		} 
+		yAxis = new NumberAxis((int)(lowerBound - lowerBound * 0.1), (int)(upperBound + upperBound * 0.1), 10); // give the yAxis these new bounds with 10% higher and lower either way
 	}
 
 }
