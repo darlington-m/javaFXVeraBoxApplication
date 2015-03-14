@@ -45,7 +45,16 @@ public class CurrentReadings {
 									.getInt("subcategory"), resultSetReadings
 									.getInt("room"), resultSetReadings
 									.getInt("parent"), resultSetReadings
-									.getInt("heat")));
+									.getInt("heat"), resultSetReadings
+									.getInt("setpoint"), resultSetReadings
+									.getInt("heat"), resultSetReadings
+									.getInt("cool"), resultSetReadings
+									.getString("commands"), resultSetReadings
+									.getInt("batterylevel"), resultSetReadings
+									.getString("reading_mode"), resultSetReadings
+									.getInt("state"), resultSetReadings
+									.getString("reading_comment")		
+							));
 					System.out.println("radiator created");
 					// Check for light and not humidity to tell the difference
 					// between 4in1 sensor and light sensor
