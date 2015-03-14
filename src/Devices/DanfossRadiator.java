@@ -1,7 +1,5 @@
 package Devices;
 
-import java.util.Date;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -49,24 +47,6 @@ public class DanfossRadiator extends Device implements Sensor {
 		return currentReading;
 	}
 
-	@Override
-	public String readingToSQL() {
-		return new String(
-				"INSERT INTO Reading "
-						+ " (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, heat) VALUES ('"
-						+ new Date() + "', '" + getName() + "', '" + getId()
-						+ "',  '" + getAltid() + "',  '" + getCategory()
-						+ "',  '" + getSubcategory() + "',  '" + getRoom()
-						+ "',  '" + getParent() + "',  '" + getReading() + "')");
-	}
-
-	@Override
-	public String readingFromSQL(long startDate, long endDate) {
-		return new String(
-				"SELECT heat, reading_date FROM Reading WHERE id =  '"
-						+ getId() + "' AND reading_date >='" + startDate
-						+ "' AND reading_date <='" + endDate + "'");
-	}
 
 	@Override
 	public String getDetails() {
@@ -83,5 +63,11 @@ public class DanfossRadiator extends Device implements Sensor {
 		reading.setLayoutY(100);
 		pane.getChildren().addAll(reading);
 		return pane;
+	}
+
+	@Override
+	public String readingFromSQL(long startDate, long endDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

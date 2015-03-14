@@ -20,11 +20,7 @@ public class DataMining extends Device implements Sensor {
 	public int getReading() {
 		return 0;
 	}
-
-	@Override
-	public String readingToSQL() {
-		return null;
-	}
+	
 
 	@Override
 	public String getDetails() {

@@ -1,7 +1,5 @@
 package Devices;
 
-import java.util.Date;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -47,31 +45,6 @@ public class FourInOne extends Device {
 				+ " LastTrip: " + lasttrip;
 	}
 
-	public String readingToSQL() {
-		return "INSERT INTO Reading (reading_date, reading_device_name, id, altid, category, subcategory, room, parent, temperature, humidity, light) VALUES ('"
-				+ new Date()
-				+ "', '"
-				+ getName()
-				+ "', '"
-				+ getId()
-				+ "',  '"
-				+ getAltid()
-				+ "',  '"
-				+ getCategory()
-				+ "',  '"
-				+ getSubcategory()
-				+ "',  '"
-				+ getRoom()
-				+ "',  '" 
-				+ getParent() 
-				+ "',  '" 
-				+ temperature 
-				+ "',  '" 
-				+ humidity
-				+ "',  '" 
-				+ light
-				+ "')";
-	}
 
 	@Override
 	public String readingFromSQL(long startDate, long endDate) {
