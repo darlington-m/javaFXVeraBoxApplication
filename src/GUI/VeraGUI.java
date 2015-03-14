@@ -507,6 +507,7 @@ public class VeraGUI extends Application {
 
 			 final Pane imagePane = new Pane(); //pane to contain the image and the label
 			 imagePane.setLayoutY(30);
+			 imagePane.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 		     			 
 		     imagePane.setPrefSize(144, 145); // sizing the pane
 
@@ -544,7 +545,7 @@ public class VeraGUI extends Application {
 					     ft.play();
 					     
 					 } else {
-						 imagePane.setStyle("-fx-border-color:white; -fx-border-width: 1; -fx-border-style: solid;");
+						 imagePane.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 						 selectedDevices.remove(deviceLabel.getText());
 						 imagePane.setPrefSize(144, 145);
 						 //System.out.println("Removed: " + deviceLabel.getText());
@@ -684,8 +685,8 @@ public class VeraGUI extends Application {
 							 }
 						 }
 					 }
-					showDeviceDetails(devicesToDisplay, "not24"); //<-- this currently takes in the device that is second in the devices
-				} catch (SQLException e) {			   // array. This will change to the devices that are selected in the devicesPane
+					showDeviceDetails(devicesToDisplay, "not24"); //<-- passes the devices to be displayed in the graph and tells the method to use
+				} catch (SQLException e) {			   			  //    the dates selected in the dropdown boxes.
 					e.printStackTrace();
 				}
 			 }

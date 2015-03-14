@@ -112,7 +112,8 @@ public class CurrentReadings {
 									.getInt("parent"), resultSetReadings
 									.getInt("temperature"), resultSetReadings
 									.getInt("light"), resultSetReadings
-									.getInt("humidity")));
+									.getInt("humidity"), resultSetReadings
+									.getInt("armedtripped")));
 					System.out.println("4in1 created");
 				}
 			}

@@ -17,17 +17,24 @@ public class FourInOne extends Device {
 	String comment;
 	int tripped;
 	int lasttrip;
-
+	String[] readingNames = new String[4];
+	
+	
 	public FourInOne() {
 		super.setImage("4in1.png");
 	}
 	
 	public FourInOne(String name, int id, String altid, int category,
-			int subcategory, int room, int parent, int temperature, int light, int humidity) {
+			int subcategory, int room, int parent, int temperature, int light, int humidity, int armedTripped) {
 		super(name, id, altid, category, subcategory, room, parent, "4in1.png", "", 0);
 		this.temperature = temperature;
 		this.light = light;
 		this.humidity = humidity;
+		this.armedtripped = armedTripped;
+		readingNames[0] = "temperature"; 
+		readingNames[1] = "light"; 
+		readingNames[2] = "humidity"; 
+		readingNames[3] = "armedTripped"; 
 	}
 
 	public String toString() {
@@ -95,7 +102,11 @@ public class FourInOne extends Device {
 				+ this.humidity);
 		humidity.setLayoutY(125);
 		humidity.setLayoutX(200);
-		pane.getChildren().addAll(light, temp, humidity);
+		Label armedTripped = new Label("Armed Tripped: "
+				+ this.armedtripped);
+		armedTripped.setLayoutY(150);
+		armedTripped.setLayoutX(200);
+		pane.getChildren().addAll(light, temp, humidity, armedTripped);
 		return pane;
 	}
 }
