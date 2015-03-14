@@ -30,13 +30,21 @@ public class Charts {
 
 	ArrayList<Integer> oneLineOfReadings; // Array storing readings for line one
 	ArrayList<String> oneLineOfDates; // Array storing dates for line one
+	
+	int size; // number of readings 
+	int position; // number of the current reading
+	/*
+	 * these variables are used to decide the size and position of the graphs. Further explaination below with the calculations
+	 */
 
-	public Charts(ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices, String type) 
+	public Charts(ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices, String type, int size, int position) 
 	{
 		this.readings = readings; //store the readings
 		this.dates = dates; // store the dates
 		this.devices = devices; // the devices
 		this.type = type; // the type
+		this.size = size;
+		this.position = position;
 	}
 
 	public void show(Pane pane) 
@@ -70,10 +78,10 @@ public class Charts {
 			
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, readings, dates, devices);  // send the data over to bar chart to be added to the chart
-			lineChart.setPrefSize(800, 400);
+			lineChart.setPrefSize(800, (500/(size))); // Size of the chart will decrease when the number of charts needed increases
 			lineChart.setLayoutX(0);
-			lineChart.setLayoutY(150);
-			pane.getChildren().add(lineChart);
+			lineChart.setLayoutY(50 + ((550 / size) * position)); // calculation to determine y position. If you want to change where the charts
+			pane.getChildren().add(lineChart); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
 		}
 	}
 

@@ -80,7 +80,7 @@ public class VeraGUI extends Application {
 			secondCompareFrom;
 	private VBox sideButtons;
 	private RadioButton compareone;
-	private ChoiceBox<String> graphType;
+	private ChoiceBox<String> graphType, seperateGraphs;
 	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
 	private ArrayList<String> dateArray = new ArrayList<String>();
 	private Device selectedDevice;
@@ -263,68 +263,8 @@ public class VeraGUI extends Application {
 			}
 		};
 
-		secondCompareTo = new DatePicker();
-		secondCompareFrom = new DatePicker();
-		secondCompareTo.setValue(LocalDate.now());
-		secondCompareFrom.setValue(secondCompareTo.getValue().minusDays(1));
-		secondCompareTo.setId("datePicker");
-		secondCompareFrom.setId("datePicker");
-		secondCompareTo.setDisable(true);
-		secondCompareFrom.setDisable(true);
-
-		ChangeListener<LocalDate> secondChanger = new ChangeListener<LocalDate>() {
-
-			@Override
-			public void changed(ObservableValue<? extends LocalDate> arg0,
-					LocalDate oldDate, LocalDate newDate) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("A");
-				LocalDate date = LocalDate.parse(oldDate.toString(), formatter);
-				System.out
-						.println("Old Date :" + date + "New Date :" + newDate);
-			}
-		};
-
-		secondCompareTo.valueProperty().addListener(secondChanger);
-		secondCompareFrom.valueProperty().addListener(secondChanger);
-
 		compareTo.setDayCellFactory(dayCellFactory);
 		compareFrom.setDayCellFactory(dayCellFactory);
-		secondCompareTo.setDayCellFactory(dayCellFactory);
-		secondCompareFrom.setDayCellFactory(dayCellFactory);
-
-		// ToggleGroup group = new ToggleGroup();
-		compareone = new RadioButton("Enabled");
-		compareone.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (((RadioButton) arg0.getSource()).isSelected()) {
-					secondCompareTo.setDisable(false);
-					secondCompareFrom.setDisable(false);
-					secondCompareFromHours.setDisable(false);
-					secondCompareFromMinutes.setDisable(false);
-					secondCompareFromHours2.setDisable(false);
-					secondCompareFromMinutes2.setDisable(false);
-				} else {
-					secondCompareTo.setDisable(true);
-					secondCompareFrom.setDisable(true);
-					secondCompareFromHours.setDisable(true);
-					secondCompareFromMinutes.setDisable(true);
-					secondCompareFromHours2.setDisable(true);
-					secondCompareFromMinutes2.setDisable(true);
-				}
-			}
-		});
-
-		Label colonLabel = new Label(":");
-		secondCompareFromHours = getBox("hours");
-		secondCompareFromHours.setMaxWidth(10);
-		secondCompareFromMinutes = getBox("minutes");
-		secondCompareFromMinutes.setDisable(true);
-		secondCompareFromHours.setDisable(true);
-		secondCompareFromHours2 = getBox("hours");
-		secondCompareFromMinutes2 = getBox("minutes");
-		secondCompareFromMinutes2.setDisable(true);
-		secondCompareFromHours2.setDisable(true);
 
 		stage.show();
 		displayDevices();
@@ -620,7 +560,7 @@ public class VeraGUI extends Application {
 		 compareFrom.setMaxWidth(110);
 		 compareFrom.setValue(compareTo.getValue().minusDays(1));
 		 compareFrom.setId("datePicker");
-		 
+		 compareFrom.setEditable(false);
 		 compareFrom.valueProperty().addListener(dateChanger); 
 		 
 		 compareFromHours = getBox("hours"); // allows to pick an hour
@@ -647,6 +587,7 @@ public class VeraGUI extends Application {
 		 compareTo.setMaxWidth(101);
 		 compareTo.setValue(LocalDate.now());
 		 compareTo.setId("datePicker");
+		 compareTo.setEditable(false);
 		 compareTo.valueProperty().addListener(dateChanger);
 		 
 		 compareToHours = getBox("hours"); // allows to pick an hour
@@ -672,6 +613,13 @@ public class VeraGUI extends Application {
 		 graphType.setLayoutX(100);
 		 graphType.setLayoutY(10);
 		 
+		 seperateGraphs = new ChoiceBox<String>(); // creates a combo box to select the type of graph
+		 seperateGraphs.getItems().addAll("One Chart", "Multiple Charts");
+		 seperateGraphs.setTooltip(new Tooltip("Display readings on one graph or many"));
+		 seperateGraphs.getSelectionModel().selectFirst();
+		 seperateGraphs.setLayoutX(87);
+		 seperateGraphs.setLayoutY(60);
+		 
 		 Button createGraphButton = new Button("Generate Graph"); // creates a button used to generate the graph
 		 createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when button is pressed call the showDeviceDetails method
 			 @Override
@@ -685,7 +633,7 @@ public class VeraGUI extends Application {
 							 }
 						 }
 					 }
-					showDeviceDetails(devicesToDisplay, "not24"); //<-- passes the devices to be displayed in the graph and tells the method to use
+					 showDeviceDetails(devicesToDisplay, "not24"); //<-- passes the devices to be displayed in the graph and tells the method to use
 				} catch (SQLException e) {			   			  //    the dates selected in the dropdown boxes.
 					e.printStackTrace();
 				}
@@ -693,9 +641,9 @@ public class VeraGUI extends Application {
 		 }
 				 );
 		 createGraphButton.setLayoutX(95); // layout of the button
-		 createGraphButton.setLayoutY(60);
+		 createGraphButton.setLayoutY(110);
 		 
-		 submitPane.getChildren().addAll(graphType, createGraphButton); // add graph selecter and button to the submitPane
+		 submitPane.getChildren().addAll(graphType, seperateGraphs, createGraphButton); // add graph selecter and button to the submitPane
 		 
 		 // -------------------------------- Setting up the graphSettingsContainer -----------------------------------------------------
 		 
@@ -834,10 +782,34 @@ public class VeraGUI extends Application {
 					readings.add(readingsArray); // add the current devices reading array to the array of reading arrays
 					dates.add(dateArray); // add the current devices date array to the array of date arrays
 				}
-
-				Charts chart = new Charts(readings, dates, devicesToDisplay,
-						"Line Chart"); // send the arrays to the chart object
-				chart.show(display);
+				
+				String splitGraphs;
+				
+				if (mode.equals("not24")){ // If method called through graph page
+					splitGraphs = seperateGraphs.getValue(); // Check type of graph to display
+				} else { // If method called through device page
+					splitGraphs = "One Chart"; // auto set to one chart
+				}
+			
+				if (splitGraphs.equals("One Chart")) { // If one chart selected give all readings to the chart to display all readings on one graph
+					Charts chart = new Charts(readings, dates, devicesToDisplay,
+							"Line Chart", 1, 0); // send the arrays to the chart object
+					chart.show(display);
+				} else { // else split each of the readings into seperate arrayLists (to make compatable with the chart) and create a chart for each reading
+					ArrayList<Charts> charts = new ArrayList<Charts>();
+					for (int i = 0; i < devicesToDisplay.size(); i++){
+						ArrayList<ArrayList> singleReadings = new ArrayList<ArrayList>();
+						ArrayList<ArrayList> singleDates = new ArrayList<ArrayList>();
+						ArrayList<Device> singleDevicesToDisplay = new ArrayList<Device>();
+						
+						singleReadings.add(readings.get(i));
+						singleDates.add(dates.get(i));
+						singleDevicesToDisplay.add(devicesToDisplay.get(i));
+						
+						charts.add(new Charts(singleReadings, singleDates, singleDevicesToDisplay, "Line Chart", devicesToDisplay.size(), i));
+						charts.get(i).show(display);
+					}
+				}
 		} catch (SQLException e1) {
 			Label warning = new Label("Sorry No Graph Data Available");
 			warning.setPrefSize(600, 300);
