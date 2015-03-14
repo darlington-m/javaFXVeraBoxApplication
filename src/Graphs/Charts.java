@@ -23,15 +23,19 @@ public class Charts {
 	NumberAxis yAxis = new NumberAxis();
 	
 	Scene scene = new Scene(xAxis, 0, 0);
+	
+	ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
+	ArrayList<ArrayList> dates = new ArrayList<ArrayList>();
+	ArrayList<Device> devices = new ArrayList<Device>();
 
-	ArrayList<Integer> lineOneReadings; // Array storing readings for line one
-	ArrayList<String> lineOneDates; // Array storing dates for line one
+	ArrayList<Integer> oneLineOfReadings; // Array storing readings for line one
+	ArrayList<String> oneLineOfDates; // Array storing dates for line one
 
-	public Charts(ArrayList<Integer> tempArray, ArrayList<String> tempArray2,Device device, String type) 
+	public Charts(ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices, String type) 
 	{
-		this.lineOneReadings = tempArray; //store the readings
-		this.lineOneDates = tempArray2; // store the dates
-		this.device = device; // the device
+		this.readings = readings; //store the readings
+		this.dates = dates; // store the dates
+		this.devices = devices; // the devices
 		this.type = type; // the type
 	}
 
@@ -44,7 +48,7 @@ public class Charts {
 		{
 			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis); // set Axis's
 			barChart.setId("BarChart"); // set ID for CSS
-			barChartGraph.checkCompare(barChart, lineOneReadings, lineOneDates, device); // send the data over to bar chart to be added to the chart
+			barChartGraph.checkCompare(barChart, oneLineOfReadings, oneLineOfDates, device); // send the data over to bar chart to be added to the chart
 			for (Node n : barChart.lookupAll(".default-color0.chart-bar")) // Set the colour of the bar in the chart
 			{
 				n.setStyle("-fx-bar-fill: #00AF33;");
@@ -60,11 +64,12 @@ public class Charts {
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
 		{			
-			int lowerBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) - lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
+			/*int lowerBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) - lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
 			int upperBound = (int) (lineOneReadings.get(lineOneReadings.size()/2) + lineOneReadings.get(lineOneReadings.size()/2) * 0.1);
-			yAxis = new NumberAxis(lowerBound, upperBound,20);
+			yAxis = new NumberAxis(lowerBound, upperBound,20);*/
+			
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
-			lineChartGraph.checkCompare(lineChart, lineOneReadings, lineOneDates, device);  // send the data over to bar chart to be added to the chart
+			lineChartGraph.checkCompare(lineChart, readings, dates, devices);  // send the data over to bar chart to be added to the chart
 			lineChart.setPrefSize(800, 400);
 			lineChart.setLayoutX(0);
 			lineChart.setLayoutY(150);

@@ -71,7 +71,7 @@ public class VeraGUI extends Application {
 	private Scene scene;
 	private Stage stage;
 	private Pane root, display;
-	private long lastCompareToDate, lastCompareFromDate;
+	private long compareToDate, compareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
 			compareFromHours, compareFromMinutes, secondCompareFromHours,
 			secondCompareFromMinutes, secondCompareFromHours2,
@@ -108,13 +108,6 @@ public class VeraGUI extends Application {
 			case "Scenes":
 				displayScenes();
 				break;
-			case "Compare":
-				if (sideButtons.getChildren().get(1) instanceof VBox) {
-					changeButtons("details");
-				} else {
-					changeButtons("compare");
-				}
-				break;
 			case "Back":
 				display.getChildren().clear();
 				changeButtons("mainMenu");
@@ -130,10 +123,6 @@ public class VeraGUI extends Application {
 				setRadiatorTemp();
 				break;
 			case "Download CSV":
-				System.out.println("Date 1:" + compareTo.getValue()
-						+ "\n Date 2:" + compareFrom.getValue());
-				System.out.println(turnDateToLong(compareFrom.getValue()));
-
 				saveToCSV(selectedDevice);
 				break;
 			}
@@ -426,7 +415,9 @@ public class VeraGUI extends Application {
 		        						changeButtons("details");
 		        						selectedDevice = device;
 		        						try {
-		        							showDeviceDetailsPastDay(device);
+		        							ArrayList<Device> devices = new ArrayList<Device>();
+		        							devices.add(device);
+		        							showDeviceDetails(devices, "24");
 		        						} catch (SQLException e) {
 		        							// TODO Auto-generated catch block
 		        							e.printStackTrace();
@@ -516,32 +507,35 @@ public class VeraGUI extends Application {
 
 			 final Pane imagePane = new Pane(); //pane to contain the image and the label
 			 imagePane.setLayoutY(30);
-			 imagePane.setStyle("-fx-border-color:red; -fx-border-width: 1; -fx-border-style: solid;");
-		     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
+		     			 
+		     imagePane.setPrefSize(144, 145); // sizing the pane
+
+			 FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 		     ft.setFromValue(0.3);
 		     ft.setToValue(0.3);
 		     ft.setCycleCount(1);
 		     ft.setAutoReverse(false);
 		     
 		     ft.play();
-			 imagePane.setPrefSize(144, 145); // sizing the pane
-
+		     
 			 imagePane.setOnMouseClicked(new EventHandler<Event>() { // when the pane is clicked
 				 /*
 				  * As we are making the program dynamic this needs to account for any number of devices being
 				  * added. To do this we cannot have hard coded panes. A way around needing to do this is to
 				  * change the width of the image page to be able to tell if the image has been selected or not
-				  * 135 stands for false, 145 stands for true. So when you click on the image pane it will highlight 
+				  * 144 stands for false, 145 stands for true. So when you click on the image pane it will highlight 
 				  * around the pane and set the size to 145. When clicked again it will unhighlight and set the 
-				  * size back to 135.
+				  * size back to 144.
 				  */
 				 @Override
 				 public void handle(Event event) {
 					 if (imagePane.getWidth() == 144){ 
-						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 1; -fx-border-style: solid;");
+						 imagePane.setStyle("-fx-border-color:green; -fx-border-width: 3; -fx-border-style: solid;");
 						 imagePane.setPrefSize(145, 145);
 						 selectedDevices.add(deviceLabel.getText());
-					     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
+						 //System.out.println("Added: " + deviceLabel.getText());
+					  
+						 FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 					     ft.setFromValue(0.3);
 					     ft.setToValue(1);
 					     ft.setCycleCount(1);
@@ -550,10 +544,12 @@ public class VeraGUI extends Application {
 					     ft.play();
 					     
 					 } else {
-						 imagePane.setStyle("-fx-border-color:red; -fx-border-width: 1; -fx-border-style: solid;");
+						 imagePane.setStyle("-fx-border-color:white; -fx-border-width: 1; -fx-border-style: solid;");
 						 selectedDevices.remove(deviceLabel.getText());
 						 imagePane.setPrefSize(144, 145);
-					     FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
+						 //System.out.println("Removed: " + deviceLabel.getText());
+					    
+						 FadeTransition ft = new FadeTransition(Duration.millis(300), imagePane);
 					     ft.setFromValue(1.0);
 					     ft.setToValue(0.3);
 					     ft.setCycleCount(1);
@@ -680,7 +676,15 @@ public class VeraGUI extends Application {
 			 @Override
 			 public void handle(ActionEvent arg0) {
 				 try {
-					showDeviceDetails(devices.get(2)); //<-- this currently takes in the device that is second in the devices
+					 ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
+					 for(String selectedDevice : selectedDevices){
+						 for(Device device : devices){
+							 if (selectedDevice.equals(device.getName())){
+								 devicesToDisplay.add(device); // basically finds which devices are selected and adds them to this array list
+							 }
+						 }
+					 }
+					showDeviceDetails(devicesToDisplay, "not24"); //<-- this currently takes in the device that is second in the devices
 				} catch (SQLException e) {			   // array. This will change to the devices that are selected in the devicesPane
 					e.printStackTrace();
 				}
@@ -738,7 +742,7 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Compare", "Download CSV", "Back", "Quit" };
+			String[] words2 = { "Download CSV", "Back", "Quit" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "settings":
@@ -748,65 +752,6 @@ public class VeraGUI extends Application {
 		case "addRoom":
 			String[] words5 = { "Cancel", "Back", "Quit" };
 			names = Arrays.<String> asList(words5);
-			break;
-		case "compare":
-
-			String[] words3 = { "Compare", "Download CSV", "Back", "Quit" };
-			names = Arrays.<String> asList(words3);
-
-/*			VBox dropdown = new VBox(5);
-			dropdown.setId("dropdown");
-			sideButtons.getChildren().add(dropdown);
-			Label compareLabel = new Label("Compare From");
-
-			Label colonLabel = new Label(":");
-			Label colonLabel2 = new Label(":");
-
-			HBox compareFromRow = new HBox(5);
-			compareFromHours = getBox("hours");
-			compareFromHours.setMaxWidth(2);
-			compareFromMinutes = getBox("minutes");
-			compareFromMinutes.setMaxWidth(2);
-			compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
-					colonLabel, compareFromMinutes);
-			HBox compareToRow = new HBox(5);
-			compareToHours = getBox("hours");
-			compareToHours.setMaxWidth(2);
-			compareToMinutes = getBox("minutes");
-			compareToMinutes.setMaxWidth(2);
-			compareToRow.getChildren().addAll(compareTo, compareToHours,
-					colonLabel2, compareToMinutes);
-
-			HBox compareFromRow2 = new HBox(5);
-			compareFromRow2.getChildren().addAll(secondCompareFrom,
-					secondCompareFromHours, secondCompareFromMinutes);
-			HBox compareToRow2 = new HBox(5);
-			compareToRow2.getChildren().addAll(secondCompareTo,
-					secondCompareFromHours2, secondCompareFromMinutes2);
-
-			Label compareToLabel = new Label("Compare To");
-			Label compareLabel2 = new Label("Compare From");
-			Label compareToLabel2 = new Label("Compare To");
-			HBox label = new HBox(15);// this adds the enable button
-			label.getChildren().addAll(compareLabel2, compareone);
-
-			Button submitCompare = new Button("Compare");
-			submitCompare.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					try {
-						showDeviceDetails(selectedDevice, "test");
-						graphType.getSelectionModel().selectFirst();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
-
-			dropdown.getChildren().addAll(compareLabel, compareFromRow,
-					compareToLabel, compareToRow, label, compareFromRow2,
-					compareToLabel2, compareToRow2, submitCompare);*/
 			break;
 		}
 		int x = 0;
@@ -827,104 +772,71 @@ public class VeraGUI extends Application {
 		}
 	}
 
-	private void showDeviceDetailsPastDay(final Device device) throws SQLException {
-		changeButtons("compare");
-		Calendar currentDate = Calendar.getInstance();
-
-		String trimmedCurrentDate = Long
-				.toString(currentDate.getTimeInMillis() / 1000);
-		trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
-
-		lastCompareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
-		lastCompareToDate = Long.parseLong(trimmedCurrentDate);
-
-		ResultSet results = conn.getRows(device.readingFromSQL(
-				lastCompareFromDate, lastCompareToDate));
-		display.getChildren().clear();
-		display.getChildren().addAll(); // adds the dropdownbox for
-													// selecting different
-													// grpahs
-
-		try {
-			readingsArray = new ArrayList<Integer>();
-			while (results.next()) {
-				String temp = results.getString(device.getReadingName());
-				long temp2 = results.getInt("reading_date");
-				if (!(temp == null)) {
-					int temp3 = Integer.parseInt(temp);
-					String date = new java.text.SimpleDateFormat(
-							"MM/dd/yyyy HH:mm").format(new java.util.Date(
-							temp2 * 1000));
-					date = date.replaceAll("/", "");
-					date = date.replaceAll(":", "");
-					date = date.replaceAll(" ", "");
-					String dateHours = date.substring(8, 10);
-					String dateMinutes = date.substring(10, 12);
-					date = dateHours + ":" + dateMinutes;
-					readingsArray.add(temp3);
-					dateArray.add(date);
-				}
-			}
-			display.getChildren().addAll(
-					device.showDeviceDetails().getChildren());
-			Charts chart = new Charts(readingsArray, dateArray, device,
-					"Line Chart");
-			chart.show(display);
-		} catch (SQLException e1) {
-			Label warning = new Label("Sorry No Graph Data Available");
-			warning.setPrefSize(600, 300);
-			warning.setId("graphWarning");
-			warning.setLayoutX(50);
-			warning.setLayoutY(150);
-			display.getChildren().add(warning);
-		}
-		// this adds a change listener to the drop down box and creates a new
-		// graph when you select one.
-	}
-
-	private void showDeviceDetails(final Device device) 
+	private void showDeviceDetails(ArrayList<Device> devicesToDisplay, String mode) 
 			throws SQLException {
 		
-		long compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
-				+ (Long.parseLong(compareFromHours.getValue()) * 3600)
-				+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
-		long compareToDate = (compareTo.getValue().toEpochDay() * 86400)
-				+ (Long.parseLong(compareToHours.getValue()) * 3600)
-				+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
+		// mode parameter determines if the method has been called from within a device or the graphs pane.
 		
-		ResultSet results = conn.getRows(device.readingFromSQL(
-				compareFromDate, compareToDate));
+		if (mode.equals("24")){ // if mode = 24 hours set compareFromDate and compareToDate to the past 24 hours
+			Calendar currentDate = Calendar.getInstance();
+
+			String trimmedCurrentDate = Long
+					.toString(currentDate.getTimeInMillis() / 1000);
+			trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
+
+			compareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
+			compareToDate = Long.parseLong(trimmedCurrentDate);
+		} else {								 // else use the times selected using the dropdown boxes.
+			compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
+					+ (Long.parseLong(compareFromHours.getValue()) * 3600)
+					+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
+			compareToDate = (compareTo.getValue().toEpochDay() * 86400)
+					+ (Long.parseLong(compareToHours.getValue()) * 3600)
+					+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
+		}
+
+		display.getChildren().clear(); // fresh window
 		
-		display.getChildren().clear();
-		display.getChildren().addAll(); // adds the drop down box for
-													// selecting different
-													// graphs
-		try {
-			readingsArray = new ArrayList<Integer>();
-			dateArray = new ArrayList<String>();
-			while (results.next()) {
-				String temp = results.getString(device.getReadingName());
-				long temp2 = results.getInt("reading_date");
-				if (!(temp == null)) {
-					int temp3 = Integer.parseInt(temp);
-					String date = new java.text.SimpleDateFormat(
-							"MM/dd/yyyy HH:mm").format(new java.util.Date(
-							temp2 * 1000));
-					date = date.replaceAll("/", "");
-					date = date.replaceAll(":", "");
-					date = date.replaceAll(" ", "");
-					String dateHours = date.substring(8, 10);
-					String dateMinutes = date.substring(10, 12);
-					date = dateHours + ":" + dateMinutes;
-					readingsArray.add(temp3);
-					dateArray.add(date);
+			try {
+				ArrayList<ArrayList> readings = new ArrayList<ArrayList>();// Array list of arrays list of readings
+				ArrayList<ArrayList> dates = new ArrayList<ArrayList>(); // Array list of arrays list of dates
+				/*
+				 * This is required as we need to send an array list of readings for each devices and all of these
+				 * array lists need to be held within an array list to be pasted over to the charts method.
+				 */
+				
+				for(Device device : devicesToDisplay){ // For each device
+					ResultSet results = conn.getRows(device.readingFromSQL(
+							compareFromDate, compareToDate)); // get a result set from the database containing dates and readings
+
+					readingsArray = new ArrayList<Integer>(); // array list for the devices readings
+					dateArray = new ArrayList<String>(); // array list for the devices readings dates
+					
+					while (results.next()) { // while there is still date in the array
+						String deviceReading = results.getString(device.getReadingName()); //assign the reading to deviceReading
+						long readingDate = results.getInt("reading_date"); // assign the date to readingDate
+						if (!(deviceReading == null)) { // if the reading is not null
+							int convertedDeviceReading = Integer.parseInt(deviceReading); //convert the reading into an int
+							String date = new java.text.SimpleDateFormat(
+									"MM/dd/yyyy HH:mm").format(new java.util.Date(
+											readingDate * 1000)); //convert the date into a more readable format
+							date = date.replaceAll("/", "");
+							date = date.replaceAll(":", "");
+							date = date.replaceAll(" ", "");
+							String dateHours = date.substring(8, 10);
+							String dateMinutes = date.substring(10, 12);
+							date = dateHours + ":" + dateMinutes;
+							readingsArray.add(convertedDeviceReading); //add reading to the array
+							dateArray.add(date); // add date to the array
+						}
+					}
+					readings.add(readingsArray); // add the current devices reading array to the array of reading arrays
+					dates.add(dateArray); // add the current devices date array to the array of date arrays
 				}
-			}
-			display.getChildren().addAll(
-					device.showDeviceDetails().getChildren());
-			Charts chart = new Charts(readingsArray, dateArray, device,
-					"Line Chart");
-			chart.show(display);
+
+				Charts chart = new Charts(readings, dates, devicesToDisplay,
+						"Line Chart"); // send the arrays to the chart object
+				chart.show(display);
 		} catch (SQLException e1) {
 			Label warning = new Label("Sorry No Graph Data Available");
 			warning.setPrefSize(600, 300);
@@ -970,8 +882,8 @@ public class VeraGUI extends Application {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
-		fileChooser.setInitialFileName("veraData_" + lastCompareFromDate
-				+ "_to_" + lastCompareToDate + ".csv");
+		fileChooser.setInitialFileName("veraData_" + compareFromDate
+				+ "_to_" + compareToDate + ".csv");
 		// Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 				"CSV files (*.csv)", "*.csv");
@@ -981,7 +893,7 @@ public class VeraGUI extends Application {
 
 		CSV csv = new CSV();
 		try {
-			csv.toCSV(file, device, lastCompareFromDate, lastCompareToDate);
+			csv.toCSV(file, device, compareFromDate, compareToDate);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
