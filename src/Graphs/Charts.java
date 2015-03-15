@@ -105,7 +105,7 @@ public class Charts {
 				i++;
 			}
 		} 
-		yAxis = new NumberAxis((int)(lowerBound - lowerBound * 0.1), (int)(upperBound + upperBound * 0.1), 10); // give the yAxis these new bounds with 10% higher and lower either way
+		yAxis = new NumberAxis((int)(lowerBound - lowerBound * 0.1), (int)(upperBound + upperBound * 0.1), 1); // give the yAxis these new bounds with 10% higher and lower either way
 	}
 
 }
