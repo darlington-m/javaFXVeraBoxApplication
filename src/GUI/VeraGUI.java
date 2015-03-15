@@ -91,7 +91,7 @@ public class VeraGUI extends Application {
 
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
-					displayDevices();
+					displayDevices("All");
 					break;
 				case "Settings":
 					changeButtons("settings");
@@ -106,7 +106,7 @@ public class VeraGUI extends Application {
 				case "Back":
 					display.getChildren().clear();
 					changeButtons("mainMenu");
-					displayDevices();
+					displayDevices("All");
 					break;
 				case "Cancel":
 					displaySettings();
@@ -272,13 +272,13 @@ public class VeraGUI extends Application {
 		stage.show();
 
 		if (InternetConnectionCheck()) {
-			displayDevices();
+			displayDevices("All");
 		} else {
 			displayNoInternet();
 		}
 	}
 
-	public void displayDevices() {
+	public void displayDevices(String chosenRoom) {
 		final CurrentReadings currentReadings = new CurrentReadings();
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
@@ -291,30 +291,42 @@ public class VeraGUI extends Application {
 		sortingPane.setPrefSize(display.getPrefWidth() - 200, 40);
 		sortingPane.setLayoutX(100);
 		sortingPane.setId("sortingPane");
+		
+		
+		String[] roomNames = new String[currentReadings.getRooms().size()+1];
+        roomNames[0] = "All";
+        int count = 1; 
+        for(Room room: currentReadings.getRooms()) {
+            roomNames[count] = room.getName();
+            count++;
+        }
+		
 
 		HBox hbox = new HBox(10);
 		hbox.setStyle("-fx-padding:8px 0 0 30px");
-		Label sort = new Label("Sort By \t\t");
-		sort.setId("sortingLabel");
-		Label roomText = new Label("Rooms:");
+//		Label sort = new Label("Sort By \t\t");
+//		sort.setId("sortingLabel");
+		
+		
+		Label roomText = new Label("Select Room:");
 		roomText.setId("sortingLabel");
 		ChoiceBox<String> rooms = new ChoiceBox<String>();
-		rooms.getItems().addAll("Living Room", "Kitchen", "Study", "Bedroom",
-				"BathRoom");
+		rooms.getItems().addAll(roomNames);
 		rooms.getSelectionModel().selectFirst();
 		rooms.setId("sortingDropDown");
 		rooms.setMaxWidth(100);
-		Label devicesText = new Label("\t\tDevices:");
-		devicesText.setId("sortingLabel");
-		ChoiceBox<String> deviceList = new ChoiceBox<String>();
-		deviceList.getItems().addAll("4 in 1 Sensor", "Heat Sensor",
-				"Light Sensor", "Danfoss Radiator");
-		deviceList.getSelectionModel().selectFirst();
-		deviceList.setId("sortingDropDown");
-		deviceList.setMaxWidth(100);
+		
+		
+//		Label devicesText = new Label("\t\tDevices:");
+//		devicesText.setId("sortingLabel");
+//		ChoiceBox<String> deviceList = new ChoiceBox<String>();
+//		deviceList.getItems().addAll("4 in 1 Sensor", "Heat Sensor",
+//				"Light Sensor", "Danfoss Radiator");
+//		deviceList.getSelectionModel().selectFirst();
+//		deviceList.setId("sortingDropDown");
+//		deviceList.setMaxWidth(100);
 
-		hbox.getChildren().addAll(sort, roomText, rooms, devicesText,
-				deviceList);
+		hbox.getChildren().addAll(roomText, rooms);
 		sortingPane.getChildren().addAll(hbox);
 
 		final VBox vb = new VBox(30);
@@ -340,6 +352,17 @@ public class VeraGUI extends Application {
 			}
 		});
 		// PLACE AFTER THE SCROLLBAR
+		
+		ArrayList<Room> roomToDisplay = new ArrayList<Room>();
+		
+		if(chosenRoom == "All") {
+			
+			roomToDisplay = currentReadings.getRooms();
+			
+		}
+		
+		
+		
 
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
