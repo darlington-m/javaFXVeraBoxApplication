@@ -120,7 +120,7 @@ public class VeraGUI extends Application {
 					break;
 				}
 			} else {
-				
+
 				if (((Button) arg0.getSource()).getText() == "Quit") {
 					System.exit(0);
 				} else {
@@ -287,23 +287,20 @@ public class VeraGUI extends Application {
 		sortingPane.setPrefSize(display.getPrefWidth() - 200, 40);
 		sortingPane.setLayoutX(100);
 		sortingPane.setId("sortingPane");
-		
-		
-		String[] roomNames = new String[currentReadings.getRooms().size()+1];
-        roomNames[0] = "All";
-        int count = 1; 
-        for(Room room: currentReadings.getRooms()) {
-            roomNames[count] = room.getName();
-            count++;
-        }
-		
+
+		String[] roomNames = new String[currentReadings.getRooms().size() + 1];
+		roomNames[0] = "All";
+		int count = 1;
+		for (Room room : currentReadings.getRooms()) {
+			roomNames[count] = room.getName();
+			count++;
+		}
 
 		HBox hbox = new HBox(10);
 		hbox.setStyle("-fx-padding:8px 0 0 30px");
-//		Label sort = new Label("Sort By \t\t");
-//		sort.setId("sortingLabel");
-		
-		
+		// Label sort = new Label("Sort By \t\t");
+		// sort.setId("sortingLabel");
+
 		Label roomText = new Label("Select Room:");
 		roomText.setId("sortingLabel");
 		final ChoiceBox<String> roomDropDown = new ChoiceBox<String>();
@@ -311,24 +308,14 @@ public class VeraGUI extends Application {
 		roomDropDown.getSelectionModel().selectFirst();
 		roomDropDown.setId("sortingDropDown");
 		roomDropDown.setMaxWidth(100);
-		roomDropDown.valueProperty().addListener(new ChangeListener<String>(){
+		roomDropDown.valueProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> arg0,
 					String oldString, String newString) {
 				updateDashboard(getRooms(newString));
-			}});
-	
-		
-		
-//		Label devicesText = new Label("\t\tDevices:");
-//		devicesText.setId("sortingLabel");
-//		ChoiceBox<String> deviceList = new ChoiceBox<String>();
-//		deviceList.getItems().addAll("4 in 1 Sensor", "Heat Sensor",
-//				"Light Sensor", "Danfoss Radiator");
-//		deviceList.getSelectionModel().selectFirst();
-//		deviceList.setId("sortingDropDown");
-//		deviceList.setMaxWidth(100);
+			}
+		});
 
 		hbox.getChildren().addAll(roomText, roomDropDown);
 		sortingPane.getChildren().addAll(hbox);
@@ -355,60 +342,59 @@ public class VeraGUI extends Application {
 			}
 		});
 		// PLACE AFTER THE SCROLLBAR
-		
+
 		ArrayList<Room> roomsToDisplay = new ArrayList<Room>();
-		
-		if(chosenRoom == "All") {
+
+		if (chosenRoom == "All") {
 			roomsToDisplay = currentReadings.getRooms();
 		} else {
-			for (Room room: currentReadings.getRooms()) {
-				if(room.getName() == chosenRoom) {
+			for (Room room : currentReadings.getRooms()) {
+				if (room.getName() == chosenRoom) {
 					roomsToDisplay.add(room);
 				}
 			}
 		}
-		
-		
-		
 
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				Platform.runLater(new Runnable() {
 					public void run() {
-						// the "refresh" checks what has been selected from the dropdown box 
-						// and gets the relevant rooms and updates the dashboard.
-						updateDashboard(getRooms(roomDropDown.getSelectionModel().getSelectedItem()));
+						// the "refresh" checks what has been selected from the
+						// dropdown box
+						// and gets the relevant rooms and updates the
+						// dashboard.
+						updateDashboard(getRooms(roomDropDown
+								.getSelectionModel().getSelectedItem()));
 					}
 				});
 			}
 		}, 0, 300000);
 
-
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
-	
-	private ArrayList<Room> getRooms(String roomToRetrieve){
+
+	private ArrayList<Room> getRooms(String roomToRetrieve) {
 		ArrayList<Room> rooms = new CurrentReadings().getRooms();
-		if(roomToRetrieve.equals("All")){
+		if (roomToRetrieve.equals("All")) {
 			return rooms;
-		}else{
+		} else {
 			// setup an iterator
 			for (Iterator<Room> iterator = rooms.iterator(); iterator.hasNext();) {
-			    Room currentRoom = iterator.next();
-			 // if the room name doesnt match whats been selected then remove
-			    if (!currentRoom.getName().equals(roomToRetrieve)) {
-			        iterator.remove();
-			    }
+				Room currentRoom = iterator.next();
+				// if the room name doesnt match whats been selected then remove
+				if (!currentRoom.getName().equals(roomToRetrieve)) {
+					iterator.remove();
+				}
 			}
 			return rooms;
 		}
 	}
-	private void updateDashboard(ArrayList<Room> rooms){
+
+	private void updateDashboard(ArrayList<Room> rooms) {
 		vb.getChildren().clear();
 		for (Room room : rooms) {
-			Pane roomPane = room.getPane(sortingPane
-					.getPrefWidth());
+			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
 			VBox deviceBox = new VBox(10);
 			deviceBox.setLayoutX(50);
 			deviceBox.setLayoutY(50);
@@ -438,7 +424,6 @@ public class VeraGUI extends Application {
 		}
 	}
 
-	
 	public void addARoom() {
 		display.getChildren().clear();
 		final Label addRoom = new Label("Add a new room");
@@ -602,7 +587,7 @@ public class VeraGUI extends Application {
 
 			imagePane.setLayoutX(i * 150 + 30); // x layout position spread
 
-			imagePane.getChildren().addAll(deviceImage, deviceLabel); 
+			imagePane.getChildren().addAll(deviceImage, deviceLabel);
 
 			devicesPane.getChildren().add(imagePane); // add image panes to the
 														// devices pane.
@@ -674,7 +659,7 @@ public class VeraGUI extends Application {
 		compareTo.setId("datePicker");
 		compareTo.setEditable(false);
 		compareTo.valueProperty().addListener(dateChanger);
-		
+
 		compareToHours = getBox("hours"); // allows to pick an hour
 		compareToHours.setMaxWidth(2);
 
@@ -693,7 +678,8 @@ public class VeraGUI extends Application {
 
 		// factory to create a cell for every day within the date picker
 		// checks to see if the cell is after todays date
-		// sets the cell to disabled and background color to red if date is after current date.
+		// sets the cell to disabled and background color to red if date is
+		// after current date.
 		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
 			@Override
 			public DateCell call(final DatePicker datePicker) {
@@ -701,7 +687,7 @@ public class VeraGUI extends Application {
 					@Override
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
-						if (item.isAfter(LocalDate.now())) { 
+						if (item.isAfter(LocalDate.now())) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
 						}
@@ -712,8 +698,7 @@ public class VeraGUI extends Application {
 		// adds the factory to both of the compare buttons.
 		compareFrom.setDayCellFactory(dayCellFactory);
 		compareTo.setDayCellFactory(dayCellFactory);
-		
-		
+
 		// -------------------------------- Setting up the submitPane
 		// -----------------------------------------------------
 
@@ -826,7 +811,8 @@ public class VeraGUI extends Application {
 		action.setLayoutX(600);
 		action.setLayoutY(50);
 		Separator separator = new Separator();
-		separator.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+		separator
+				.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
 		pane.getChildren().addAll(roomName, number, action);
 		list.getChildren().addAll(pane, separator);
 
@@ -909,7 +895,7 @@ public class VeraGUI extends Application {
 			ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
 			// ArrayList of ArrayList of dates
 			ArrayList<ArrayList> dates = new ArrayList<ArrayList>(); // Array
-																		
+
 			/*
 			 * This is required as we need to send an array list of readings for
 			 * each devices and all of these array lists need to be held within
@@ -1005,13 +991,13 @@ public class VeraGUI extends Application {
 				}
 			}
 		} catch (SQLException e1) {
-//			Label warning = new Label("Sorry No Graph Data Available");
-//			warning.setPrefSize(600, 300);
-//			warning.setId("graphWarning");
-//			warning.setLayoutX(50);
-//			warning.setLayoutY(150);
-//			display.getChildren().add(warning);
-			
+			// Label warning = new Label("Sorry No Graph Data Available");
+			// warning.setPrefSize(600, 300);
+			// warning.setId("graphWarning");
+			// warning.setLayoutX(50);
+			// warning.setLayoutY(150);
+			// display.getChildren().add(warning);
+
 			displayNoGraph();
 		}
 		// this adds a change listener to the drop down box and creates a new
@@ -1065,10 +1051,9 @@ public class VeraGUI extends Application {
 			csv.toCSV(file, device, compareFromDate, compareToDate);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} // Specific id and date.
 	}
-	
 
 	public void displayNoInternet() {
 		display.getChildren().clear();
@@ -1091,8 +1076,7 @@ public class VeraGUI extends Application {
 
 		display.getChildren().addAll(pane, warning, warningText);
 	}
-	
-	
+
 	public void displayNoGraph() {
 		display.getChildren().clear();
 		Pane pane = new Pane();
@@ -1114,7 +1098,6 @@ public class VeraGUI extends Application {
 
 		display.getChildren().addAll(pane, warning, warningText);
 	}
-	
 
 	private boolean InternetConnectionCheck() {
 
