@@ -116,7 +116,8 @@ public class CurrentReadings {
 									.getInt("temperature"), resultSetReadings
 									.getInt("light"), resultSetReadings
 									.getInt("humidity"), resultSetReadings
-									.getInt("armedtripped")));
+									.getInt("armedtripped"),resultSetReadings
+									.getInt("batterylevel")));
 				}
 			}
 

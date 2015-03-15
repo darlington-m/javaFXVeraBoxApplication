@@ -580,22 +580,6 @@ public class VeraGUI extends Application {
 			}
 		};
 
-		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-			@Override
-			public DateCell call(final DatePicker datePicker) {
-				return new DateCell() {
-					@Override
-					public void updateItem(LocalDate item, boolean empty) {
-						super.updateItem(item, empty);
-						if (item.isAfter(LocalDate.now())) {
-							setDisable(true);
-							setStyle("-fx-background-color: #ffc0cb;");
-						}
-					}
-				};
-			}
-		};
-
 		Label compareLabel = new Label("Compare From"); // compare from label
 		compareLabel.setLayoutX(40);
 		compareLabel.setLayoutY(10);
@@ -637,7 +621,7 @@ public class VeraGUI extends Application {
 		compareTo.setId("datePicker");
 		compareTo.setEditable(false);
 		compareTo.valueProperty().addListener(dateChanger);
-
+		
 		compareToHours = getBox("hours"); // allows to pick an hour
 		compareToHours.setMaxWidth(2);
 
@@ -654,6 +638,29 @@ public class VeraGUI extends Application {
 				compareToLabel, compareToRow); // adds labels and rows to the
 												// compare pane
 
+		// factory to create a cell for every day within the date picker
+		// checks to see if the cell is after todays date
+		// sets the cell to disabled and background color to red if date is after current date.
+		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+			@Override
+			public DateCell call(final DatePicker datePicker) {
+				return new DateCell() {
+					@Override
+					public void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item.isAfter(LocalDate.now())) { 
+							setDisable(true);
+							setStyle("-fx-background-color: #ffc0cb;");
+						}
+					}
+				};
+			}
+		};
+		// adds the factory to both of the compare buttons.
+		compareFrom.setDayCellFactory(dayCellFactory);
+		compareTo.setDayCellFactory(dayCellFactory);
+		
+		
 		// -------------------------------- Setting up the submitPane
 		// -----------------------------------------------------
 
@@ -766,8 +773,7 @@ public class VeraGUI extends Application {
 		action.setLayoutX(600);
 		action.setLayoutY(50);
 		Separator separator = new Separator();
-		separator
-				.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+		separator.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
 		pane.getChildren().addAll(roomName, number, action);
 		list.getChildren().addAll(pane, separator);
 

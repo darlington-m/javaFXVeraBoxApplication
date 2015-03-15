@@ -191,3 +191,7 @@
 	-fx-font-weight: 500;
 	-fx-font-size: 15px;
 }
+
+#batteryLevel {
+-fx-text-fill:white;
+}

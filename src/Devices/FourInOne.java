@@ -1,6 +1,8 @@
 package Devices;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class FourInOne extends Device {
@@ -23,12 +25,14 @@ public class FourInOne extends Device {
 	}
 	
 	public FourInOne(String name, int id, String altid, int category,
-			int subcategory, int room, int parent, int temperature, int light, int humidity, int armedTripped) {
+			int subcategory, int room, int parent, int temperature, int light, int humidity,
+			int armedTripped,int batterylevel) {
 		super(name, id, altid, category, subcategory, room, parent, "4in1.png", "", 0);
 		this.temperature = temperature;
 		this.light = light;
 		this.humidity = humidity;
 		this.armedtripped = armedTripped;
+		this.batterylevel = batterylevel;
 		readingNames[0] = "temperature"; 
 		readingNames[1] = "light"; 
 		readingNames[2] = "humidity"; 
@@ -79,7 +83,14 @@ public class FourInOne extends Device {
 				+ this.armedtripped);
 		armedTripped.setLayoutY(150);
 		armedTripped.setLayoutX(200);
-		pane.getChildren().addAll(light, temp, humidity, armedTripped);
+		Label battery = new Label(this.batterylevel + "%");
+		battery.setId("batteryLevel");
+		battery.setLayoutY(37);
+		battery.setLayoutX(407);
+		ImageView batteryImage = new ImageView(new Image(FourInOne.class.getResource("/Resources/battery-medium.png").toExternalForm()));
+		batteryImage.setLayoutY(20);
+		batteryImage.setLayoutX(400);
+		pane.getChildren().addAll(light, temp, humidity, armedTripped,batteryImage,battery);
 		return pane;
 	}
 }
