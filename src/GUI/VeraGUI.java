@@ -7,13 +7,11 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,7 +47,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
@@ -66,6 +63,7 @@ public class VeraGUI extends Application {
 	private Scene scene;
 	private Stage stage;
 	private Pane root, display;
+	final private Pane sortingPane = new Pane();
 	private long compareToDate, compareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
 			compareFromHours, compareFromMinutes, secondCompareFromHours,
@@ -73,7 +71,7 @@ public class VeraGUI extends Application {
 			secondCompareFromMinutes2;
 	private DatePicker compareTo, compareFrom, secondCompareTo,
 			secondCompareFrom;
-	private VBox sideButtons;
+	final private VBox sideButtons = new VBox(0), vb = new VBox(30);
 	private RadioButton compareone;
 	private ChoiceBox<String> graphType, seperateGraphs;
 	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
@@ -160,7 +158,6 @@ public class VeraGUI extends Application {
 		image.setLayoutY(13);
 		image.setId("logo");
 
-		sideButtons = new VBox(0);
 		sideButtons.setLayoutY((image.getLayoutY() + image.getImage()
 				.getHeight()) - 5);
 		sideButtons.setStyle("-fx-padding: 15px 0 0 0");
@@ -287,7 +284,6 @@ public class VeraGUI extends Application {
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
-		final Pane sortingPane = new Pane();
 		sortingPane.setPrefSize(display.getPrefWidth() - 200, 40);
 		sortingPane.setLayoutX(100);
 		sortingPane.setId("sortingPane");
@@ -310,11 +306,19 @@ public class VeraGUI extends Application {
 		
 		Label roomText = new Label("Select Room:");
 		roomText.setId("sortingLabel");
-		ChoiceBox<String> rooms = new ChoiceBox<String>();
-		rooms.getItems().addAll(roomNames);
-		rooms.getSelectionModel().selectFirst();
-		rooms.setId("sortingDropDown");
-		rooms.setMaxWidth(100);
+		final ChoiceBox<String> roomDropDown = new ChoiceBox<String>();
+		roomDropDown.getItems().addAll(roomNames);
+		roomDropDown.getSelectionModel().selectFirst();
+		roomDropDown.setId("sortingDropDown");
+		roomDropDown.setMaxWidth(100);
+		roomDropDown.valueProperty().addListener(new ChangeListener<String>(){
+
+			@Override
+			public void changed(ObservableValue<? extends String> arg0,
+					String oldString, String newString) {
+				updateDashboard(getRooms(newString));
+			}});
+	
 		
 		
 //		Label devicesText = new Label("\t\tDevices:");
@@ -326,10 +330,9 @@ public class VeraGUI extends Application {
 //		deviceList.setId("sortingDropDown");
 //		deviceList.setMaxWidth(100);
 
-		hbox.getChildren().addAll(roomText, rooms);
+		hbox.getChildren().addAll(roomText, roomDropDown);
 		sortingPane.getChildren().addAll(hbox);
 
-		final VBox vb = new VBox(30);
 		vb.setLayoutY(sortingPane.getPrefHeight());
 		vb.setLayoutX(55);
 		vb.setStyle("-fx-padding: 0 0 0 45px");
@@ -373,46 +376,69 @@ public class VeraGUI extends Application {
 			public void run() {
 				Platform.runLater(new Runnable() {
 					public void run() {
-						vb.getChildren().clear();
-						// System.out.println("Test");
-						for (Room room : currentReadings.getRooms()) {
-							Pane roomPane = room.getPane(sortingPane
-									.getPrefWidth());
-							VBox deviceBox = new VBox(10);
-							deviceBox.setLayoutX(50);
-							deviceBox.setLayoutY(50);
-							for (final Device device : room.getDevices()) {
-								Pane pane = device.getPane();
-								pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
-								pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
-
-									@Override
-									public void handle(MouseEvent arg0) {
-										changeButtons("details");
-										selectedDevice = device;
-										try {
-											ArrayList<Device> devices = new ArrayList<Device>();
-											devices.add(device);
-											showDeviceDetails(devices, "24");
-										} catch (SQLException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-									}
-								});
-								deviceBox.getChildren().add(pane);
-							}
-							roomPane.getChildren().add(deviceBox);
-							vb.getChildren().add(roomPane);
-						}
+						// the "refresh" checks what has been selected from the dropdown box 
+						// and gets the relevant rooms and updates the dashboard.
+						updateDashboard(getRooms(roomDropDown.getSelectionModel().getSelectedItem()));
 					}
 				});
 			}
 		}, 0, 300000);
 
+
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
+	
+	private ArrayList<Room> getRooms(String roomToRetrieve){
+		ArrayList<Room> rooms = new CurrentReadings().getRooms();
+		if(roomToRetrieve.equals("All")){
+			return rooms;
+		}else{
+			// setup an iterator
+			for (Iterator<Room> iterator = rooms.iterator(); iterator.hasNext();) {
+			    Room currentRoom = iterator.next();
+			 // if the room name doesnt match whats been selected then remove
+			    if (!currentRoom.getName().equals(roomToRetrieve)) {
+			        iterator.remove();
+			    }
+			}
+			return rooms;
+		}
+	}
+	private void updateDashboard(ArrayList<Room> rooms){
+		vb.getChildren().clear();
+		for (Room room : rooms) {
+			Pane roomPane = room.getPane(sortingPane
+					.getPrefWidth());
+			VBox deviceBox = new VBox(10);
+			deviceBox.setLayoutX(50);
+			deviceBox.setLayoutY(50);
+			for (final Device device : room.getDevices()) {
+				Pane pane = device.getPane();
+				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
+				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
+					@Override
+					public void handle(MouseEvent arg0) {
+						changeButtons("details");
+						selectedDevice = device;
+						try {
+							ArrayList<Device> devices = new ArrayList<Device>();
+							devices.add(device);
+							showDeviceDetails(devices, "24");
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				deviceBox.getChildren().add(pane);
+			}
+			roomPane.getChildren().add(deviceBox);
+			vb.getChildren().add(roomPane);
+		}
+	}
+
+	
 	public void addARoom() {
 		display.getChildren().clear();
 		final Label addRoom = new Label("Add a new room");
