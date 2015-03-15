@@ -55,7 +55,6 @@ public class CurrentReadings {
 									.getInt("state"), resultSetReadings
 									.getString("reading_comment")		
 							));
-					System.out.println("radiator created");
 					// Check for light and not humidity to tell the difference
 					// between 4in1 sensor and light sensor
 				} else if (resultSetReadings.getString("light") != null
@@ -70,8 +69,6 @@ public class CurrentReadings {
 									.getInt("room"), resultSetReadings
 									.getInt("parent"), resultSetReadings
 									.getInt("light")));
-					System.out.println("light sensor created");
-
 				}
 				// Check for humidity and not heat to tell the difference
 				// between 4in1 sensor and humidity sensor
@@ -87,7 +84,6 @@ public class CurrentReadings {
 									.getInt("room"), resultSetReadings
 									.getInt("parent"), resultSetReadings
 									.getInt("humidity")));
-					System.out.println("humidity sensor created");
 
 				}
 				// Check for temperature and not humidity to tell the difference
@@ -104,8 +100,6 @@ public class CurrentReadings {
 									.getInt("room"), resultSetReadings
 									.getInt("parent"), resultSetReadings
 									.getInt("temperature")));
-					System.out.println("temperature sensor created");
-
 				}
 				// Check for temperature and humidity to tell that their is a
 				// 4in1 sensor
@@ -123,7 +117,6 @@ public class CurrentReadings {
 									.getInt("light"), resultSetReadings
 									.getInt("humidity"), resultSetReadings
 									.getInt("armedtripped")));
-					System.out.println("4in1 created");
 				}
 			}
 
