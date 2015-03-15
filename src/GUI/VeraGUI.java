@@ -60,8 +60,6 @@ import Exports.CSV;
 import Graphs.Charts;
 
 public class VeraGUI extends Application {
-	// Comment to push to Darlington
-	// Another comment
 
 	MySQLConnect conn = new MySQLConnect();
 
@@ -550,13 +548,7 @@ public class VeraGUI extends Application {
 
 			imagePane.setLayoutX(i * 150 + 30); // x layout position spread
 
-			imagePane.getChildren().addAll(deviceImage, deviceLabel); // add
-																		// image
-																		// and
-																		// label
-																		// to
-																		// the
-																		// pane.
+			imagePane.getChildren().addAll(deviceImage, deviceLabel); 
 
 			devicesPane.getChildren().add(imagePane); // add image panes to the
 														// devices pane.
@@ -1087,7 +1079,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayNoInternet() {
-		// display.getChildren().clear();
+		display.getChildren().clear();
 		Pane pane = new Pane();
 		pane.setId("noInternet");
 		pane.setTranslateX(30);
