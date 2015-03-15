@@ -105,7 +105,16 @@ public class Charts {
 				i++;
 			}
 		} 
-		yAxis = new NumberAxis((int)(lowerBound - lowerBound * 0.1), (int)(upperBound + upperBound * 0.1), 1); // give the yAxis these new bounds with 10% higher and lower either way
+		
+		int check =  (int) (lowerBound* 1.1- upperBound* 0.9);
+		//System.out.println(check);
+		if(check > 35)
+		{
+			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/5));	
+		}
+		else
+		{
+			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/4);	
+		}
 	}
-
 }

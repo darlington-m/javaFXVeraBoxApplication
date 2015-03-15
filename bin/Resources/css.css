@@ -126,13 +126,13 @@
 
 #textField {
     -fx-background-color: transparent;
-    -fx-border: 0px solid;
+    -fx-border: 0px;
     -fx-text-fill: #12805C;
 	-fx-font-size:  20px;
 }
 
 #textField:hover {
-	-fx-border: 1px solid;
+	-fx-border: 1px;
 	-fx-border-color: #f4f4f4;
 }
 
@@ -170,4 +170,28 @@
 }
 .default-color1.chart-bar{
 -fx-background-color: #00AF33;
+}
+
+#noInternet {
+	-fx-background-color:#cccccc; 
+	-fx-pref-height:500px; 
+	-fx-pref-width:735px;
+}
+
+
+#noInternetWarning {
+	-fx-text-fill: red;
+	-fx-font-weight: 700;
+	-fx-font-size: 20px;
+}
+
+
+#noInternetText {
+	-fx-text-fill: #333333;
+	-fx-font-weight: 500;
+	-fx-font-size: 15px;
+}
+
+#batteryLevel {
+-fx-text-fill:white;
 }
