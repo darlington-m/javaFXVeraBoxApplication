@@ -353,12 +353,16 @@ public class VeraGUI extends Application {
 		});
 		// PLACE AFTER THE SCROLLBAR
 		
-		ArrayList<Room> roomToDisplay = new ArrayList<Room>();
+		ArrayList<Room> roomsToDisplay = new ArrayList<Room>();
 		
 		if(chosenRoom == "All") {
-			
-			roomToDisplay = currentReadings.getRooms();
-			
+			roomsToDisplay = currentReadings.getRooms();
+		} else {
+			for (Room room: currentReadings.getRooms()) {
+				if(room.getName() == chosenRoom) {
+					roomsToDisplay.add(room);
+				}
+			}
 		}
 		
 		
