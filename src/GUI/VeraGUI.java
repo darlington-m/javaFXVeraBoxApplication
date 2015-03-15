@@ -100,9 +100,6 @@ public class VeraGUI extends Application {
 				case "Graphs":
 					displayGraphs();
 					break;
-				case "Quit":
-					System.exit(0);
-					break;
 				case "Scenes":
 					displayScenes();
 					break;
@@ -125,8 +122,12 @@ public class VeraGUI extends Application {
 					break;
 				}
 			} else {
-				displayNoInternet();
-
+				
+				if (((Button) arg0.getSource()).getText() == "Quit") {
+					System.exit(0);
+				} else {
+					displayNoInternet();
+				}
 			}
 		}
 	};
@@ -845,20 +846,11 @@ public class VeraGUI extends Application {
 		display.getChildren().clear(); // fresh window
 
 		try {
-			ArrayList<ArrayList> readings = new ArrayList<ArrayList>();// Array
-																		// list
-																		// of
-																		// arrays
-																		// list
-																		// of
-																		// readings
+			// ArrayList of ArrayList of reading
+			ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
+			// ArrayList of ArrayList of dates
 			ArrayList<ArrayList> dates = new ArrayList<ArrayList>(); // Array
-																		// list
-																		// of
-																		// arrays
-																		// list
-																		// of
-																		// dates
+																		
 			/*
 			 * This is required as we need to send an array list of readings for
 			 * each devices and all of these array lists need to be held within
