@@ -946,12 +946,14 @@ public class VeraGUI extends Application {
 				}
 			}
 		} catch (SQLException e1) {
-			Label warning = new Label("Sorry No Graph Data Available");
-			warning.setPrefSize(600, 300);
-			warning.setId("graphWarning");
-			warning.setLayoutX(50);
-			warning.setLayoutY(150);
-			display.getChildren().add(warning);
+//			Label warning = new Label("Sorry No Graph Data Available");
+//			warning.setPrefSize(600, 300);
+//			warning.setId("graphWarning");
+//			warning.setLayoutX(50);
+//			warning.setLayoutY(150);
+//			display.getChildren().add(warning);
+			
+			displayNoGraph();
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
@@ -1086,8 +1088,30 @@ public class VeraGUI extends Application {
 		Label warningText = new Label(
 				"Internet connection needed to retrieve data from Vera box and the database");
 		warningText.setId("noInternetText");
-		;
 		warningText.setLayoutX(100);
+		warningText.setLayoutY(290);
+
+		display.getChildren().addAll(pane, warning, warningText);
+	}
+	
+	
+	public void displayNoGraph() {
+		display.getChildren().clear();
+		Pane pane = new Pane();
+		pane.setId("noInternet");
+		pane.setTranslateX(30);
+		pane.setTranslateY(30);
+
+		Label warning = new Label("Sorry, No Graph To Display");
+		warning.setId("noInternetWarning");
+		warning.setLayoutX(230);
+		warning.setLayoutY(250);
+
+		Label warningText = new Label(
+				"Try changing date and times in order for a graph to be displayed");
+		warningText.setId("noInternetText");
+		;
+		warningText.setLayoutX(120);
 		warningText.setLayoutY(290);
 
 		display.getChildren().addAll(pane, warning, warningText);

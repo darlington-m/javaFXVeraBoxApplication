@@ -126,13 +126,13 @@
 
 #textField {
     -fx-background-color: transparent;
-    -fx-border: 0px solid;
+    -fx-border: 0px;
     -fx-text-fill: #12805C;
 	-fx-font-size:  20px;
 }
 
 #textField:hover {
-	-fx-border: 1px solid;
+	-fx-border: 1px;
 	-fx-border-color: #f4f4f4;
 }
 
