@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 @SuiteClasses({})
 public class AllTests {
 
+	@SuppressWarnings("null")
 	@Test
 	public void checkRadiator() {
 		Gson gson = new Gson();
@@ -39,7 +40,7 @@ public class AllTests {
 			// convert the json string back to jsonArray
 			data = gson.fromJson(br, Data.class);
 			// get added item from array
-			for (JsonElement x : data.getDevices()) {
+			for (@SuppressWarnings("unused") JsonElement x : data.getDevices()) {
 
 		//		testObj = factory.toDeviceObject(x);
 			}

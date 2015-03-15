@@ -120,6 +120,9 @@ public class VeraGUI extends Application {
 				case "Download CSV":
 					saveToCSV(selectedDevice);
 					break;
+				case "Quit":
+					System.exit(0);
+					break;
 				}
 			} else {
 				
@@ -1006,7 +1009,7 @@ public class VeraGUI extends Application {
 			csv.toCSV(file, device, compareFromDate, compareToDate);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} // Specific id and date.
 	}
 
