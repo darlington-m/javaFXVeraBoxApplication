@@ -298,16 +298,16 @@ public class VeraGUI extends Application {
 
 		HBox hbox = new HBox(10);
 		hbox.setStyle("-fx-padding:8px 0 0 30px");
-		// Label sort = new Label("Sort By \t\t");
-		// sort.setId("sortingLabel");
 
 		Label roomText = new Label("Select Room:");
 		roomText.setId("sortingLabel");
+
 		final ChoiceBox<String> roomDropDown = new ChoiceBox<String>();
 		roomDropDown.getItems().addAll(roomNames);
 		roomDropDown.getSelectionModel().selectFirst();
 		roomDropDown.setId("sortingDropDown");
 		roomDropDown.setMaxWidth(100);
+		roomDropDown.setMinWidth(100);
 		roomDropDown.valueProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -325,11 +325,11 @@ public class VeraGUI extends Application {
 		vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - 20);
+		sc.setLayoutX(display.getPrefWidth() - 25);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(20);
-		sc.setMaxWidth(20);
+		sc.setMinWidth(15);
+		sc.setMaxWidth(15);
 		sc.setVisibleAmount(160);
 		sc.setUnitIncrement(160);
 		sc.setBlockIncrement(160);
@@ -343,27 +343,15 @@ public class VeraGUI extends Application {
 		});
 		// PLACE AFTER THE SCROLLBAR
 
-		ArrayList<Room> roomsToDisplay = new ArrayList<Room>();
-
-		if (chosenRoom == "All") {
-			roomsToDisplay = currentReadings.getRooms();
-		} else {
-			for (Room room : currentReadings.getRooms()) {
-				if (room.getName() == chosenRoom) {
-					roomsToDisplay.add(room);
-				}
-			}
-		}
-
 		Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				Platform.runLater(new Runnable() {
 					public void run() {
 						// the "refresh" checks what has been selected from the
-						// dropdown box
+						// drop down box
 						// and gets the relevant rooms and updates the
-						// dashboard.
+						// dash board.
 						updateDashboard(getRooms(roomDropDown
 								.getSelectionModel().getSelectedItem()));
 					}
