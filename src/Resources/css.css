@@ -61,7 +61,7 @@
 
 #sortingPane{
 -fx-background-color: #12805C;
--fx-background-radius: 20px 20px 0 0;
+-fx-background-radius: 0;
 }
 
 #devices:hover{

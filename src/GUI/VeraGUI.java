@@ -284,8 +284,9 @@ public class VeraGUI extends Application {
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
-		sortingPane.setPrefSize(display.getPrefWidth() - 200, 40);
-		sortingPane.setLayoutX(100);
+		sortingPane.setPrefSize(790, 40);
+		sortingPane.setLayoutX(0);
+		sortingPane.setLayoutY(15);
 		sortingPane.setId("sortingPane");
 
 		String[] roomNames = new String[currentReadings.getRooms().size() + 1];
@@ -321,8 +322,8 @@ public class VeraGUI extends Application {
 		sortingPane.getChildren().addAll(hbox);
 
 		vb.setLayoutY(sortingPane.getPrefHeight());
-		vb.setLayoutX(55);
-		vb.setStyle("-fx-padding: 0 0 0 45px");
+		vb.setLayoutX(0);
+		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
 		sc.setLayoutX(display.getPrefWidth() - (display.getPrefWidth()/45));
