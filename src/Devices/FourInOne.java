@@ -57,6 +57,13 @@ public class FourInOne extends Device {
 						+ getId() + "' AND reading_date >='" + startDate
 						+ "' AND reading_date <='" + endDate + "'");
 	}
+	
+	public String readingFromSQL(String reading, long startDate, long endDate) {
+		return new String(
+				"SELECT " + reading + ", reading_date FROM Reading WHERE id =  '"
+						+ getId() + "' AND reading_date >='" + startDate
+						+ "' AND reading_date <='" + endDate + "'");
+	}
 
 	@Override
 	public String getDetails() {

@@ -123,6 +123,11 @@ public class VeraGUI extends Application {
 
 				if (((Button) arg0.getSource()).getText() == "Quit") {
 					System.exit(0);
+				} else if (((Button) arg0.getSource()).getText() == "Back"){
+					display.getChildren().clear();
+					changeButtons("mainMenu");
+					displayDevices("All");
+		
 				} else {
 					displayNoInternet();
 				}
@@ -492,6 +497,8 @@ public class VeraGUI extends Application {
 
 			deviceImage.setLayoutX(25); // image layout
 			deviceImage.setLayoutY(20);
+			
+			//If statement for adding further images for the 4in1 sensor
 
 			final Label deviceLabel = new Label(devices.get(i).getName()); // name
 																			// of
@@ -582,8 +589,7 @@ public class VeraGUI extends Application {
 														// devices pane.
 		}
 
-		// -------------------------------- Setting up the comparePane
-		// -----------------------------------------------------
+		// -------------------------------- Setting up the comparePane -----------------------------------------------------
 
 		ChangeListener<LocalDate> dateChanger = new ChangeListener<LocalDate>() {
 			@Override
