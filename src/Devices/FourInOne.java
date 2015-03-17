@@ -15,7 +15,6 @@ public class FourInOne extends Device {
 	String comment;
 	int tripped;
 	int lasttrip;
-	String[] readingNames = new String[4];
 	
 	
 	public FourInOne() {
@@ -31,10 +30,6 @@ public class FourInOne extends Device {
 		this.humidity = humidity;
 		this.armedtripped = armedTripped;
 		this.batterylevel = batterylevel;
-		readingNames[0] = "temperature"; 
-		readingNames[1] = "light"; 
-		readingNames[2] = "humidity"; 
-		readingNames[3] = "armedTripped"; 
 	}
 
 	public String toString() {
@@ -132,10 +127,6 @@ public class FourInOne extends Device {
 		return lasttrip;
 	}
 
-	public String[] getReadingNames() {
-		return readingNames;
-	}
-
 	public void setBatterylevel(int batterylevel) {
 		this.batterylevel = batterylevel;
 	}
@@ -175,11 +166,10 @@ public class FourInOne extends Device {
 	public void setLasttrip(int lasttrip) {
 		this.lasttrip = lasttrip;
 	}
-
-	public void setReadingNames(String[] readingNames) {
-		this.readingNames = readingNames;
-	}
 	
+	public void setReadingName(String readingName){
+		this.readingName = readingName;
+	}
 	
 	
 }

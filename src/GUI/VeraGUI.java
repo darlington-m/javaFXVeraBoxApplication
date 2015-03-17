@@ -519,7 +519,6 @@ public class VeraGUI extends Application {
 				display.getHeight() / 3 * 1.5);
 
 		// -------------------------------- Setting up the devicesPane
-		// -----------------------------------------------------
 
 		CurrentReadings currentReadings = new CurrentReadings();
 
@@ -599,7 +598,14 @@ public class VeraGUI extends Application {
 								imagePane
 										.setStyle("-fx-border-color:green; -fx-border-width: 3; -fx-border-style: solid;");
 								imagePane.setPrefSize(145, 145);
-								selectedDevices.add(deviceLabel.getText());
+								if (deviceLabel.getText().equals("4 in 1 sensor")){
+									selectedDevices.add(deviceLabel.getText() + ": temperature");
+									selectedDevices.add(deviceLabel.getText() + ": light");
+									selectedDevices.add(deviceLabel.getText() + ": armedtripped");
+									selectedDevices.add(deviceLabel.getText() + ": humidity");
+								} else {
+									selectedDevices.add(deviceLabel.getText());
+								}
 								// System.out.println("Added: " +
 								// deviceLabel.getText());
 
@@ -615,7 +621,14 @@ public class VeraGUI extends Application {
 							} else {
 								imagePane
 										.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
-								selectedDevices.remove(deviceLabel.getText());
+								if (deviceLabel.getText().equals("4 in 1 sensor")){
+									selectedDevices.remove(deviceLabel.getText() + ": temperature");
+									selectedDevices.remove(deviceLabel.getText() + ": light");
+									selectedDevices.remove(deviceLabel.getText() + ": armedtripped");
+									selectedDevices.remove(deviceLabel.getText() + ": humidity");
+								} else {
+									selectedDevices.remove(deviceLabel.getText());
+								}
 								imagePane.setPrefSize(144, 145);
 								// System.out.println("Removed: " +
 								// deviceLabel.getText());
@@ -784,9 +797,19 @@ public class VeraGUI extends Application {
 							ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
 							for (String selectedDevice : selectedDevices) {
 								for (Device device : devices) {
-									if (selectedDevice.equals(device.getName())) {
-										devicesToDisplay.add(device); // basically
-																		// finds
+									if (selectedDevice.contains(device.getName())) {
+										if (device instanceof FourInOne){
+											FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
+													device.getAltid(), device.getCategory(), device.getSubcategory(),
+													device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
+													((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
+													((FourInOne) device).getArmedtripped(), device.getBatterylevel());
+											fourInOne.setReadingName(selectedDevice.substring(15));
+											System.out.println(selectedDevice);
+											devicesToDisplay.add(fourInOne);
+										} else {
+											devicesToDisplay.add(device); // basically
+										}						// finds
 																		// which
 																		// devices
 																		// are
@@ -800,6 +823,10 @@ public class VeraGUI extends Application {
 																		// list
 									}
 								}
+							}
+							System.out.println("--------------------------");
+							for (Device device : devicesToDisplay){
+								System.out.println(device.getReadingName());
 							}
 							showDeviceDetails(devicesToDisplay, "not24"); // <--
 																			// passes
@@ -947,59 +974,68 @@ public class VeraGUI extends Application {
 			 * each devices and all of these array lists need to be held within
 			 * an array list to be pasted over to the charts method.
 			 */
-
+			ResultSet results;
 			for (Device device : devicesToDisplay) { // For each device
-				ResultSet results = conn.getRows(device.readingFromSQL(
-						compareFromDate, compareToDate)); // get a result set
-															// from the database
-															// containing dates
-															// and readings
-
-				readingsArray = new ArrayList<Integer>(); // array list for the
-															// devices readings
-				dateArray = new ArrayList<String>(); // array list for the
-														// devices readings
-														// dates
-
-				while (results.next()) { // while there is still date in the
-											// array
-					String deviceReading = results.getString(device
-							.getReadingName()); // assign the reading to
-												// deviceReading
-					long readingDate = results.getInt("reading_date"); // assign
-																		// the
-																		// date
-																		// to
-																		// readingDate
-					if (!(deviceReading == null)) { // if the reading is not
-													// null
-						int convertedDeviceReading = Integer
-								.parseInt(deviceReading); // convert the reading
-															// into an int
-						String date = new java.text.SimpleDateFormat(
-								"MM/dd/yyyy HH:mm").format(new java.util.Date(
-								readingDate * 1000)); // convert the date into a
-														// more readable format
-						date = date.replaceAll("/", "");
-						date = date.replaceAll(":", "");
-						date = date.replaceAll(" ", "");
-						String dateHours = date.substring(8, 10);
-						String dateMinutes = date.substring(10, 12);
-						date = dateHours + ":" + dateMinutes;
-						readingsArray.add(convertedDeviceReading); // add
-																	// reading
-																	// to the
-																	// array
-						dateArray.add(date); // add date to the array
-					}
+				if (device instanceof FourInOne){
+					results = conn.getRows(((FourInOne) device).readingFromSQL(device.getReadingName(),
+									compareFromDate, compareToDate)); 
+				} else {
+					results = conn.getRows(device.readingFromSQL(
+							compareFromDate, compareToDate)); 
 				}
-				readings.add(readingsArray); // add the current devices reading
-												// array to the array of reading
-												// arrays
-				dates.add(dateArray); // add the current devices date array to
-										// the array of date arrays
-			}
+					
+					// get a result set
+					// from the database
+					// containing dates
+					// and readings
 
+					readingsArray = new ArrayList<Integer>(); // array list for the
+					// devices readings
+					dateArray = new ArrayList<String>(); // array list for the
+					// devices readings
+					// dates
+
+					while (results.next()) { // while there is still date in the
+						// array
+							String deviceReading = results.getString(device
+									.getReadingName());
+						// assign the reading to
+						// deviceReading
+						long readingDate = results.getInt("reading_date"); // assign
+						// the
+						// date
+						// to
+						// readingDate
+						if (!(deviceReading == null)) { // if the reading is not
+							// null
+							int convertedDeviceReading = Integer
+									.parseInt(deviceReading); // convert the reading
+							// into an int
+							String date = new java.text.SimpleDateFormat(
+									"MM/dd/yyyy HH:mm").format(new java.util.Date(
+											readingDate * 1000)); // convert the date into a
+							// more readable format
+							date = date.replaceAll("/", "");
+							date = date.replaceAll(":", "");
+							date = date.replaceAll(" ", "");
+							String dateHours = date.substring(8, 10);
+							String dateMinutes = date.substring(10, 12);
+							date = dateHours + ":" + dateMinutes;
+							readingsArray.add(convertedDeviceReading); // add
+							// reading
+							// to the
+							// array
+							dateArray.add(date); // add date to the array
+						}
+					}
+					readings.add(readingsArray); // add the current devices reading
+					// array to the array of reading
+					// arrays
+					dates.add(dateArray); // add the current devices date array to
+					// the array of date arrays
+				}
+
+			
 			String splitGraphs;
 
 			if (mode.equals("not24")) { // If method called through graph page
