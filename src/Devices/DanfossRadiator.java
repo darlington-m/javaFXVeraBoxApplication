@@ -1,6 +1,8 @@
 package Devices;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class DanfossRadiator extends Device implements Sensor {
@@ -58,10 +60,17 @@ public class DanfossRadiator extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label("Reading: " + getReading());
+		Label reading = new Label("Heat: " + getReading() + "*C");
 		reading.setLayoutX(200);
 		reading.setLayoutY(100);
-		pane.getChildren().addAll(reading);
+		Label battery = new Label(this.batterylevel + "%");
+		battery.setId("batteryLevel");
+		battery.setLayoutY(37);
+		battery.setLayoutX(507);
+		ImageView batteryImage = new ImageView(new Image(DanfossRadiator.class.getResource("/Resources/battery-medium.png").toExternalForm()));
+		batteryImage.setLayoutY(20);
+		batteryImage.setLayoutX(500);
+		pane.getChildren().addAll(reading, batteryImage, battery);
 		return pane;
 	}
 

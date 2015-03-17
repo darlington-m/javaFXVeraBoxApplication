@@ -47,7 +47,7 @@ public class HumiditySensor extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label("Reading: " + currentReading);
+		Label reading = new Label("Humidity: " + currentReading + "%");
 		reading.setLayoutX(200);
 		reading.setLayoutY(100);
 		pane.getChildren().addAll(reading);

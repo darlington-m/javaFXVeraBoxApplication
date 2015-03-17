@@ -43,7 +43,7 @@ public class LightSensor extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label("Reading: " + getReading());
+		Label reading = new Label("Light: " + getReading() + "%");
 		reading.setLayoutX(200);
 		reading.setLayoutY(100);
 		pane.getChildren().addAll(reading);
