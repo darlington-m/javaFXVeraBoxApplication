@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 //import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -107,7 +108,7 @@ public abstract class Device {
 	public Pane getPane() {
 		Pane pane = new Pane();
 		pane.setId("devices");
-		pane.setPrefSize(600, 200);
+		pane.setPrefSize(600, 150);
 
 		Rectangle imageView = new Rectangle(100, 100);
 		imageView.setUserData(this);
@@ -116,12 +117,7 @@ public abstract class Device {
 		imageView.setLayoutX(30);
 		imageView.setLayoutY(30);
 
-		Label name = new Label(getName());
-		name.setId("DeviceName");
-		name.setLayoutX(200);
-		name.setLayoutY(20);
-
-		pane.getChildren().addAll(name, imageView);
+		pane.getChildren().addAll(imageView);
 		return pane;
 	}
 
@@ -199,5 +195,10 @@ public abstract class Device {
 			System.out.println("Cannot connect renaming URL for " + getName());
 		}
 
+	}
+
+	public int getBatterylevel() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -34,19 +34,22 @@ public class TemperatureSensor extends Device implements Sensor {
 	public String readingFromSQL(long startDate, long endDate) {
 		return new String("SELECT temperature,reading_date FROM Reading WHERE id =  '" + getId()  + "' AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'");
 	}
+	
     @Override
     public String toString(){
 		return super.toString() + " Temperature: " + temperature;
     }
+    
     @Override
     public String getDetails(){
     	return super.getDetails() + "\nTemperature: " + temperature;
     }
+    
     public Pane getPane(){
     	Pane pane = super.getPane();
 		Label reading = new Label("Temperature: " + getReading() + "*C");
 		reading.setLayoutX(200);
-		reading.setLayoutY(100);
+		reading.setLayoutY(25);
 		pane.getChildren().addAll(reading);
 		return pane;
     }

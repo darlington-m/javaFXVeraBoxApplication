@@ -37,14 +37,18 @@
 -fx-background-color: white;
 }
 
+
 #roomPane{
--fx-border-color: #f4f4f4;
+-fx-border-color: #12805C;
 -fx-border-width: 5px;
 }
 
+
+/*
 #roomPane:hover {
 -fx-border-color: #12805C;
 }
+*/
 
 #WelcomeMessage{
 -fx-font-size: 40px;
@@ -64,9 +68,13 @@
 -fx-background-radius: 0;
 }
 
+/*
 #devices:hover{
  -fx-border-color: #12805C;
 }
+*/
+
+
 #roomName {
 -fx-text-fill: #12805C;
 -fx-font-size:18px;
@@ -194,4 +202,24 @@
 
 #batteryLevel {
 -fx-text-fill:white;
+}
+
+
+#botPaneBtn {
+    -fx-background-color: 
+        linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),
+        linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);
+    -fx-background-insets: 0,1,4,5;
+    -fx-padding: 7 15 7 15;
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #12805C;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+    -fx-min-width: 130px;
+    -fx-max-width: 130px;
+}
+
+#botPaneBtn Text {
+    -fx-effect: dropshadow( one-pass-box , white , 0, 0.0 , 0 , 1 );
 }

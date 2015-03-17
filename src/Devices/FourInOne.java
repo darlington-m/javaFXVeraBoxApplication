@@ -1,8 +1,6 @@
 package Devices;
 
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class FourInOne extends Device {
@@ -76,28 +74,112 @@ public class FourInOne extends Device {
 	public Pane getPane() {
 		Pane pane = super.getPane();
 		Label light = new Label("Light: " + this.light);
-		light.setLayoutY(75);
+		light.setLayoutY(25);
 		light.setLayoutX(200);
 		Label temp = new Label("Temperature: "
 				+ this.temperature);
-		temp.setLayoutY(100);
+		temp.setLayoutY(50);
 		temp.setLayoutX(200);
 		Label humidity = new Label("Humidity: "
 				+ this.humidity);
-		humidity.setLayoutY(125);
+		humidity.setLayoutY(75);
 		humidity.setLayoutX(200);
 		Label armedTripped = new Label("Armed Tripped: "
 				+ this.armedtripped);
-		armedTripped.setLayoutY(150);
+		armedTripped.setLayoutY(100);
 		armedTripped.setLayoutX(200);
-		Label battery = new Label(this.batterylevel + "%");
-		battery.setId("batteryLevel");
-		battery.setLayoutY(37);
-		battery.setLayoutX(407);
-		ImageView batteryImage = new ImageView(new Image(FourInOne.class.getResource("/Resources/battery-medium.png").toExternalForm()));
-		batteryImage.setLayoutY(20);
-		batteryImage.setLayoutX(400);
-		pane.getChildren().addAll(light, temp, humidity, armedTripped,batteryImage,battery);
+		pane.getChildren().addAll(light, temp, humidity, armedTripped);
 		return pane;
 	}
+
+	public int getBatterylevel() {
+		return batterylevel;
+	}
+
+	public int getTemperature() {
+		return temperature;
+	}
+
+	public int getLight() {
+		return light;
+	}
+
+	public int getHumidity() {
+		return humidity;
+	}
+
+	public int getArmedtripped() {
+		return armedtripped;
+	}
+
+	public int getArmed() {
+		return armed;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public int getTripped() {
+		return tripped;
+	}
+
+	public int getLasttrip() {
+		return lasttrip;
+	}
+
+	public String[] getReadingNames() {
+		return readingNames;
+	}
+
+	public void setBatterylevel(int batterylevel) {
+		this.batterylevel = batterylevel;
+	}
+
+	public void setTemperature(int temperature) {
+		this.temperature = temperature;
+	}
+
+	public void setLight(int light) {
+		this.light = light;
+	}
+
+	public void setHumidity(int humidity) {
+		this.humidity = humidity;
+	}
+
+	public void setArmedtripped(int armedtripped) {
+		this.armedtripped = armedtripped;
+	}
+
+	public void setArmed(int armed) {
+		this.armed = armed;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setTripped(int tripped) {
+		this.tripped = tripped;
+	}
+
+	public void setLasttrip(int lasttrip) {
+		this.lasttrip = lasttrip;
+	}
+
+	public void setReadingNames(String[] readingNames) {
+		this.readingNames = readingNames;
+	}
+	
+	
+	
 }

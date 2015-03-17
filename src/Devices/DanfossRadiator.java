@@ -1,8 +1,6 @@
 package Devices;
 
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class DanfossRadiator extends Device implements Sensor {
@@ -62,15 +60,8 @@ public class DanfossRadiator extends Device implements Sensor {
 		Pane pane = super.getPane();
 		Label reading = new Label("Heat: " + getReading() + "*C");
 		reading.setLayoutX(200);
-		reading.setLayoutY(100);
-		Label battery = new Label(this.batterylevel + "%");
-		battery.setId("batteryLevel");
-		battery.setLayoutY(37);
-		battery.setLayoutX(507);
-		ImageView batteryImage = new ImageView(new Image(DanfossRadiator.class.getResource("/Resources/battery-medium.png").toExternalForm()));
-		batteryImage.setLayoutY(20);
-		batteryImage.setLayoutX(500);
-		pane.getChildren().addAll(reading, batteryImage, battery);
+		reading.setLayoutY(25);
+		pane.getChildren().addAll(reading);
 		return pane;
 	}
 
@@ -80,5 +71,69 @@ public class DanfossRadiator extends Device implements Sensor {
 				"SELECT heat, reading_date FROM Reading WHERE id =  '"
 						+ getId() + "' AND reading_date >='" + startDate
 						+ "' AND reading_date <='" + endDate + "'");
+	}
+
+	public int getSetpoint() {
+		return setpoint;
+	}
+
+	public int getHeat() {
+		return heat;
+	}
+
+	public int getCool() {
+		return cool;
+	}
+
+	public String getCommands() {
+		return commands;
+	}
+
+	public int getBatterylevel() {
+		return batterylevel;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setSetpoint(int setpoint) {
+		this.setpoint = setpoint;
+	}
+
+	public void setHeat(int heat) {
+		this.heat = heat;
+	}
+
+	public void setCool(int cool) {
+		this.cool = cool;
+	}
+
+	public void setCommands(String commands) {
+		this.commands = commands;
+	}
+
+	public void setBatterylevel(int batterylevel) {
+		this.batterylevel = batterylevel;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }

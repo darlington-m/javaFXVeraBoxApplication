@@ -51,7 +51,9 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
 import DataRetrival.MySQLConnect;
+import Devices.DanfossRadiator;
 import Devices.Device;
+import Devices.FourInOne;
 import Devices.Room;
 import Exports.CSV;
 import Graphs.Charts;
@@ -393,8 +395,53 @@ public class VeraGUI extends Application {
 			deviceBox.setLayoutX(50);
 			deviceBox.setLayoutY(50);
 			for (final Device device : room.getDevices()) {
-				Pane pane = device.getPane();
+				FlowPane pane = new FlowPane();
 				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
+//				pane.setMinWidth(780);
+//				pane.setMaxWidth(780);
+//				pane.setMaxHeight(250);
+//				pane.setMinHeight(250);
+//				
+				Pane topPane = new Pane();
+				topPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
+				topPane.setMinHeight(50);
+				topPane.setMaxHeight(50);
+//				topPane.setMinWidth(780);
+				topPane.setStyle("-fx-background-color: #f4f4f4");
+				
+				Label name = new Label(device.getName());
+				name.setId("DeviceName");
+				name.setLayoutX(10);
+				name.setLayoutY(10);
+				
+				topPane.getChildren().add(name);
+				
+				if (device instanceof FourInOne || device instanceof DanfossRadiator) {
+					
+					Label battery = new Label(device.getBatterylevel() + "%");
+					battery.setId("batteryLevel");
+					battery.setLayoutY(17);
+					battery.setLayoutX(597);
+					ImageView batteryImage = new ImageView(new Image(VeraGUI.class.getResource("/Resources/battery-medium.png").toExternalForm()));
+					batteryImage.setLayoutY(2);
+					batteryImage.setLayoutX(590);
+					topPane.getChildren().addAll(batteryImage, battery);
+				}
+				
+				
+				Pane botPane = device.getPane();
+				botPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
+				
+				Button detailsBtn = new Button("View Details");
+				detailsBtn.setId("botPaneBtn");
+				detailsBtn.setLayoutX(540);
+				detailsBtn.setLayoutY(100);
+				
+				Button graphBtn = new Button("24hr Graph");
+				graphBtn.setId("botPaneBtn");
+				graphBtn.setLayoutX(540);
+				graphBtn.setLayoutY(60);
+				
 				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 					@Override
@@ -411,6 +458,10 @@ public class VeraGUI extends Application {
 						}
 					}
 				});
+				
+				botPane.getChildren().addAll(graphBtn, detailsBtn);
+				pane.getChildren().addAll(topPane, botPane);
+				
 				deviceBox.getChildren().add(pane);
 			}
 			roomPane.getChildren().add(deviceBox);
