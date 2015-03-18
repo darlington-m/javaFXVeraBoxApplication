@@ -79,8 +79,8 @@ public class VeraGUI extends Application {
 	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
 	private ArrayList<String> dateArray = new ArrayList<String>();
 	private Device selectedDevice;
-
-	ArrayList<Button> buttons = new ArrayList<Button>();
+	private ArrayList<Room> roomsList = new ArrayList<Room>();
+	private ArrayList<Button> buttons = new ArrayList<Button>();
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
 
@@ -91,7 +91,7 @@ public class VeraGUI extends Application {
 
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
-					displayDevices("All");
+					displayDevices();
 					break;
 				case "Settings":
 					changeButtons("settings");
@@ -106,7 +106,7 @@ public class VeraGUI extends Application {
 				case "Back":
 					display.getChildren().clear();
 					changeButtons("mainMenu");
-					displayDevices("All");
+					displayDevices();
 					break;
 				case "Cancel":
 					displaySettings();
@@ -128,7 +128,7 @@ public class VeraGUI extends Application {
 				} else if (((Button) arg0.getSource()).getText() == "Back"){
 					display.getChildren().clear();
 					changeButtons("mainMenu");
-					displayDevices("All");
+					displayDevices();
 		
 				} else {
 					displayNoInternet();
@@ -276,13 +276,13 @@ public class VeraGUI extends Application {
 		stage.show();
 
 		if (InternetConnectionCheck()) {
-			displayDevices("All");
+			displayDevices();
 		} else {
 			displayNoInternet();
 		}
 	}
 
-	public void displayDevices(String chosenRoom) {
+	public void displayDevices() {
 		final CurrentReadings currentReadings = new CurrentReadings();
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
@@ -321,7 +321,7 @@ public class VeraGUI extends Application {
 			@Override
 			public void changed(ObservableValue<? extends String> arg0,
 					String oldString, String newString) {
-				updateDashboard(getRooms(newString));
+				updateDashboard(sortRooms(newString));
 			}
 		});
 
@@ -359,22 +359,25 @@ public class VeraGUI extends Application {
 			public void run() {
 				Platform.runLater(new Runnable() {
 					public void run() {
-						// the "refresh" checks what has been selected from the
-						// drop down box
-						// and gets the relevant rooms and updates the
-						// dash board.
-						updateDashboard(getRooms(roomDropDown
-								.getSelectionModel().getSelectedItem()));
+						// every 5 minutes update the field roomslist
+						// with the latest in the database.
+						getRooms();
 					}
 				});
 			}
 		}, 0, 300000);
-
+		getRooms();
+		updateDashboard(sortRooms("All"));
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
+	
+	private void getRooms(){
+		roomsList = new CurrentReadings().getRooms();
+	}
 
-	private ArrayList<Room> getRooms(String roomToRetrieve) {
-		ArrayList<Room> rooms = new CurrentReadings().getRooms();
+	private ArrayList<Room> sortRooms(String roomToRetrieve) {
+		ArrayList<Room> rooms = new ArrayList<Room>();
+		rooms.addAll(roomsList);
 		if (roomToRetrieve.equals("All")) {
 			return rooms;
 		} else {
@@ -423,7 +426,7 @@ public class VeraGUI extends Application {
 					
 					Label battery = new Label(device.getBatterylevel() + "%");
 					battery.setId("batteryLevel");
-					battery.setLayoutY(17);
+					battery.setLayoutY(18);
 					battery.setLayoutX(597);
 					ImageView batteryImage = new ImageView(new Image(VeraGUI.class.getResource("/Resources/battery-medium.png").toExternalForm()));
 					batteryImage.setLayoutY(2);
@@ -1201,7 +1204,7 @@ public class VeraGUI extends Application {
 			@Override
 			public void handle(MouseEvent arg0) {
 				if(InternetConnectionCheck()) {
-					displayDevices("All");	
+					displayDevices();
 				} else {
 					// do nothing yet
 				}
