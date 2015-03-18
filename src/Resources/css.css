@@ -200,10 +200,10 @@
 -fx-background-color: #00AF33;
 }
 
-#noInternet {
-	-fx-background-color:#cccccc; 
-	-fx-pref-height:500px; 
-	-fx-pref-width:735px;
+#backPaneBackground {
+	-fx-background-color:#f4f4f4; 
+	-fx-pref-height:550px; 
+	-fx-pref-width:780px;
 }
 
 
