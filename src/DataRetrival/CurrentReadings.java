@@ -31,14 +31,9 @@ public class CurrentReadings {
 		try {
 			
 			ResultSet tempCount = conn.getRows("SELECT COUNT(*) AS deviceCount FROM Device");
-			
 			tempCount.next();
-			
-			Date date = new Date();
-			System.out.println(Long.toString(date.getTime()));
-			
 			ResultSet resultSetReadings = conn
-					.getRows("SELECT * FROM Reading WHERE reading_date > '" + Long.toString(date.getTime() / 1000 - 300) + "'");
+					.getRows("SELECT * FROM Reading ORDER BY reading_date DESC LIMIT " + tempCount.getInt("deviceCount"));
 
 			while (resultSetReadings.next()) {
 				// Check for heat and not humidity to tell the difference

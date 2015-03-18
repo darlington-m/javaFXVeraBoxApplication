@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -47,10 +46,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import DataRetrival.CurrentReadings;
 import DataRetrival.MySQLConnect;
+import DataRetrival.ReadingsUpdateTimer;
 import Devices.DanfossRadiator;
 import Devices.Device;
 import Devices.FourInOne;
@@ -79,9 +80,16 @@ public class VeraGUI extends Application {
 	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
 	private ArrayList<String> dateArray = new ArrayList<String>();
 	private Device selectedDevice;
-	private ArrayList<Room> roomsList = new ArrayList<Room>();
+	private ArrayList<Room> roomsList;
+	private ArrayList<Device> devicesList;
 	private ArrayList<Button> buttons = new ArrayList<Button>();
 	private ScrollBar sc;
+
+	public VeraGUI() {
+		CurrentReadings curr = new CurrentReadings();
+		this.roomsList = curr.getRooms();
+		this.devicesList = curr.getAllDevices();
+	}
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
 
@@ -275,6 +283,18 @@ public class VeraGUI extends Application {
 		compareFrom.setDayCellFactory(dayCellFactory);
 
 		stage.show();
+		
+		final Timer updateReadings = new Timer();
+		updateReadings.schedule(new ReadingsUpdateTimer(this), 0, 3000000); // 5 minutes
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent t) {
+				Platform.exit();
+				System.exit(0);
+				updateReadings.cancel();
+			}
+		});
 
 		if (InternetConnectionCheck()) {
 			displayDevices();
@@ -284,8 +304,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayDevices() {
-		final CurrentReadings currentReadings = new CurrentReadings();
-		getRooms();
+		
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
 		paneBackground
@@ -356,26 +375,11 @@ public class VeraGUI extends Application {
 			}
 		});
 		// PLACE AFTER THE SCROLLBAR
-
-		Timer timer = new java.util.Timer();
-		timer.schedule(new TimerTask() {
-			public void run() {
-				Platform.runLater(new Runnable() {
-					public void run() {
-						// every 5 minutes update the field roomslist
-						// with the latest in the database.
-						getRooms();
-					}
-				});
-			}
-		}, 0, 300000);
+		
 		updateDashboard(sortRooms("All"));
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
 	
-	private void getRooms(){
-		roomsList = new CurrentReadings().getRooms();
-	}
 
 	private ArrayList<Room> sortRooms(String roomToRetrieve) {
 		ArrayList<Room> rooms = new ArrayList<Room>();
@@ -555,10 +559,8 @@ public class VeraGUI extends Application {
 
 		// -------------------------------- Setting up the devicesPane
 
-		final ArrayList<Device> devices = new ArrayList<Device>(); // array of
-																	// devices
-		CurrentReadings currentReadings = new CurrentReadings();
-		devices.addAll(currentReadings.getAllDevices());
+		final ArrayList<Device> devices = new ArrayList<Device>(); // array of devices
+		devices.addAll(devicesList);
 
 		final ArrayList<String> selectedDevices = new ArrayList<String>(); // array
 																			// of
@@ -1280,4 +1282,22 @@ public class VeraGUI extends Application {
 
 		return check;
 	}
+
+	public ArrayList<Room> getRoomsList() {
+		return roomsList;
+	}
+
+	public void setRoomsList(ArrayList<Room> roomsList) {
+		this.roomsList = roomsList;
+	}
+
+	public ArrayList<Device> getDevicesList() {
+		return devicesList;
+	}
+
+	public void setDevicesList(ArrayList<Device> devicesList) {
+		this.devicesList = devicesList;
+	}
+	
+	
 }
