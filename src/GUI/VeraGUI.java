@@ -284,7 +284,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayDevices() {
-	//	final CurrentReadings currentReadings = new CurrentReadings();
+		final CurrentReadings currentReadings = new CurrentReadings();
 		getRooms();
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
@@ -529,7 +529,7 @@ public class VeraGUI extends Application {
 
 	public void displayGraphs() {
 		display.getChildren().clear();
-
+		
 		FlowPane graphSettingsContainer = new FlowPane(); // Contains the 3
 															// panes the make
 															// the graph
@@ -557,6 +557,9 @@ public class VeraGUI extends Application {
 
 		final ArrayList<Device> devices = new ArrayList<Device>(); // array of
 																	// devices
+		CurrentReadings currentReadings = new CurrentReadings();
+		devices.addAll(currentReadings.getAllDevices());
+
 		final ArrayList<String> selectedDevices = new ArrayList<String>(); // array
 																			// of
 																			// names

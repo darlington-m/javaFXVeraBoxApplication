@@ -3,6 +3,7 @@ package DataRetrival;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Devices.DanfossRadiator;
 import Devices.Device;
@@ -33,8 +34,11 @@ public class CurrentReadings {
 			
 			tempCount.next();
 			
+			Date date = new Date();
+			System.out.println(Long.toString(date.getTime()));
+			
 			ResultSet resultSetReadings = conn
-					.getRows("SELECT * FROM Reading ORDER BY reading_date DESC LIMIT " + (tempCount.getInt("deviceCount")-1));
+					.getRows("SELECT * FROM Reading WHERE reading_date > '" + Long.toString(date.getTime() / 1000 - 300) + "'");
 
 			while (resultSetReadings.next()) {
 				// Check for heat and not humidity to tell the difference
