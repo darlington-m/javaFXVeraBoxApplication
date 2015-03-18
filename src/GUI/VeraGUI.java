@@ -191,6 +191,7 @@ public class VeraGUI extends Application {
 
 		Pane topDisplay = new Pane();
 		topDisplay.setLayoutX(sideDisplay.getPrefWidth());
+		topDisplay.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
 		topDisplay.setPrefSize(
 				(scene.getWidth() - sideDisplay.getPrefWidth() + 10), 100);
 		topDisplay.setId("topDisplay");
@@ -225,6 +226,8 @@ public class VeraGUI extends Application {
 				(scene.getHeight() - topDisplay.getPrefHeight() + 10));
 		display.setLayoutX(sideDisplay.getPrefWidth());
 		display.setLayoutY(topDisplay.getPrefHeight());
+		display.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
+
 		root.getChildren().addAll(display, sideDisplay, topDisplay);
 
 		compareTo = new DatePicker();
@@ -466,7 +469,19 @@ public class VeraGUI extends Application {
 						selectedDevice = device;
 						try {
 							ArrayList<Device> devices = new ArrayList<Device>();
-							devices.add(device);
+							if (device instanceof FourInOne){
+								for (String readingName : ((FourInOne)device).getReadingNames()){
+								FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
+										device.getAltid(), device.getCategory(), device.getSubcategory(),
+										device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
+										((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
+										((FourInOne) device).getArmedtripped(), device.getBatterylevel());
+								fourInOne.setReadingName(readingName);
+								devices.add(fourInOne);
+								}
+							} else {
+								devices.add(device);
+							}
 							show24hrGraph(devices, "24");
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
@@ -559,9 +574,6 @@ public class VeraGUI extends Application {
 
 		// -------------------------------- Setting up the devicesPane
 
-		final ArrayList<Device> devices = new ArrayList<Device>(); // array of devices
-		devices.addAll(devicesList);
-
 		final ArrayList<String> selectedDevices = new ArrayList<String>(); // array
 																			// of
 																			// names
@@ -572,18 +584,13 @@ public class VeraGUI extends Application {
 		
 		// gets all the devices from all the rooms
 		// and adds them to the local variable devices
-		for(Room room : roomsList){
-			for(Device device: room.getDevices()){
-				devices.add(device);
-			}
-		}
 
-		for (int i = 0; i < devices.size(); i++) // for each device create a
+		for (int i = 0; i < devicesList.size(); i++) // for each device create a
 													// pane with an image and a
 													// label
 		{
 			final ImageView deviceImage = new ImageView(new Image(VeraGUI.class
-					.getResource("/Resources/" + devices.get(i).getImage())
+					.getResource("/Resources/" + devicesList.get(i).getImage())
 					.toExternalForm())); // add the image
 
 			deviceImage.setFitHeight(100); // image sizing
@@ -594,7 +601,7 @@ public class VeraGUI extends Application {
 			
 			//If statement for adding further images for the 4in1 sensor
 
-			final Label deviceLabel = new Label(devices.get(i).getName()); // name
+			final Label deviceLabel = new Label(devicesList.get(i).getName()); // name
 																			// of
 																			// the
 																			// device
@@ -859,7 +866,7 @@ public class VeraGUI extends Application {
 						try {
 							ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
 							for (String selectedDevice : selectedDevices) {
-								for (Device device : devices) {
+								for (Device device : devicesList) {
 									if (selectedDevice.contains(device.getName())) {
 										if (device instanceof FourInOne){
 											FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),

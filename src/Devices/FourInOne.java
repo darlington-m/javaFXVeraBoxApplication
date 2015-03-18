@@ -1,5 +1,7 @@
 package Devices;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -15,6 +17,7 @@ public class FourInOne extends Device {
 	String comment;
 	int tripped;
 	int lasttrip;
+	ArrayList<String> readingNames = new ArrayList<String>();
 	
 	
 	public FourInOne() {
@@ -30,6 +33,10 @@ public class FourInOne extends Device {
 		this.humidity = humidity;
 		this.armedtripped = armedTripped;
 		this.batterylevel = batterylevel;
+		readingNames.add("temperature");
+		readingNames.add("humidity");
+		readingNames.add("light");
+		readingNames.add("armedtripped");
 	}
 
 	public String toString() {
@@ -169,6 +176,10 @@ public class FourInOne extends Device {
 	
 	public void setReadingName(String readingName){
 		this.readingName = readingName;
+	}
+	
+	public ArrayList<String> getReadingNames(){
+		return readingNames;
 	}
 	
 	
