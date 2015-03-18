@@ -291,9 +291,9 @@ public class VeraGUI extends Application {
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
-		sortingPane.setPrefSize(790, 40);
-		sortingPane.setLayoutX(0);
-		sortingPane.setLayoutY(15);
+		sortingPane.setPrefSize(770, 40);
+		sortingPane.setLayoutX(10);
+		sortingPane.setLayoutY(10);
 		sortingPane.setId("sortingPane");
 
 		String[] roomNames = new String[currentReadings.getRooms().size() + 1];
@@ -328,8 +328,8 @@ public class VeraGUI extends Application {
 		hbox.getChildren().addAll(roomText, roomDropDown);
 		sortingPane.getChildren().addAll(hbox);
 
-		vb.setLayoutY(sortingPane.getPrefHeight());
-		vb.setLayoutX(0);
+		vb.setLayoutY(sortingPane.getPrefHeight() + 10);
+		vb.setLayoutX(10);
 		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
@@ -434,15 +434,15 @@ public class VeraGUI extends Application {
 				
 				Button detailsBtn = new Button("View Details");
 				detailsBtn.setId("botPaneBtn");
-				detailsBtn.setLayoutX(540);
+				detailsBtn.setLayoutX(525);
 				detailsBtn.setLayoutY(100);
 				
 				Button graphBtn = new Button("24hr Graph");
 				graphBtn.setId("botPaneBtn");
-				graphBtn.setLayoutX(540);
+				graphBtn.setLayoutX(525);
 				graphBtn.setLayoutY(60);
 				
-				pane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+				graphBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 					@Override
 					public void handle(MouseEvent arg0) {
@@ -451,11 +451,20 @@ public class VeraGUI extends Application {
 						try {
 							ArrayList<Device> devices = new ArrayList<Device>();
 							devices.add(device);
-							showDeviceDetails(devices, "24");
+							show24hrGraph(devices, "24");
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+					}
+				});
+				
+				detailsBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent arg0) {
+						changeButtons("details");
+						showDeviceDetails();
 					}
 				});
 				
@@ -468,6 +477,19 @@ public class VeraGUI extends Application {
 			vb.getChildren().add(roomPane);
 		}
 	}
+	
+	
+	private void showDeviceDetails() {
+		// TODO Auto-generated method stub
+		display.getChildren().clear();
+		Pane pane = new Pane();
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
+		
+		display.getChildren().add(pane);
+	}
+	
 
 	public void addARoom() {
 		display.getChildren().clear();
@@ -828,7 +850,7 @@ public class VeraGUI extends Application {
 							for (Device device : devicesToDisplay){
 								System.out.println(device.getReadingName());
 							}
-							showDeviceDetails(devicesToDisplay, "not24"); // <--
+							show24hrGraph(devicesToDisplay, "not24"); // <--
 																			// passes
 																			// the
 																			// devices
@@ -936,7 +958,7 @@ public class VeraGUI extends Application {
 		}
 	}
 
-	private void showDeviceDetails(ArrayList<Device> devicesToDisplay,
+	private void show24hrGraph(ArrayList<Device> devicesToDisplay,
 			String mode) throws SQLException {
 
 		// mode parameter determines if the method has been called from within a
@@ -1140,15 +1162,31 @@ public class VeraGUI extends Application {
 	public void displayNoInternet() {
 		display.getChildren().clear();
 		Pane pane = new Pane();
-		pane.setId("noInternet");
-		pane.setTranslateX(30);
-		pane.setTranslateY(30);
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
 
 		Label warning = new Label("Sorry, No Internet Connection");
 		warning.setId("noInternetWarning");
-		;
 		warning.setLayoutX(230);
 		warning.setLayoutY(250);
+		
+		Button refreshBtn = new Button("Refresh");
+		refreshBtn.setId("botPaneBtn");
+		refreshBtn.setLayoutX(340);
+		refreshBtn.setLayoutY(170);
+		
+		refreshBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				if(InternetConnectionCheck()) {
+					displayDevices("All");	
+				} else {
+					// do nothing yet
+				}
+			}
+		});
 
 		Label warningText = new Label(
 				"Internet connection needed to retrieve data from Vera box and the database");
@@ -1156,15 +1194,15 @@ public class VeraGUI extends Application {
 		warningText.setLayoutX(100);
 		warningText.setLayoutY(290);
 
-		display.getChildren().addAll(pane, warning, warningText);
+		display.getChildren().addAll(pane, refreshBtn, warning, warningText);
 	}
 
 	public void displayNoGraph() {
 		display.getChildren().clear();
 		Pane pane = new Pane();
-		pane.setId("noInternet");
-		pane.setTranslateX(30);
-		pane.setTranslateY(30);
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
 
 		Label warning = new Label("Sorry, No Graph To Display");
 		warning.setId("noInternetWarning");
