@@ -81,6 +81,7 @@ public class VeraGUI extends Application {
 	private Device selectedDevice;
 	private ArrayList<Room> roomsList = new ArrayList<Room>();
 	private ArrayList<Button> buttons = new ArrayList<Button>();
+	private ScrollBar sc;
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
 
@@ -283,7 +284,8 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayDevices() {
-		final CurrentReadings currentReadings = new CurrentReadings();
+	//	final CurrentReadings currentReadings = new CurrentReadings();
+		getRooms();
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
 		paneBackground
@@ -296,10 +298,10 @@ public class VeraGUI extends Application {
 		sortingPane.setLayoutY(0);
 		sortingPane.setId("sortingPane");
 		
-		String[] roomNames = new String[currentReadings.getRooms().size() + 1];
+		String[] roomNames = new String[roomsList.size() + 1];
 		roomNames[0] = "All";
 		int count = 1;
-		for (Room room : currentReadings.getRooms()) {
+		for (Room room : roomsList) {
 			roomNames[count] = room.getName();
 			count++;
 		}
@@ -332,7 +334,7 @@ public class VeraGUI extends Application {
 		vb.setLayoutX(0);
 		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
-		ScrollBar sc = new ScrollBar();
+		sc = new ScrollBar();
 		sc.setLayoutX(display.getPrefWidth() - (display.getPrefWidth()/45));
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
@@ -341,7 +343,8 @@ public class VeraGUI extends Application {
 		sc.setVisibleAmount(200);
 		sc.setUnitIncrement(160);
 		sc.setBlockIncrement(160);
-		sc.setMax(currentReadings.getAllDevices().size() * 190);
+		
+		// get the total number of devices across all rooms
 		
 		// <------------------------- NEED TO CHECK HOW MANY DEVICES ARE IN A ROOM FOR SC
 		
@@ -366,7 +369,6 @@ public class VeraGUI extends Application {
 				});
 			}
 		}, 0, 300000);
-		getRooms();
 		updateDashboard(sortRooms("All"));
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 	}
@@ -394,13 +396,17 @@ public class VeraGUI extends Application {
 	}
 
 	private void updateDashboard(ArrayList<Room> rooms) {
+		int scrollBarSize = 0;
+		
 		vb.getChildren().clear();
 		for (Room room : rooms) {
+			scrollBarSize++;
 			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
 			VBox deviceBox = new VBox(10);
 			deviceBox.setLayoutX(50);
 			deviceBox.setLayoutY(50);
 			for (final Device device : room.getDevices()) {
+				scrollBarSize +=3;
 				FlowPane pane = new FlowPane();
 				pane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 //				pane.setMinWidth(780);
@@ -482,6 +488,7 @@ public class VeraGUI extends Application {
 			roomPane.getChildren().add(deviceBox);
 			vb.getChildren().add(roomPane);
 		}
+		sc.setMax(scrollBarSize * 60);
 	}
 	
 	
@@ -548,8 +555,6 @@ public class VeraGUI extends Application {
 
 		// -------------------------------- Setting up the devicesPane
 
-		CurrentReadings currentReadings = new CurrentReadings();
-
 		final ArrayList<Device> devices = new ArrayList<Device>(); // array of
 																	// devices
 		final ArrayList<String> selectedDevices = new ArrayList<String>(); // array
@@ -559,8 +564,14 @@ public class VeraGUI extends Application {
 																			// the
 																			// selected
 																			// devices
-
-		devices.addAll(currentReadings.getAllDevices());
+		
+		// gets all the devices from all the rooms
+		// and adds them to the local variable devices
+		for(Room room : roomsList){
+			for(Device device: room.getDevices()){
+				devices.add(device);
+			}
+		}
 
 		for (int i = 0; i < devices.size(); i++) // for each device create a
 													// pane with an image and a
