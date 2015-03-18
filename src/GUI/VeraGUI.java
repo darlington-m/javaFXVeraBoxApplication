@@ -188,8 +188,8 @@ public class VeraGUI extends Application {
 
 		Label welcome = new Label("Welcome");
 		welcome.setId("WelcomeMessage");
-		welcome.setLayoutX(20);
-		welcome.setLayoutY(35);
+		welcome.setLayoutX(40);
+		welcome.setLayoutY(20);
 
 		final Label time = new Label();
 		time.setId("time");
@@ -219,7 +219,7 @@ public class VeraGUI extends Application {
 		root.getChildren().addAll(display, sideDisplay, topDisplay);
 
 		compareTo = new DatePicker();
-		compareTo.setMaxWidth(101);
+		compareTo.setMaxWidth(110);
 		compareFrom = new DatePicker();
 		compareFrom.setMaxWidth(110);
 		compareTo.setValue(LocalDate.now());
@@ -291,11 +291,11 @@ public class VeraGUI extends Application {
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
-		sortingPane.setPrefSize(770, 40);
-		sortingPane.setLayoutX(10);
-		sortingPane.setLayoutY(10);
+		sortingPane.setPrefSize(display.getWidth()-19, 40);
+		sortingPane.setLayoutX(0);
+		sortingPane.setLayoutY(0);
 		sortingPane.setId("sortingPane");
-
+		
 		String[] roomNames = new String[currentReadings.getRooms().size() + 1];
 		roomNames[0] = "All";
 		int count = 1;
@@ -328,8 +328,8 @@ public class VeraGUI extends Application {
 		hbox.getChildren().addAll(roomText, roomDropDown);
 		sortingPane.getChildren().addAll(hbox);
 
-		vb.setLayoutY(sortingPane.getPrefHeight() + 10);
-		vb.setLayoutX(10);
+		vb.setLayoutY(sortingPane.getPrefHeight() );
+		vb.setLayoutX(0);
 		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		ScrollBar sc = new ScrollBar();
@@ -338,10 +338,13 @@ public class VeraGUI extends Application {
 		sc.setOrientation(Orientation.VERTICAL);
 		sc.setMinWidth(20);
 		sc.setMaxWidth(20);
-		sc.setVisibleAmount(160);
+		sc.setVisibleAmount(200);
 		sc.setUnitIncrement(160);
 		sc.setBlockIncrement(160);
-		sc.setMax(currentReadings.getAllDevices().size() * 160);
+		sc.setMax(currentReadings.getAllDevices().size() * 190);
+		
+		// <------------------------- NEED TO CHECK HOW MANY DEVICES ARE IN A ROOM FOR SC
+		
 		sc.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 					Number old_val, Number new_val) {
@@ -412,7 +415,7 @@ public class VeraGUI extends Application {
 				Label name = new Label(device.getName());
 				name.setId("DeviceName");
 				name.setLayoutX(10);
-				name.setLayoutY(10);
+				name.setLayoutY(5);
 				
 				topPane.getChildren().add(name);
 				
@@ -701,11 +704,12 @@ public class VeraGUI extends Application {
 
 		Label compareLabel = new Label("Compare From"); // compare from label
 		compareLabel.setLayoutX(40);
-		compareLabel.setLayoutY(10);
+		compareLabel.setLayoutY(85);
+		compareLabel.setId("CompareName");
 
 		HBox compareFromRow = new HBox(5); // hbox for the compare from elements
 		compareFromRow.setLayoutX(40);
-		compareFromRow.setLayoutY(40);
+		compareFromRow.setLayoutY(120);
 
 		compareFrom = new DatePicker(); // allows to pick a date
 		compareFrom.setMaxWidth(110);
@@ -728,14 +732,15 @@ public class VeraGUI extends Application {
 
 		Label compareToLabel = new Label("Compare To"); // compare to label
 		compareToLabel.setLayoutX(40);
-		compareToLabel.setLayoutY(110);
+		compareToLabel.setLayoutY(175);
+		compareToLabel.setId("CompareName");
 
 		HBox compareToRow = new HBox(5); // hbox for the compare from elements
 		compareToRow.setLayoutX(40);
-		compareToRow.setLayoutY(150);
+		compareToRow.setLayoutY(210);
 
 		compareTo = new DatePicker(); // allows to pick a date
-		compareTo.setMaxWidth(101);
+		compareTo.setMaxWidth(110);
 		compareTo.setValue(LocalDate.now());
 		compareTo.setId("datePicker");
 		compareTo.setEditable(false);
@@ -788,23 +793,40 @@ public class VeraGUI extends Application {
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
-		graphType.setLayoutX(100);
-		graphType.setLayoutY(10);
-
+		graphType.setLayoutX(220);
+		graphType.setLayoutY(100);
+		graphType.setMinWidth(150);
+		graphType.setMaxWidth(150);
+		graphType.setMaxHeight(40);
+		graphType.setMinHeight(40);
+		graphType.setId("listCSS");
+		
 		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
 													// select the type of graph
 		seperateGraphs.getItems().addAll("One Chart", "Multiple Charts");
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
 		seperateGraphs.getSelectionModel().selectFirst();
-		seperateGraphs.setLayoutX(87);
-		seperateGraphs.setLayoutY(60);
+		seperateGraphs.setLayoutX(220);
+		seperateGraphs.setLayoutY(150);
+		seperateGraphs.setMinWidth(150);
+		seperateGraphs.setMaxWidth(150);
+		seperateGraphs.setMaxHeight(40);
+		seperateGraphs.setMinHeight(40);
+		seperateGraphs.setId("listCSS");
 
 		Button createGraphButton = new Button("Generate Graph"); // creates a
 																	// button
 																	// used to
 																	// generate
 																	// the graph
+		createGraphButton.setLayoutX(220);
+		createGraphButton.setLayoutY(200);
+		createGraphButton.setMinWidth(150);
+		createGraphButton.setMaxWidth(150);
+		createGraphButton.setMaxHeight(40);
+		createGraphButton.setMinHeight(40);
+		createGraphButton.setId("listCSS");
 		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when
 																		// button
 																		// is
@@ -872,8 +894,6 @@ public class VeraGUI extends Application {
 						}
 					}
 				});
-		createGraphButton.setLayoutX(95); // layout of the button
-		createGraphButton.setLayoutY(110);
 
 		submitPane.getChildren().addAll(graphType, seperateGraphs,
 				createGraphButton); // add graph selecter and button to the

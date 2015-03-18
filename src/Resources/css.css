@@ -40,7 +40,8 @@
 
 #roomPane{
 -fx-border-color: #12805C;
--fx-border-width: 5px;
+-fx-border-width: 2px;
+-fx-padding: 10px 0 20px 10px;
 }
 
 
@@ -90,6 +91,11 @@
 -fx-text-fill: #12805C;
 }
 
+#CompareName{
+-fx-font-size: 20px;
+-fx-text-fill: #12805C;
+}
+
 #sortingLabel{
 -fx-font-size: 15px;
 -fx-text-fill: white;
@@ -130,6 +136,20 @@
 -fx-text-align: center;
 -fx-font-size:30px;
 -fx-text-fill: red;
+}
+
+#listCSS {
+-fx-text-align: center;
+    -fx-background-color: 
+        linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),
+        linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);
+    -fx-background-insets: 0,1,4,5;
+    -fx-padding: 7 15 7 15;
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #12805C;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
 }
 
 #textField {
@@ -180,10 +200,10 @@
 -fx-background-color: #00AF33;
 }
 
-#backPaneBackground {
-	-fx-background-color:#f4f4f4; 
-	-fx-pref-height:545px; 
-	-fx-pref-width:780px;
+#noInternet {
+	-fx-background-color:#cccccc; 
+	-fx-pref-height:500px; 
+	-fx-pref-width:735px;
 }
 
 
@@ -219,6 +239,7 @@
     -fx-min-width: 130px;
     -fx-max-width: 130px;
 }
+
 
 #botPaneBtn:hover {
     -fx-background-color: 
