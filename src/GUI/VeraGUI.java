@@ -28,12 +28,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -317,7 +320,7 @@ public class VeraGUI extends Application {
 
 		sortingPane.setPrefSize(display.getWidth()-39, 40);
 		sortingPane.setLayoutX(10);
-		sortingPane.setLayoutY(0);
+		sortingPane.setLayoutY(10);
 		sortingPane.setId("sortingPane");
 		
 		String[] roomNames = new String[roomsList.size() + 1];
@@ -545,7 +548,6 @@ public class VeraGUI extends Application {
 		display.getChildren()
 				.addAll(addRoom, enterDetails, warning, input, add);
 	}
-
 	public void displayGraphs() {
 		display.getChildren().clear();
 		
@@ -553,7 +555,8 @@ public class VeraGUI extends Application {
 															// panes the make
 															// the graph
 															// settings page
-
+		ScrollPane devicesScrollPane = new ScrollPane();
+		
 		Pane devicesPane = new Pane(); // Holds the images which the user can
 										// select to add to the graph
 		Pane comparePane = new Pane(); // Holds the combo boxes that allow the
@@ -563,14 +566,15 @@ public class VeraGUI extends Application {
 										// decide which graph they want to
 										// display and the button to commit
 
-		devicesPane.setPrefSize(display.getWidth(),
-				display.getHeight() / 3 * 1.5); // sets the layout of 1 pane on
+		
+		devicesScrollPane.setPrefSize(display.getWidth()+5,
+				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
 												// the top and two below, evenly
 												// spaces
 		comparePane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.5);
+				display.getHeight() / 3 * 1.9);
 		submitPane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.5);
+				display.getHeight() / 3 * 1.9);
 
 		// -------------------------------- Setting up the devicesPane
 
@@ -584,7 +588,11 @@ public class VeraGUI extends Application {
 		
 		// gets all the devices from all the rooms
 		// and adds them to the local variable devices
+		
+		boolean prevFourInOne = false;
 
+		int j = 0;
+		
 		for (int i = 0; i < devicesList.size(); i++) // for each device create a
 													// pane with an image and a
 													// label
@@ -616,8 +624,50 @@ public class VeraGUI extends Application {
 			imagePane.setLayoutY(30);
 			imagePane
 					.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
+			
+			if (devicesList.get(i) instanceof FourInOne){
+				imagePane.setPrefSize(288, 145); // sizing the pane
+				
+				CheckBox tempCheckBox = new CheckBox();
+				tempCheckBox.setLayoutX(140);
+				tempCheckBox.setLayoutY(20);
+				
+				Label tempLabel = new Label("Temperature");
+				tempLabel.setLayoutX(170);
+				tempLabel.setLayoutY(20);
 
-			imagePane.setPrefSize(144, 145); // sizing the pane
+				CheckBox lightCheckBox = new CheckBox();
+				lightCheckBox.setLayoutX(140);
+				lightCheckBox.setLayoutY(50);
+				
+				Label lightLabel = new Label("Armed Tripped");
+				lightLabel.setLayoutX(170);
+				lightLabel.setLayoutY(50);
+
+				CheckBox humidityCheckBox = new CheckBox();
+				humidityCheckBox.setLayoutX(140);
+				humidityCheckBox.setLayoutY(80);
+				
+				Label humidityLabel = new Label("Armed Tripped");
+				humidityLabel.setLayoutX(170);
+				humidityLabel.setLayoutY(80);
+
+				CheckBox armedTrippedCheckBox = new CheckBox();
+				armedTrippedCheckBox.setLayoutX(140);
+				armedTrippedCheckBox.setLayoutY(110);
+				
+				Label armedTrippedLabel = new Label("Armed Tripped");
+				armedTrippedLabel.setLayoutX(170);
+				armedTrippedLabel.setLayoutY(110);
+
+				imagePane.getChildren().addAll(tempCheckBox, lightCheckBox, humidityCheckBox, armedTrippedCheckBox, armedTrippedLabel);
+				
+			
+				prevFourInOne = true;
+			} else {
+				imagePane.setPrefSize(144, 145); // sizing the pane
+				prevFourInOne = false;
+			}
 
 			FadeTransition ft = new FadeTransition(Duration.millis(300),
 					imagePane);
@@ -645,10 +695,14 @@ public class VeraGUI extends Application {
 						 */
 						@Override
 						public void handle(Event event) {
-							if (imagePane.getWidth() == 144) {
+							if (imagePane.getWidth() == 144 || imagePane.getWidth() == 288) {
 								imagePane
 										.setStyle("-fx-border-color:green; -fx-border-width: 3; -fx-border-style: solid;");
-								imagePane.setPrefSize(145, 145);
+								if (imagePane.getWidth() == 144){
+									imagePane.setPrefSize(145, 145);
+								} else {
+									imagePane.setPrefSize(289, 145);
+								}
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
 									selectedDevices.add(deviceLabel.getText() + ": temperature");
 									selectedDevices.add(deviceLabel.getText() + ": light");
@@ -680,7 +734,11 @@ public class VeraGUI extends Application {
 								} else {
 									selectedDevices.remove(deviceLabel.getText());
 								}
-								imagePane.setPrefSize(144, 145);
+								if (imagePane.getWidth() == 145){
+									imagePane.setPrefSize(144, 145);
+								} else {
+									imagePane.setPrefSize(288, 145);
+								}
 								// System.out.println("Removed: " +
 								// deviceLabel.getText());
 
@@ -695,10 +753,21 @@ public class VeraGUI extends Application {
 							}
 						}
 					});
-
-			imagePane.setLayoutX(i * 150 + 30); // x layout position spread
+			
+			imagePane.setLayoutX(j * 150 + 30); // x layout position spread
+			
+			if (prevFourInOne == true) {
+				j += 2;
+			} else {
+				j++;
+			}
 
 			imagePane.getChildren().addAll(deviceImage, deviceLabel);
+			
+			devicesPane.setPrefSize(j * 150 + 30,
+					display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
+													// the top and two below, evenly
+													// spaces
 
 			devicesPane.getChildren().add(imagePane); // add image panes to the
 														// devices pane.
@@ -928,8 +997,12 @@ public class VeraGUI extends Application {
 		// -------------------------------- Setting up the
 		// graphSettingsContainer
 		// -----------------------------------------------------
-
-		graphSettingsContainer.getChildren().addAll(devicesPane, comparePane,
+		
+		devicesScrollPane.setContent(devicesPane);
+		devicesScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		devicesScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
+		
+		graphSettingsContainer.getChildren().addAll(devicesScrollPane, comparePane,
 				submitPane);
 		display.getChildren().add(graphSettingsContainer);
 	}

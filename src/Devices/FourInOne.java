@@ -2,7 +2,11 @@ package Devices;
 
 import java.util.ArrayList;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 
 public class FourInOne extends Device {
@@ -90,7 +94,47 @@ public class FourInOne extends Device {
 				+ this.armedtripped);
 		armedTripped.setLayoutY(100);
 		armedTripped.setLayoutX(200);
-		pane.getChildren().addAll(light, temp, humidity, armedTripped);
+		
+		// Switch--------------------------------------------
+		
+		Label armedOnLabel = new Label("On");
+		armedOnLabel.setPrefSize(40, 40);
+		armedOnLabel.setLayoutX(250);
+		armedOnLabel.setLayoutY(50);
+
+		Label armedOffLabel = new Label("Off");
+		armedOffLabel.setPrefSize(40, 40);
+		armedOffLabel.setLayoutX(290);
+		armedOffLabel.setLayoutY(50);
+	
+		final Button armedButton = new Button();
+		if (armed == 1){
+			armedButton.setText("On");
+			armedButton.setLayoutX(244);
+		} else {
+			armedButton.setText("Off");
+			armedButton.setLayoutX(283);
+		}
+		armedButton.setLayoutY(58);
+		
+		EventHandler<ActionEvent> armedButtonHandler = new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (armedButton.getText().equals("Off")){
+					armedButton.setText("On");
+					armedButton.setLayoutX(244);
+				} else {
+					armedButton.setText("Off");
+					armedButton.setLayoutX(283);
+				}
+			}
+		};
+		
+		armedButton.setOnAction(armedButtonHandler);
+
+		
+		pane.getChildren().addAll(armedOnLabel, armedOffLabel, armedButton);
 		return pane;
 	}
 

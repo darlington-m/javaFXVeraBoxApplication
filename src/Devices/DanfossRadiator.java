@@ -58,9 +58,10 @@ public class DanfossRadiator extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label("Heat: " + getReading() + "*C");
+		Label reading = new Label(getReading() + "°C");
 		reading.setLayoutX(200);
 		reading.setLayoutY(25);
+		reading.setId("readingLabel");
 		pane.getChildren().addAll(reading);
 		return pane;
 	}
