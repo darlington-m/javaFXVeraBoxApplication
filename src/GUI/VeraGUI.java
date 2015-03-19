@@ -87,6 +87,10 @@ public class VeraGUI extends Application {
 	private ArrayList<Device> devicesList;
 	private ArrayList<Button> buttons = new ArrayList<Button>();
 	private ScrollBar sc;
+	private CheckBox tempCheckBox;
+	private CheckBox lightCheckBox;
+	private CheckBox humidityCheckBox;
+	private CheckBox armedTrippedCheckBox; 
 
 	public VeraGUI() {
 		CurrentReadings curr = new CurrentReadings();
@@ -629,7 +633,7 @@ public class VeraGUI extends Application {
 			if (devicesList.get(i) instanceof FourInOne){
 				imagePane.setPrefSize(288, 145); // sizing the pane
 				
-				CheckBox tempCheckBox = new CheckBox();
+				tempCheckBox = new CheckBox();
 				tempCheckBox.setLayoutX(140);
 				tempCheckBox.setLayoutY(20);
 				
@@ -637,15 +641,16 @@ public class VeraGUI extends Application {
 				tempLabel.setLayoutX(170);
 				tempLabel.setLayoutY(20);
 
-				CheckBox lightCheckBox = new CheckBox();
+				lightCheckBox = new CheckBox();
 				lightCheckBox.setLayoutX(140);
 				lightCheckBox.setLayoutY(50);
+				
 				
 				Label lightLabel = new Label("Light");
 				lightLabel.setLayoutX(170);
 				lightLabel.setLayoutY(50);
 
-				CheckBox humidityCheckBox = new CheckBox();
+				humidityCheckBox = new CheckBox();
 				humidityCheckBox.setLayoutX(140);
 				humidityCheckBox.setLayoutY(80);
 				
@@ -653,7 +658,7 @@ public class VeraGUI extends Application {
 				humidityLabel.setLayoutX(170);
 				humidityLabel.setLayoutY(80);
 
-				CheckBox armedTrippedCheckBox = new CheckBox();
+				armedTrippedCheckBox = new CheckBox();
 				armedTrippedCheckBox.setLayoutX(140);
 				armedTrippedCheckBox.setLayoutY(110);
 				
@@ -705,10 +710,10 @@ public class VeraGUI extends Application {
 									imagePane.setPrefSize(289, 145);
 								}
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
-									selectedDevices.add(deviceLabel.getText() + ": temperature");
-									selectedDevices.add(deviceLabel.getText() + ": light");
-									selectedDevices.add(deviceLabel.getText() + ": armedtripped");
-									selectedDevices.add(deviceLabel.getText() + ": humidity");
+									tempCheckBox.setSelected(true);
+									lightCheckBox.setSelected(true);
+									humidityCheckBox.setSelected(true);
+									armedTrippedCheckBox.setSelected(true);
 								} else {
 									selectedDevices.add(deviceLabel.getText());
 								}
@@ -728,10 +733,10 @@ public class VeraGUI extends Application {
 								imagePane
 										.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
-									selectedDevices.remove(deviceLabel.getText() + ": temperature");
-									selectedDevices.remove(deviceLabel.getText() + ": light");
-									selectedDevices.remove(deviceLabel.getText() + ": armedtripped");
-									selectedDevices.remove(deviceLabel.getText() + ": humidity");
+									tempCheckBox.setSelected(false);
+									lightCheckBox.setSelected(false);
+									humidityCheckBox.setSelected(false);
+									armedTrippedCheckBox.setSelected(false);
 								} else {
 									selectedDevices.remove(deviceLabel.getText());
 								}
@@ -935,6 +940,21 @@ public class VeraGUI extends Application {
 					public void handle(ActionEvent arg0) {
 						try {
 							ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
+
+							if (tempCheckBox.isSelected() ==  true){
+								selectedDevices.add( "4 in 1 sensor: temperature");
+							}
+							if (lightCheckBox.isSelected() ==  true){
+								selectedDevices.add( "4 in 1 sensor: light");
+							}
+							if (humidityCheckBox.isSelected() ==  true){
+								selectedDevices.add( "4 in 1 sensor: humidity");
+							}
+							if (armedTrippedCheckBox.isSelected() ==  true){
+								selectedDevices.add( "4 in 1 sensor: armedTripped");
+							}
+
+							
 							for (String selectedDevice : selectedDevices) {
 								for (Device device : devicesList) {
 									if (selectedDevice.contains(device.getName())) {
