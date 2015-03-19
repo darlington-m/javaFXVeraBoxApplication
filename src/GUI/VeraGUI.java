@@ -191,7 +191,7 @@ public class VeraGUI extends Application {
 
 		Pane topDisplay = new Pane();
 		topDisplay.setLayoutX(sideDisplay.getPrefWidth());
-		topDisplay.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
+		//topDisplay.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
 		topDisplay.setPrefSize(
 				(scene.getWidth() - sideDisplay.getPrefWidth() + 10), 100);
 		topDisplay.setId("topDisplay");
@@ -226,7 +226,7 @@ public class VeraGUI extends Application {
 				(scene.getHeight() - topDisplay.getPrefHeight() + 10));
 		display.setLayoutX(sideDisplay.getPrefWidth());
 		display.setLayoutY(topDisplay.getPrefHeight());
-		display.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
+		//display.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
 
 		root.getChildren().addAll(display, sideDisplay, topDisplay);
 
@@ -315,8 +315,8 @@ public class VeraGUI extends Application {
 		paneBackground.setLayoutX(45);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
-		sortingPane.setPrefSize(display.getWidth()-19, 40);
-		sortingPane.setLayoutX(0);
+		sortingPane.setPrefSize(display.getWidth()-39, 40);
+		sortingPane.setLayoutX(10);
 		sortingPane.setLayoutY(0);
 		sortingPane.setId("sortingPane");
 		
@@ -353,7 +353,7 @@ public class VeraGUI extends Application {
 		sortingPane.getChildren().addAll(hbox);
 
 		vb.setLayoutY(sortingPane.getPrefHeight() );
-		vb.setLayoutX(0);
+		vb.setLayoutX(10);
 		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		sc = new ScrollBar();
