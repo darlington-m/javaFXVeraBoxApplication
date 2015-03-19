@@ -636,6 +636,7 @@ public class VeraGUI extends Application {
 				tempCheckBox = new CheckBox();
 				tempCheckBox.setLayoutX(140);
 				tempCheckBox.setLayoutY(20);
+				tempCheckBox.setDisable(true);
 				
 				Label tempLabel = new Label("Temperature");
 				tempLabel.setLayoutX(170);
@@ -644,7 +645,7 @@ public class VeraGUI extends Application {
 				lightCheckBox = new CheckBox();
 				lightCheckBox.setLayoutX(140);
 				lightCheckBox.setLayoutY(50);
-				
+				lightCheckBox.setDisable(true);
 				
 				Label lightLabel = new Label("Light");
 				lightLabel.setLayoutX(170);
@@ -653,6 +654,7 @@ public class VeraGUI extends Application {
 				humidityCheckBox = new CheckBox();
 				humidityCheckBox.setLayoutX(140);
 				humidityCheckBox.setLayoutY(80);
+				humidityCheckBox.setDisable(true);
 				
 				Label humidityLabel = new Label("Humidity");
 				humidityLabel.setLayoutX(170);
@@ -661,6 +663,7 @@ public class VeraGUI extends Application {
 				armedTrippedCheckBox = new CheckBox();
 				armedTrippedCheckBox.setLayoutX(140);
 				armedTrippedCheckBox.setLayoutY(110);
+				armedTrippedCheckBox.setDisable(true);
 				
 				Label armedTrippedLabel = new Label("Armed Tripped");
 				armedTrippedLabel.setLayoutX(170);
@@ -711,9 +714,13 @@ public class VeraGUI extends Application {
 								}
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
 									tempCheckBox.setSelected(true);
+									tempCheckBox.setDisable(false);
 									lightCheckBox.setSelected(true);
+									lightCheckBox.setDisable(false);
 									humidityCheckBox.setSelected(true);
+									humidityCheckBox.setDisable(false);
 									armedTrippedCheckBox.setSelected(true);
+									armedTrippedCheckBox.setDisable(false);
 								} else {
 									selectedDevices.add(deviceLabel.getText());
 								}
@@ -734,9 +741,13 @@ public class VeraGUI extends Application {
 										.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
 									tempCheckBox.setSelected(false);
+									tempCheckBox.setDisable(true);
 									lightCheckBox.setSelected(false);
+									lightCheckBox.setDisable(true);
 									humidityCheckBox.setSelected(false);
+									humidityCheckBox.setDisable(true);
 									armedTrippedCheckBox.setSelected(false);
+									armedTrippedCheckBox.setDisable(true);
 								} else {
 									selectedDevices.remove(deviceLabel.getText());
 								}
