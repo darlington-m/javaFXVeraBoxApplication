@@ -1,5 +1,8 @@
 package Devices;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -58,11 +61,49 @@ public class DanfossRadiator extends Device implements Sensor {
 
 	public Pane getPane() {
 		Pane pane = super.getPane();
-		Label reading = new Label(getReading() + "°C");
+		Label reading = new Label(getReading() + "Â°" + "C");
 		reading.setLayoutX(200);
 		reading.setLayoutY(25);
 		reading.setId("readingLabel");
-		pane.getChildren().addAll(reading);
+		
+		final Button off = new Button("Off");
+		off.setLayoutX(265);
+		off.setLayoutY(100);
+		off.setMinWidth(60);
+		off.setMaxWidth(60);
+		
+		final Button heat = new Button("Heat");
+		heat.setLayoutX(200);
+		heat.setLayoutY(100);
+		heat.setMinWidth(60);
+		heat.setMaxWidth(65);
+		
+		if(mode == "off") {
+			heat.setId("heatButtonRed");
+			off.setId("heatButtonGray");
+		}else {
+			heat.setId("heatButtonGray");
+			off.setId("heatButtonRed");
+		}
+		
+		EventHandler<ActionEvent> heatButtonHandler = new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (heat.getId() == "heatButtonRed") {
+					heat.setId("heatButtonGray");
+					off.setId("heatButtonRed");			
+				} else {
+					heat.setId("heatButtonRed");
+					off.setId("heatButtonGray");
+				}
+			}
+		};
+		
+		off.setOnAction(heatButtonHandler);
+		heat.setOnAction(heatButtonHandler);
+		
+		pane.getChildren().addAll(reading, off, heat);
 		return pane;
 	}
 
