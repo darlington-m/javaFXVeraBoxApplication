@@ -264,3 +264,34 @@
     -fx-font-weight: 400;
     -fx-text-fill: #B1B1B1;
 }
+
+#armedOnLabel {
+    -fx-background-color: red;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-text-fill: #ffffff;
+}
+
+#armedOffLabel {
+    -fx-background-color: #dddddd;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-text-fill: #ffffff;
+}
+
+#armedButton {
+    -fx-border-radius: 35px;
+    -fx-background-radius: 35px;
+    -fx-border-color: #cccccc;
+    -fx-background-color: #f4f4f4;
+}
+
+#armedLabelRed {
+    -fx-font-size: 15px;
+    -fx-text-fill: red
+}
+
+#armedLabelGray {
+    -fx-font-size: 15px;
+    -fx-text-fill: #dddddd;
+}

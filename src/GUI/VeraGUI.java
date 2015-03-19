@@ -556,7 +556,6 @@ public class VeraGUI extends Application {
 															// the graph
 															// settings page
 		ScrollPane devicesScrollPane = new ScrollPane();
-		
 		Pane devicesPane = new Pane(); // Holds the images which the user can
 										// select to add to the graph
 		Pane comparePane = new Pane(); // Holds the combo boxes that allow the
@@ -568,13 +567,13 @@ public class VeraGUI extends Application {
 
 		
 		devicesScrollPane.setPrefSize(display.getWidth()+5,
-				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
+				display.getHeight() / 3 * 1.15); // sets the layout of 1 pane on
 												// the top and two below, evenly
 												// spaces
 		comparePane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.9);
+				display.getHeight() / 3 * 1.85);
 		submitPane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.9);
+				display.getHeight() / 3 * 1.85);
 
 		// -------------------------------- Setting up the devicesPane
 
@@ -606,6 +605,8 @@ public class VeraGUI extends Application {
 
 			deviceImage.setLayoutX(25); // image layout
 			deviceImage.setLayoutY(20);
+			
+			
 			
 			//If statement for adding further images for the 4in1 sensor
 
@@ -640,7 +641,7 @@ public class VeraGUI extends Application {
 				lightCheckBox.setLayoutX(140);
 				lightCheckBox.setLayoutY(50);
 				
-				Label lightLabel = new Label("Armed Tripped");
+				Label lightLabel = new Label("Light");
 				lightLabel.setLayoutX(170);
 				lightLabel.setLayoutY(50);
 
@@ -648,7 +649,7 @@ public class VeraGUI extends Application {
 				humidityCheckBox.setLayoutX(140);
 				humidityCheckBox.setLayoutY(80);
 				
-				Label humidityLabel = new Label("Armed Tripped");
+				Label humidityLabel = new Label("Humidity");
 				humidityLabel.setLayoutX(170);
 				humidityLabel.setLayoutY(80);
 
@@ -660,7 +661,7 @@ public class VeraGUI extends Application {
 				armedTrippedLabel.setLayoutX(170);
 				armedTrippedLabel.setLayoutY(110);
 
-				imagePane.getChildren().addAll(tempCheckBox, lightCheckBox, humidityCheckBox, armedTrippedCheckBox, armedTrippedLabel);
+				imagePane.getChildren().addAll(tempCheckBox,tempLabel, lightCheckBox,lightLabel, humidityCheckBox,humidityLabel, armedTrippedCheckBox, armedTrippedLabel);
 				
 			
 				prevFourInOne = true;
@@ -1006,6 +1007,7 @@ public class VeraGUI extends Application {
 				submitPane);
 		display.getChildren().add(graphSettingsContainer);
 	}
+
 
 	public void displaySettings() {
 		display.getChildren().clear();

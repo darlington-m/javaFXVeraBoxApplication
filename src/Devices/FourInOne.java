@@ -97,36 +97,50 @@ public class FourInOne extends Device {
 		
 		// Switch--------------------------------------------
 		
-		Label armedOnLabel = new Label("On");
-		armedOnLabel.setPrefSize(40, 40);
-		armedOnLabel.setLayoutX(250);
-		armedOnLabel.setLayoutY(50);
-
-		Label armedOffLabel = new Label("Off");
-		armedOffLabel.setPrefSize(40, 40);
-		armedOffLabel.setLayoutX(290);
-		armedOffLabel.setLayoutY(50);
+		final Label armedBackgroundLabel = new Label();
+		armedBackgroundLabel.setId("armedOnLabel");
+		armedBackgroundLabel.setPrefSize(70, 25);
+		armedBackgroundLabel.setMaxHeight(25);
+		armedBackgroundLabel.setMinHeight(25);
+		armedBackgroundLabel.setLayoutX(220);
+		armedBackgroundLabel.setLayoutY(58);
+		
+		final Label armedLabel = new Label();
+		armedLabel.setLayoutY(93);
 	
 		final Button armedButton = new Button();
+		armedButton.setId("armedButton");
+		armedButton.setPrefSize(45, 42);
 		if (armed == 1){
-			armedButton.setText("On");
-			armedButton.setLayoutX(244);
+			armedButton.setLayoutX(219);
+			armedLabel.setLayoutX(230);
+			armedLabel.setText("Bypassed");
+			armedLabel.setId("armedLabelGray");
 		} else {
-			armedButton.setText("Off");
-			armedButton.setLayoutX(283);
+			armedButton.setLayoutX(245);
+			armedLabel.setLayoutX(237);
+			armedLabel.setText("Armed");
+			armedLabel.setId("armedLabelRed");
+
 		}
-		armedButton.setLayoutY(58);
+		armedButton.setLayoutY(49);
 		
 		EventHandler<ActionEvent> armedButtonHandler = new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (armedButton.getText().equals("Off")){
-					armedButton.setText("On");
-					armedButton.setLayoutX(244);
+				if (armedButton.getLayoutX() == 245){
+					armedButton.setLayoutX(219);
+					armedLabel.setLayoutX(230);
+					armedLabel.setText("Bypassed");
+					armedLabel.setId("armedLabelGray");
+					armedBackgroundLabel.setId("armedOffLabel");
 				} else {
-					armedButton.setText("Off");
-					armedButton.setLayoutX(283);
+					armedButton.setLayoutX(245);
+					armedLabel.setLayoutX(237);
+					armedLabel.setText("Armed");
+					armedLabel.setId("armedLabelRed");
+					armedBackgroundLabel.setId("armedOnLabel");
 				}
 			}
 		};
@@ -134,7 +148,7 @@ public class FourInOne extends Device {
 		armedButton.setOnAction(armedButtonHandler);
 
 		
-		pane.getChildren().addAll(armedOnLabel, armedOffLabel, armedButton);
+		pane.getChildren().addAll(armedBackgroundLabel, armedButton, armedLabel);
 		return pane;
 	}
 
