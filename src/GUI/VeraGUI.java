@@ -167,6 +167,7 @@ public class VeraGUI extends Application {
 		stage.setScene(scene);
 		stage.setResizable(false);
 
+		//hopefully works
 		scene.getStylesheets().add(
 				VeraGUI.class.getResource("/Resources/css.css")
 						.toExternalForm());
