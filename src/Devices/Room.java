@@ -33,6 +33,9 @@ public class Room {
 		return id;
 	}
 
+	public void setSection(int sect) {
+		section = sect;
+	}
 	public int getSection() {
 		return section;
 	}

@@ -4,26 +4,56 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import Devices.HumiditySensor;
+
+/**
+ * 
+ * @author Remus
+ *
+ */
 public class HumiditySensorTest {
 
 	@Test
 	public void testToString() {
-		fail("Not yet implemented");
+
+		HumiditySensor humidity = new HumiditySensor("name", 1, "altid", 2, 3, 4, 5, 12345);
+		String actualToString = humidity.toString();
+		String expectedToString = "Name: " + "name" + " Id: " + 1 + " AltID: " + "altid"
+				+ " Category: " + 2 + " Subcategory: " + 3
+				+ " Room: " + 4 + " Parent: " + 5 + " Humidity Reading: " + 0;
+
+		assertEquals(expectedToString, actualToString);
 	}
 
 	@Test
 	public void testGetDetails() {
-		fail("Not yet implemented");
+		HumiditySensor humidity = new HumiditySensor("name", 1, "altid", 2, 3, 4, 5, 3);
+		String actualDetails = humidity.getDetails();
+
+		String expectedDetails =  "Name: " + "name" + "\nId: " + 1 + "\nAltID: " + "altid"
+				+ "\nCategory: " + 2 + "\nSubcategory: " + 3
+				+ "\nRoom: " + 4 + "\nParent: " + 5 + "\nHumidity: " + 0;
+
+		assertEquals(expectedDetails, actualDetails);
 	}
 
 	@Test
 	public void testGetName() {
-		fail("Not yet implemented");
+		HumiditySensor humidity = new HumiditySensor("name11111111111", 1, "altid", 2, 3, 4, 5, 3);
+		String actualName = humidity.getName(), expectedName = "name11111111111";
+
+		assertEquals(expectedName, actualName);
 	}
 
 	@Test
 	public void testReadingFromSQL() {
-		fail("Not yet implemented");
+		HumiditySensor humidity = new HumiditySensor();
+		String actualReading = humidity.readingFromSQL(12345, 56789);
+		String expectedReading = "SELECT humidity, reading_date FROM Reading WHERE id =  '"
+				+ humidity.getId() + "' AND reading_date >='" + 12345
+				+ "' AND reading_date <='" + 56789 + "'";
+
+		assertEquals(expectedReading, actualReading);
 	}
 
 	@Test
@@ -33,147 +63,36 @@ public class HumiditySensorTest {
 
 	@Test
 	public void testHumiditySensor() {
-		fail("Not yet implemented");
+		HumiditySensor humidity = new HumiditySensor();
+
+		assertEquals(humidity.getImage(), "humidity.jpg");
+		assertTrue(humidity instanceof HumiditySensor);
+		assertEquals(0, humidity.getBatterylevel());
+		assertEquals(null, humidity.getAltid());
+
 	}
 
 	@Test
 	public void testHumiditySensorStringIntStringIntIntIntIntInt() {
-		fail("Not yet implemented");
+		HumiditySensor humidity = new HumiditySensor("name11111111111", 1, "altid", 2, 3, 4, 5, 3);
+
+		assertEquals(humidity.getName(), "name11111111111");
+		assertEquals(humidity.getId(), 1);
+		assertEquals(humidity.getAltid(), "altid");
+		assertEquals(humidity.getCategory(), 2);
+		assertEquals(humidity.getSubcategory(), 3);
+		assertEquals(humidity.getRoom(), 4);
+		assertEquals(humidity.getParent(), 5);
+		assertEquals(humidity.getBatterylevel(), 0);
+
 	}
 
 	@Test
 	public void testGetReading() {
-		fail("Not yet implemented");
-	}
+		HumiditySensor humidity = new HumiditySensor("name", 1, "altid", 2, 3, 4, 5, 3);
+		int actualReading = humidity.getReading(), expectedReading = 3;
 
-	@Test
-	public void testReadingToSQL() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDevice() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDeviceStringIntStringIntIntIntIntStringStringInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetId() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetAltid() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetCategory() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetSubcategory() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetRoom() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetParent() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetImage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetImage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetReadingName() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testShowDeviceDetails() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRenameDevice() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testObject() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetClass() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testHashCode() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testEquals() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testClone() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString1() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotify() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotifyAll() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLong() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLongInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWait() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testFinalize() {
-		fail("Not yet implemented");
+		assertEquals(expectedReading, actualReading);
 	}
 
 }
