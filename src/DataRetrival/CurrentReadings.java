@@ -38,9 +38,7 @@ public class CurrentReadings {
 			while (resultSetReadings.next()) {
 				// Check for heat and not humidity to tell the difference
 				// between 4in1 sensor and radiator
-				if (resultSetReadings.getString("heat") != null
-						&& resultSetReadings.getString("humidity") == null 
-						&& resultSetReadings.getString("light") == null) {
+				if (resultSetReadings.getInt("category") == 5) {
 					devices.add(new DanfossRadiator(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -61,9 +59,7 @@ public class CurrentReadings {
 							));
 					// Check for light and not humidity to tell the difference
 					// between 4in1 sensor and light sensor
-				} else if (resultSetReadings.getString("light") != null
-						&& resultSetReadings.getString("humidity") == null
-						&& resultSetReadings.getString("temperature") == null) {
+				} else if (resultSetReadings.getInt("category") == 18) {
 					devices.add(new LightSensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -76,9 +72,7 @@ public class CurrentReadings {
 				}
 				// Check for humidity and not heat to tell the difference
 				// between 4in1 sensor and humidity sensor
-				else if (resultSetReadings.getString("humidity") != null
-						&& resultSetReadings.getString("heat") == null
-						&& resultSetReadings.getString("light") == null){
+				else if (resultSetReadings.getInt("category") == 16){
 					devices.add(new HumiditySensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -92,9 +86,7 @@ public class CurrentReadings {
 				}
 				// Check for temperature and not humidity to tell the difference
 				// between 4in1 sensor and temperature sensor
-				else if (resultSetReadings.getString("temperature") != null
-						&& resultSetReadings.getString("humidity") == null
-						&& resultSetReadings.getString("light") == null) {
+				else if (resultSetReadings.getInt("category") == 17) {
 					devices.add(new TemperatureSensor(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
@@ -107,8 +99,7 @@ public class CurrentReadings {
 				}
 				// Check for temperature and humidity to tell that their is a
 				// 4in1 sensor
-				else if (resultSetReadings.getString("temperature") != null
-						&& resultSetReadings.getString("humidity") != null) {
+				else if (resultSetReadings.getInt("category") == 4) {
 					devices.add(new FourInOne(resultSetReadings
 							.getString("reading_device_name"),
 							resultSetReadings.getInt("id"), resultSetReadings
