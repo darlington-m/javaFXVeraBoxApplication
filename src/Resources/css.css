@@ -52,7 +52,7 @@
 */
 
 #WelcomeMessage{
--fx-font-size: 40px;
+-fx-font-size: 30px;
 -fx-text-fill:#12805C;
 }
 
@@ -323,4 +323,33 @@
 
 #heatButtonGray Text{
     -fx-font-size: 8px;
+}
+
+
+#passFields{
+    -fx-background-color:#f4f4f4;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+    -fx-border-color: #cccccc;
+    -fx-border-width:1px;
+}
+
+#passSubmit {
+    -fx-background-color:#12805C;
+    -fx-background-radius: 15px;
+    -fx-padding:5px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+}
+
+
+#passSubmit:hover {
+    -fx-background-color:#41997D;
+}
+
+
+#passFail {
+    -fx-text-fill: red;
 }

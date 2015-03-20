@@ -14,6 +14,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
 
+import com.sun.xml.internal.bind.v2.WellKnownNamespace;
+
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
@@ -34,6 +36,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -71,6 +74,7 @@ public class VeraGUI extends Application {
 	private Stage stage;
 	private Pane root, display, topDisplay;
 	final private Pane sortingPane = new Pane();
+	private Label time, welcome ;
 	private long compareToDate, compareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
 			compareFromHours, compareFromMinutes, secondCompareFromHours,
@@ -91,7 +95,8 @@ public class VeraGUI extends Application {
 	private CheckBox tempCheckBox;
 	private CheckBox lightCheckBox;
 	private CheckBox humidityCheckBox;
-	private CheckBox armedTrippedCheckBox; 
+	private CheckBox armedTrippedCheckBox;
+	private boolean loggedIn;
 
 	public VeraGUI() {
 		CurrentReadings curr = new CurrentReadings();
@@ -104,7 +109,25 @@ public class VeraGUI extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 
-			if (InternetConnectionCheck()) {
+			if (!InternetConnectionCheck()) {
+				if (((Button) arg0.getSource()).getText() == "Quit") {
+					System.exit(0);
+				} else if (((Button) arg0.getSource()).getText() == "Back"){
+					display.getChildren().clear();
+					changeButtons("mainMenu");
+					showWelcomeSplash();
+				} else {
+					displayNoInternet();
+				}
+			} else if(!loggedIn) {
+				if (((Button) arg0.getSource()).getText() == "Quit") {
+					System.exit(0);
+				} else if (((Button) arg0.getSource()).getText() == "Back"){
+					display.getChildren().clear();
+					changeButtons("mainMenu");
+					showWelcomeSplash();
+				}
+			}else {
 
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
@@ -138,19 +161,7 @@ public class VeraGUI extends Application {
 					System.exit(0);
 					break;
 				}
-			} else {
-
-				if (((Button) arg0.getSource()).getText() == "Quit") {
-					System.exit(0);
-				} else if (((Button) arg0.getSource()).getText() == "Back"){
-					display.getChildren().clear();
-					changeButtons("mainMenu");
-					displayDevices();
-		
-				} else {
-					displayNoInternet();
-				}
-			}
+			} 
 		}
 	};
 
@@ -205,12 +216,12 @@ public class VeraGUI extends Application {
 				(scene.getWidth() - sideDisplay.getPrefWidth() + 10), 100);
 		topDisplay.setId("topDisplay");
 
-		Label welcome = new Label("Welcome");
+		welcome = new Label();
 		welcome.setId("WelcomeMessage");
 		welcome.setLayoutX(40);
-		welcome.setLayoutY(20);
+		welcome.setLayoutY(40);
 
-		final Label time = new Label();
+		time = new Label();
 		time.setId("time");
 		final SimpleDateFormat format = new SimpleDateFormat("EEE HH:mm:ss");
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),
@@ -226,7 +237,8 @@ public class VeraGUI extends Application {
 		time.setLayoutX(topDisplay.getPrefWidth() - 180);
 		time.setLayoutY(45);
 
-		topDisplay.getChildren().addAll(welcome, time);
+		topDisplay.getChildren().addAll(time);
+		showLogin();
 
 		display = new Pane();
 		display.setId("deviceDisplay");
@@ -309,7 +321,7 @@ public class VeraGUI extends Application {
 		});
 
 		if (InternetConnectionCheck()) {
-			displayDevices();
+			showWelcomeSplash();
 		} else {
 			displayNoInternet();
 		}
@@ -1469,6 +1481,104 @@ public class VeraGUI extends Application {
 	public void setDevicesList(ArrayList<Device> devicesList) {
 		this.devicesList = devicesList;
 	}
+	
+	public void showDeviceSettings(Device device) {
+		display.getChildren().clear();
+		Pane pane = new Pane();
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
+		
+		Label devLabel = new Label();
+		TextField devName = new TextField();
+		
+
+		display.getChildren().addAll(pane);
+	}
+	
+	public void showLogin() {
+	
+		PasswordField passwordField = new PasswordField();
+		passwordField.setPromptText("Your password");
+		
+		final TextField userTxt = new TextField();
+		userTxt.setPromptText("Username");
+		userTxt.setId("passFields");
+		userTxt.setLayoutX(50);
+		userTxt.setLayoutY(45);
+		userTxt.setMaxWidth(130);
+		userTxt.setMinWidth(130);
+		
+		final PasswordField passF = new PasswordField();
+		passF.setPromptText("Password");
+		passF.setId("passFields");
+		passF.setLayoutX(200);
+		passF.setLayoutY(45);
+		passF.setMaxWidth(130);
+		passF.setMinWidth(130);
+		
+		final Label passRes = new Label();
+		passRes.setId("passFail");
+		passRes.setLayoutX(50);
+		passRes.setLayoutY(20);
+		
+		Button submit = new Button("Submit");
+		submit.setId("passSubmit");
+		submit.setLayoutX(350);
+		submit.setLayoutY(45);
+		submit.setMaxWidth(100);
+		submit.setMinWidth(100);
+		
+		topDisplay.getChildren().addAll(userTxt, passF, submit, passRes);
+		
+		submit.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				
+				ResultSet resultSet = null;
+				
+				try {
+					
+					if(userTxt.getText().isEmpty() || passF.getText().isEmpty()) {
+						passRes.setText("Please fill in both fields");
+					} else {
+						
+						resultSet = conn.getRows("SELECT * FROM Users WHERE user_name = " + "'" + userTxt.getText() + "'");
+						
+						if(!resultSet.next()) {
+							passRes.setText("Incorrect Username!");
+						} else if (!passF.getText().equals(resultSet.getString("password"))) {
+							passRes.setText("Incorrect Password!");
+						} else {
+							welcome.setText("Welcome " + resultSet.getString("user_name"));
+							topDisplay.getChildren().clear();
+							topDisplay.getChildren().addAll(time, welcome);
+							displayDevices();
+							loggedIn = true;
+						}
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+		        passF.clear();
+				
+			}
+		});
+	}
+	
+	private void showWelcomeSplash() {
+		
+		ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
+				"/Resources/splash.png").toExternalForm()));
+		
+		display.getChildren().addAll(image);
+		
+		
+	}
+	
 	
 	
 }
