@@ -572,7 +572,7 @@ public class VeraGUI extends Application {
 															// panes the make
 															// the graph
 															// settings page
-		ScrollPane devicesScrollPane = new ScrollPane();
+		final ScrollPane devicesScrollPane = new ScrollPane();
 		
 		final Pane devicesPane = new Pane(); // Holds the images which the user can
 										// select to add to the graph
@@ -688,7 +688,7 @@ public class VeraGUI extends Application {
 			
 				prevFourInOne = true;
 			} else {
-				imagePane.setPrefSize(144, 145); // sizing the pane
+				imagePane.setPrefSize(1440, 145); // sizing the pane
 				prevFourInOne = false;
 			}
 
@@ -802,7 +802,47 @@ public class VeraGUI extends Application {
 			System.out.println(devicesPane.getChildren().size());
 			devicesPane.getChildren().add(imagePane); // add image panes to the
 														// devices pane.
-		}
+			
+			final Pane leftScrollPane = new Pane();
+			Pane rightScrollPane = new Pane();
+			leftScrollPane.setPrefSize(40,72.5);
+			rightScrollPane.setPrefSize(40,72.5);
+			leftScrollPane.setStyle("-fx-background-color:red");
+			rightScrollPane.setStyle("-fx-background-color:red");
+			rightScrollPane.setLayoutX(devicesScrollPane.getPrefWidth()-rightScrollPane.getPrefWidth()-20);
+			rightScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(rightScrollPane.getHeight()/2)-40);
+			leftScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(leftScrollPane.getHeight()/2)-40);
+			leftScrollPane.setLayoutX(20);
+			
+			leftScrollPane.setOnMousePressed(new EventHandler<MouseEvent>(){
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					if(imagePane.getWidth() > display.getWidth())
+					{
+						imagePane.setLayoutX(imagePane.getLayoutX()-10);
+						System.out.println("ddd");
+					}
+				}});
+			
+			rightScrollPane.setOnMousePressed(new EventHandler<MouseEvent>()
+			{
+				
+				@Override
+				public void handle(MouseEvent arg0) 
+				{
+					if(devicesPane.getWidth() < devicesScrollPane.getWidth())
+					{
+						imagePane.setLayoutX(imagePane.getLayoutX()+10);
+						System.out.println("fff");	
+					}	
+				}});
+			
+			devicesPane.getChildren().addAll(leftScrollPane,rightScrollPane);
+			
+			}// end of if
+		
+		
 
 		// -------------------------------- Setting up the comparePane -----------------------------------------------------
 
@@ -1053,40 +1093,7 @@ public class VeraGUI extends Application {
 				submitPane);
 		display.getChildren().add(graphSettingsContainer);
 		
-		final Pane leftScrollPane = new Pane();
-		Pane rightScrollPane = new Pane();
-		leftScrollPane.setPrefSize(40,72.5);
-		rightScrollPane.setPrefSize(40,72.5);
-		leftScrollPane.setStyle("-fx-background-color:red");
-		rightScrollPane.setStyle("-fx-background-color:red");
-		rightScrollPane.setLayoutX(devicesScrollPane.getPrefWidth()-rightScrollPane.getPrefWidth()-20);
-		rightScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(rightScrollPane.getHeight()/2)-40);
-		leftScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(leftScrollPane.getHeight()/2)-40);
-		leftScrollPane.setLayoutX(20);
-		leftScrollPane.setOnMouseEntered(new EventHandler<MouseEvent>(){
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				devicesPane.setLayoutX(devicesPane.getLayoutX()-2);
-				System.out.println("ddd");
-			}});
-		
-		rightScrollPane.setOnMouseMoved(new EventHandler<MouseEvent>()
-		{
-			
-			@Override
-			public void handle(MouseEvent arg0) 
-			{
-
-				devicesPane.setLayoutX(devicesPane.getLayoutX()-1000);
-				///imagePane.setLayoutX(devicesPane.getLayoutX()-10);
-						System.out.println("fff");	
-					
-			}});
-		
-		display.getChildren().addAll(leftScrollPane,rightScrollPane);
-		
-		}// end of if
+		}
 	}
 
 
