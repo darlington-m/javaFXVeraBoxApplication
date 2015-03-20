@@ -4,41 +4,56 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import Devices.LightSensor;
+
 public class LightSensorTest {
 
+	LightSensor testLightSensor;
 	@Test
-	public void testToString() {
-		fail("Not yet implemented");
+	public void testLightSensor() {
+		testLightSensor = new LightSensor();
+		assertTrue(testLightSensor.getImage()!=null);
+		assertTrue(testLightSensor.getReadingName()!=null);
+		assertTrue(testLightSensor.getReadingName().equals("light"));
+		testLightSensor=null;
+	}
+	
+	@Test
+	public void testLightSensorStringIntStringIntIntIntIntInt() {
+		testLightSensor = new LightSensor("LightSensor",1,"AltId", 2,3,2,3,5);
+		assertTrue(testLightSensor.getImage()!=null);
+		assertTrue(testLightSensor.getReadingName()!=null);
+		assertTrue(testLightSensor.getImage().equals("bulb.png"));
+		assertTrue(testLightSensor.getReadingName().equals("light"));
+		assertEquals(testLightSensor.getName(),"LightSensor");
+		assertEquals(testLightSensor.getId(),1);
+		assertEquals(testLightSensor.getAltid(),"AltId");
+		assertEquals(testLightSensor.getCategory(),2);
+		assertEquals(testLightSensor.getSubcategory(),3);
+		assertEquals(testLightSensor.getRoom(),2);
+		assertEquals(testLightSensor.getParent(),3);
+		assertEquals(testLightSensor.getReading(),5);
+		
 	}
 
 	@Test
 	public void testGetDetails() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.getDetails()!=null);
 	}
 
 	@Test
 	public void testReadingFromSQL() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.readingFromSQL(1, 2)!=null);
 	}
 
 	@Test
 	public void testGetPane() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.getPane()!=null);
 	}
-
-	@Test
-	public void testLightSensor() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testLightSensorStringIntStringIntIntIntIntInt() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testGetReading() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getReading(),5);
 	}
 
 	@Test
@@ -47,133 +62,57 @@ public class LightSensorTest {
 	}
 
 	@Test
-	public void testDevice() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDeviceStringIntStringIntIntIntIntStringStringInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testGetName() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getName(),"LightSensor");
 	}
 
 	@Test
 	public void testGetId() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getId(),1);
 	}
 
 	@Test
 	public void testGetAltid() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getAltid(),"AltId");
 	}
 
 	@Test
 	public void testGetCategory() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getCategory(),2);
 	}
 
 	@Test
 	public void testGetSubcategory() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getSubcategory(),3);
 	}
 
 	@Test
 	public void testGetRoom() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getRoom(),2);
 	}
 
 	@Test
 	public void testGetParent() {
-		fail("Not yet implemented");
+		assertEquals(testLightSensor.getParent(),3);
 	}
 
 	@Test
 	public void testGetImage() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.getImage().equals("bulb.png"));
 	}
 
 	@Test
 	public void testSetImage() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.getImage().equals("bulb.png"));
+		testLightSensor.setImage("NotBulb.png");
+		assertTrue(testLightSensor.getImage().equals("NotBulb.png"));
+		testLightSensor.setImage("bulb.png");
 	}
 
 	@Test
 	public void testGetReadingName() {
-		fail("Not yet implemented");
+		assertTrue(testLightSensor.getReadingName().equals("light"));
 	}
 
-	@Test
-	public void testShowDeviceDetails() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRenameDevice() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testObject() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetClass() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testHashCode() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testEquals() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testClone() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString1() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotify() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotifyAll() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLong() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLongInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWait() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testFinalize() {
-		fail("Not yet implemented");
-	}
 
 }
