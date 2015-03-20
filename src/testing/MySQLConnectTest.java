@@ -10,6 +10,11 @@ import org.junit.Test;
 
 import DataRetrival.MySQLConnect;
 
+/**
+ * 
+ * @author Remus
+ *
+ */
 public class MySQLConnectTest {
 
 	//@Test

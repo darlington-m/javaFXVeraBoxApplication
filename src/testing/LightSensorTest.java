@@ -6,113 +6,85 @@ import org.junit.Test;
 
 import Devices.LightSensor;
 
+/**
+ * 
+ * @author Remus
+ *
+ */
 public class LightSensorTest {
 
-	LightSensor testLightSensor;
 	@Test
-	public void testLightSensor() {
-		testLightSensor = new LightSensor();
-		assertTrue(testLightSensor.getImage()!=null);
-		assertTrue(testLightSensor.getReadingName()!=null);
-		assertTrue(testLightSensor.getReadingName().equals("light"));
-		testLightSensor=null;
-	}
-	
-	@Test
-	public void testLightSensorStringIntStringIntIntIntIntInt() {
-		testLightSensor = new LightSensor("LightSensor",1,"AltId", 2,3,2,3,5);
-		assertTrue(testLightSensor.getImage()!=null);
-		assertTrue(testLightSensor.getReadingName()!=null);
-		assertTrue(testLightSensor.getImage().equals("bulb.png"));
-		assertTrue(testLightSensor.getReadingName().equals("light"));
-		assertEquals(testLightSensor.getName(),"LightSensor");
-		assertEquals(testLightSensor.getId(),1);
-		assertEquals(testLightSensor.getAltid(),"AltId");
-		assertEquals(testLightSensor.getCategory(),2);
-		assertEquals(testLightSensor.getSubcategory(),3);
-		assertEquals(testLightSensor.getRoom(),2);
-		assertEquals(testLightSensor.getParent(),3);
-		assertEquals(testLightSensor.getReading(),5);
-		
+	public void testToString() {
+		LightSensor light = new LightSensor("name", 1, "altid", 2, 3, 4, 5, 3);
+		String actualToString = light.toString();
+		String expectedToString = "Name: " + "name" + " Id: " + 1 + " AltID: " + "altid"
+				+ " Category: " + 2 + " Subcategory: " + 3
+				+ " Room: " + 4 + " Parent: " + 5 + " Light: " + 0 + "Image: " + "bulb.png";
+
+		assertEquals(expectedToString, actualToString);
 	}
 
 	@Test
 	public void testGetDetails() {
-		assertTrue(testLightSensor.getDetails()!=null);
+		LightSensor light = new LightSensor("name", 1, "altid", 2, 3, 4, 5, 3);
+		String actualDetails = light.getDetails();
+
+		String expectedDetails =  "Name: " + "name" + "\nId: " + 1 + "\nAltID: " + "altid"
+				+ "\nCategory: " + 2 + "\nSubcategory: " + 3
+				+ "\nRoom: " + 4 + "\nParent: " + 5 + "\nLight: " + 0;
+
+		assertEquals(expectedDetails, actualDetails);
 	}
 
 	@Test
 	public void testReadingFromSQL() {
-		assertTrue(testLightSensor.readingFromSQL(1, 2)!=null);
+		LightSensor light = new LightSensor();
+		String actualReading = light.readingFromSQL(12345, 56789);
+		String expectedReading = "SELECT light, reading_date FROM Reading WHERE id =  '"
+				+ light.getId() + "' AND reading_date >='" + 12345
+				+ "' AND reading_date <='" + 56789 + "'";
+
+		assertEquals(expectedReading, actualReading);
 	}
 
 	@Test
 	public void testGetPane() {
-		assertTrue(testLightSensor.getPane()!=null);
-	}
-	
-	@Test
-	public void testGetReading() {
-		assertEquals(testLightSensor.getReading(),5);
-	}
-
-	@Test
-	public void testReadingToSQL() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testGetName() {
-		assertEquals(testLightSensor.getName(),"LightSensor");
+	public void testLightSensor() {
+		LightSensor light = new LightSensor();
+
+		assertEquals(light.getImage(), "bulb.png");
+		assertTrue(light instanceof LightSensor);
+		assertEquals(0, light.getBatterylevel());
+		assertEquals(null, light.getAltid());
 	}
 
 	@Test
-	public void testGetId() {
-		assertEquals(testLightSensor.getId(),1);
+	public void testLightSensorStringIntStringIntIntIntIntInt() {
+		LightSensor light = new LightSensor("name", 1, "altid", 2, 3, 4, 5, 3);
+
+		assertEquals(light.getName(), "name");
+		assertEquals(light.getId(), 1);
+		assertEquals(light.getAltid(), "altid");
+		assertEquals(light.getCategory(), 2);
+		assertEquals(light.getSubcategory(), 3);
+		assertEquals(light.getRoom(), 4);
+		assertEquals(light.getParent(), 5);
+		assertEquals(light.getReading(), 3);
+		assertEquals(light.getImage(), "bulb.png");
+		assertEquals(light.getBatterylevel(), 0);
+
 	}
 
 	@Test
-	public void testGetAltid() {
-		assertEquals(testLightSensor.getAltid(),"AltId");
-	}
+	public void testGetReading() {
+		LightSensor light = new LightSensor("name", 1, "altid", 2, 3, 4, 5, 3);
+		int actualReading = light.getReading(), expectedReading = 3;
 
-	@Test
-	public void testGetCategory() {
-		assertEquals(testLightSensor.getCategory(),2);
+		assertEquals(expectedReading, actualReading);
 	}
-
-	@Test
-	public void testGetSubcategory() {
-		assertEquals(testLightSensor.getSubcategory(),3);
-	}
-
-	@Test
-	public void testGetRoom() {
-		assertEquals(testLightSensor.getRoom(),2);
-	}
-
-	@Test
-	public void testGetParent() {
-		assertEquals(testLightSensor.getParent(),3);
-	}
-
-	@Test
-	public void testGetImage() {
-		assertTrue(testLightSensor.getImage().equals("bulb.png"));
-	}
-
-	@Test
-	public void testSetImage() {
-		assertTrue(testLightSensor.getImage().equals("bulb.png"));
-		testLightSensor.setImage("NotBulb.png");
-		assertTrue(testLightSensor.getImage().equals("NotBulb.png"));
-		testLightSensor.setImage("bulb.png");
-	}
-
-	@Test
-	public void testGetReadingName() {
-		assertTrue(testLightSensor.getReadingName().equals("light"));
-	}
-
 
 }
