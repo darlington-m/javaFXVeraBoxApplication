@@ -295,3 +295,32 @@
     -fx-font-size: 15px;
     -fx-text-fill: #dddddd;
 }
+
+
+    #heatButtonRed {
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-background-color: red;
+    -fx-padding: 5 15 5 15;
+}
+
+#heatButtonRed Text{
+    -fx-font-size: 8px;
+}
+
+#heatButtonRed:hover {
+    -fx-background-color: #CC0000;
+}
+
+#heatButtonGray {
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-background-color: #dcdcdc;
+    -fx-padding: 5 15 5 15;
+}
+
+#heatButtonGray Text{
+    -fx-font-size: 8px;
+}

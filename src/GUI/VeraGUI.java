@@ -319,7 +319,7 @@ public class VeraGUI extends Application {
 		Pane paneBackground = new Pane();
 		paneBackground
 				.setStyle("-fx-background-color:white; -fx-pref-height: 40;");
-		paneBackground.setLayoutX(45);
+		paneBackground.setLayoutX(0);
 		paneBackground.setPrefWidth(display.getPrefWidth());
 
 		sortingPane.setPrefSize(display.getWidth()-39, 40);
