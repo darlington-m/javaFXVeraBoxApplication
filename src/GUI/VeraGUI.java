@@ -581,30 +581,26 @@ public class VeraGUI extends Application {
 		
 		
 		
-		FlowPane graphSettingsContainer = new FlowPane(); // Contains the 3
-															// panes the make
-															// the graph
-															// settings page
+		FlowPane graphSettingsContainer = new FlowPane(); // Holds all below Panes
+		
 		final ScrollPane devicesScrollPane = new ScrollPane();
+		final Pane devicesPane = new Pane(); 
 		
-		final Pane devicesPane = new Pane(); // Holds the images which the user can
-										// select to add to the graph
-		Pane comparePane = new Pane(); // Holds the combo boxes that allow the
-										// user to select which dates they want
-										// the graph to display between
-		Pane submitPane = new Pane(); // Holds the drop down box for the user to
-										// decide which graph they want to
-										// display and the button to commit
+		Pane filterPane = new Pane();  
+		
+		final ScrollPane graphScrollPane = new ScrollPane();
+		final Pane graphsPane = new Pane(); 
 		
 		
-		devicesScrollPane.setPrefSize(display.getWidth()+5,
-				display.getHeight() / 3 * 1.15); // sets the layout of 1 pane on
-												// the top and two below, evenly
-												// spaces
-		comparePane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.85);
-		submitPane.setPrefSize(display.getWidth() / 2,
-				display.getHeight() / 3 * 1.85);
+		devicesScrollPane.setPrefSize(display.getWidth(),
+				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
+												 // the top and two below, evenly
+												 // spaces
+		filterPane.setPrefSize(display.getWidth(),
+				display.getHeight() / 3 * 0.65);
+		
+		graphScrollPane.setPrefSize(display.getWidth(),
+				display.getHeight() /3 * 1.775 );
 
 		// -------------------------------- Setting up the devicesPane
 
@@ -616,7 +612,6 @@ public class VeraGUI extends Application {
 																			// selected
 																			// devices
 		
-		// gets all the devices from all the rooms
 		// and adds them to the local variable devices
 		
 		boolean prevFourInOne = false;
@@ -653,7 +648,7 @@ public class VeraGUI extends Application {
 
 			final Pane imagePane = new Pane(); // pane to contain the image and
 												// the label
-			imagePane.setLayoutY(30);
+			imagePane.setLayoutY(22);
 			imagePane
 					.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 			
@@ -701,7 +696,7 @@ public class VeraGUI extends Application {
 			
 				prevFourInOne = true;
 			} else {
-				imagePane.setPrefSize(1440, 145); // sizing the pane
+				imagePane.setPrefSize(144, 145); // sizing the pane
 				prevFourInOne = false;
 			}
 
@@ -816,43 +811,43 @@ public class VeraGUI extends Application {
 			devicesPane.getChildren().add(imagePane); // add image panes to the
 														// devices pane.
 			
-			final Pane leftScrollPane = new Pane();
-			Pane rightScrollPane = new Pane();
-			leftScrollPane.setPrefSize(40,72.5);
-			rightScrollPane.setPrefSize(40,72.5);
-			leftScrollPane.setStyle("-fx-background-color:red");
-			rightScrollPane.setStyle("-fx-background-color:red");
-			rightScrollPane.setLayoutX(devicesScrollPane.getPrefWidth()-rightScrollPane.getPrefWidth()-20);
-			rightScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(rightScrollPane.getHeight()/2)-40);
-			leftScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(leftScrollPane.getHeight()/2)-40);
-			leftScrollPane.setLayoutX(20);
+//			final Pane leftScrollPane = new Pane();
+//			Pane rightScrollPane = new Pane();
+//			leftScrollPane.setPrefSize(40,72.5);
+//			rightScrollPane.setPrefSize(40,72.5);
+//			leftScrollPane.setStyle("-fx-background-color:red");
+//			rightScrollPane.setStyle("-fx-background-color:red");
+//			rightScrollPane.setLayoutX(devicesScrollPane.getPrefWidth()-rightScrollPane.getPrefWidth()-20);
+//			rightScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(rightScrollPane.getHeight()/2)-40);
+//			leftScrollPane.setLayoutY((devicesScrollPane.getPrefHeight()/2)-(leftScrollPane.getHeight()/2)-40);
+//			leftScrollPane.setLayoutX(20);
 			
-			leftScrollPane.setOnMousePressed(new EventHandler<MouseEvent>(){
+//			leftScrollPane.setOnMousePressed(new EventHandler<MouseEvent>(){
+//
+//			@Override
+//			public void handle(MouseEvent arg0) {
+//				if(imagePane.getWidth() > display.getWidth())
+//				{
+//					imagePane.setLayoutX(imagePane.getLayoutX()-10);
+//					System.out.println("ddd");
+//				}
+//			}});
+//
+//			rightScrollPane.setOnMousePressed(new EventHandler<MouseEvent>()
+//					{
+//
+//				@Override
+//				public void handle(MouseEvent arg0) 
+//				{
+//					if(devicesPane.getWidth() < devicesScrollPane.getWidth())
+//					{
+//						imagePane.setLayoutX(imagePane.getLayoutX()+10);
+//						System.out.println("fff");	
+//					}	
+//				}});
+//
+//			devicesPane.getChildren().addAll(leftScrollPane,rightScrollPane);
 
-				@Override
-				public void handle(MouseEvent arg0) {
-					if(imagePane.getWidth() > display.getWidth())
-					{
-						imagePane.setLayoutX(imagePane.getLayoutX()-10);
-						System.out.println("ddd");
-					}
-				}});
-			
-			rightScrollPane.setOnMousePressed(new EventHandler<MouseEvent>()
-			{
-				
-				@Override
-				public void handle(MouseEvent arg0) 
-				{
-					if(devicesPane.getWidth() < devicesScrollPane.getWidth())
-					{
-						imagePane.setLayoutX(imagePane.getLayoutX()+10);
-						System.out.println("fff");	
-					}	
-				}});
-			
-			devicesPane.getChildren().addAll(leftScrollPane,rightScrollPane);
-			
 			}// end of if
 		
 		
@@ -882,13 +877,13 @@ public class VeraGUI extends Application {
 		};
 
 		Label compareLabel = new Label("Compare From"); // compare from label
-		compareLabel.setLayoutX(40);
-		compareLabel.setLayoutY(85);
+		compareLabel.setLayoutX(30);
+		compareLabel.setLayoutY(5);
 		compareLabel.setId("CompareName");
 
 		HBox compareFromRow = new HBox(5); // hbox for the compare from elements
-		compareFromRow.setLayoutX(40);
-		compareFromRow.setLayoutY(120);
+		compareFromRow.setLayoutX(30);
+		compareFromRow.setLayoutY(30);
 
 		compareFrom = new DatePicker(); // allows to pick a date
 		compareFrom.setMaxWidth(110);
@@ -910,13 +905,13 @@ public class VeraGUI extends Application {
 													// hour and minute pickers
 
 		Label compareToLabel = new Label("Compare To"); // compare to label
-		compareToLabel.setLayoutX(40);
-		compareToLabel.setLayoutY(175);
+		compareToLabel.setLayoutX(30);
+		compareToLabel.setLayoutY(55);
 		compareToLabel.setId("CompareName");
 
 		HBox compareToRow = new HBox(5); // hbox for the compare from elements
-		compareToRow.setLayoutX(40);
-		compareToRow.setLayoutY(210);
+		compareToRow.setLayoutX(30);
+		compareToRow.setLayoutY(80);
 
 		compareTo = new DatePicker(); // allows to pick a date
 		compareTo.setMaxWidth(110);
@@ -937,7 +932,7 @@ public class VeraGUI extends Application {
 				colonLabel2, compareToMinutes); // adds the date picker and hour
 												// and minute pickers
 
-		comparePane.getChildren().addAll(compareLabel, compareFromRow,
+		filterPane.getChildren().addAll(compareLabel, compareFromRow,
 				compareToLabel, compareToRow); // adds labels and rows to the
 												// compare pane
 
@@ -972,13 +967,12 @@ public class VeraGUI extends Application {
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
-		graphType.setLayoutX(220);
-		graphType.setLayoutY(100);
-		graphType.setMinWidth(150);
-		graphType.setMaxWidth(150);
-		graphType.setMaxHeight(40);
-		graphType.setMinHeight(40);
-		graphType.setId("listCSS");
+		graphType.setLayoutX(350);
+		graphType.setLayoutY(25);
+		graphType.setMinWidth(120);
+		graphType.setMaxWidth(120);
+		graphType.setMaxHeight(30);
+		graphType.setMinHeight(30);
 		
 		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
 													// select the type of graph
@@ -986,25 +980,25 @@ public class VeraGUI extends Application {
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
 		seperateGraphs.getSelectionModel().selectFirst();
-		seperateGraphs.setLayoutX(220);
-		seperateGraphs.setLayoutY(150);
-		seperateGraphs.setMinWidth(150);
-		seperateGraphs.setMaxWidth(150);
-		seperateGraphs.setMaxHeight(40);
-		seperateGraphs.setMinHeight(40);
-		seperateGraphs.setId("listCSS");
+		seperateGraphs.setLayoutX(350);
+		seperateGraphs.setLayoutY(76);
+		seperateGraphs.setMinWidth(120);
+		seperateGraphs.setMaxWidth(120);
+		seperateGraphs.setMaxHeight(30);
+		seperateGraphs.setMinHeight(30);
+		seperateGraphs.setId("center");
 
 		Button createGraphButton = new Button("Generate Graph"); // creates a
 																	// button
 																	// used to
 																	// generate
 																	// the graph
-		createGraphButton.setLayoutX(220);
-		createGraphButton.setLayoutY(200);
-		createGraphButton.setMinWidth(150);
-		createGraphButton.setMaxWidth(150);
-		createGraphButton.setMaxHeight(40);
-		createGraphButton.setMinHeight(40);
+		createGraphButton.setLayoutX(560);
+		createGraphButton.setLayoutY(25);
+		createGraphButton.setMinWidth(200);
+		createGraphButton.setMaxWidth(200);
+		createGraphButton.setMaxHeight(80);
+		createGraphButton.setMinHeight(80);
 		createGraphButton.setId("listCSS");
 		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when
 																		// button
@@ -1089,21 +1083,29 @@ public class VeraGUI extends Application {
 					}
 				});
 
-		submitPane.getChildren().addAll(graphType, seperateGraphs,
+		filterPane.getChildren().addAll(graphType, seperateGraphs,
 				createGraphButton); // add graph selecter and button to the
 									// submitPane
+		
+		displayNoGraph(graphsPane);
 
 		// -------------------------------- Setting up the
 		// graphSettingsContainer
 		// -----------------------------------------------------
 		
 		devicesScrollPane.setContent(devicesPane);
+		devicesScrollPane.setLayoutX(-1);
 		devicesScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		devicesScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		devicesScrollPane.setHbarPolicy(ScrollBarPolicy.ALWAYS);
 		devicesScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
 		
-		graphSettingsContainer.getChildren().addAll(devicesScrollPane, comparePane,
-				submitPane);
+		graphScrollPane.setContent(graphsPane);
+		graphScrollPane.setLayoutX(-1);
+		graphScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		graphScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		graphScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
+		
+		graphSettingsContainer.getChildren().addAll(devicesScrollPane, filterPane, graphScrollPane);
 		display.getChildren().add(graphSettingsContainer);
 		
 		}
@@ -1324,7 +1326,7 @@ public class VeraGUI extends Application {
 			// warning.setLayoutY(150);
 			// display.getChildren().add(warning);
 
-			displayNoGraph();
+			displayNoGraph(display);
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
@@ -1419,7 +1421,7 @@ public class VeraGUI extends Application {
 		display.getChildren().addAll(pane, refreshBtn, warning, warningText);
 	}
 
-	public void displayNoGraph() {
+	public void displayNoGraph(Pane givenPane) {
 		display.getChildren().clear();
 		Pane pane = new Pane();
 		pane.setId("backPaneBackground");
@@ -1438,7 +1440,7 @@ public class VeraGUI extends Application {
 		warningText.setLayoutX(120);
 		warningText.setLayoutY(290);
 
-		display.getChildren().addAll(pane, warning, warningText);
+		givenPane.getChildren().addAll(pane, warning, warningText);
 	}
 
 	private boolean InternetConnectionCheck() {
@@ -1573,7 +1575,9 @@ public class VeraGUI extends Application {
 		
 		ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
 				"/Resources/splash.png").toExternalForm()));
-		
+		image.setPreserveRatio(false);
+		image.setFitWidth(display.getWidth());
+		image.setFitHeight(display.getHeight());
 		display.getChildren().addAll(image);
 		
 		
