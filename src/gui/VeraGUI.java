@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -136,28 +137,35 @@ public class VeraGUI extends Application {
 
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
+					displayLoading();
 					displayDevices();
 					break;
 				case "Settings":
+					displayLoading();
 					changeButtons("settings");
 					displaySettings();
 					break;
 				case "Graphs":
+					displayLoading();
 					changeButtons("graphs");
 					displayGraphs();
 					break;
 				case "Scenes":
+					displayLoading();
 					displayScenes();
 					break;
 				case "Back":
+					displayLoading();
 					display.getChildren().clear();
 					changeButtons("mainMenu");
 					displayDevices();
 					break;
 				case "Cancel":
+					displayLoading();
 					displaySettings();
 					break;
 				case "Add a room":
+					displayLoading();
 					changeButtons("addRoom");
 					break;
 				case "Download CSV":
@@ -1472,6 +1480,30 @@ public class VeraGUI extends Application {
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
+	}
+	
+	private void displayLoading(){		
+		display.getChildren().clear();
+		
+		Pane loadingPane = new Pane();
+		loadingPane.setPrefSize(200,40);
+		loadingPane.setLayoutX(300);
+		loadingPane.setLayoutY(230);
+		
+		ImageView loadingImage = new ImageView(new Image(VeraGUI.class.getResource(
+				"/resources/loadingGif.gif").toExternalForm()));
+		loadingImage.setFitHeight(50);
+		loadingImage.setFitWidth(50);
+		loadingImage.setLayoutX(5);
+		loadingImage.setLayoutY(5);
+		
+		Label loadingLabel = new Label("Loading...");
+		loadingLabel.setLayoutX(80);
+		loadingLabel.setLayoutY(23);
+		
+		loadingPane.getChildren().addAll(loadingImage, loadingLabel);
+		
+		display.getChildren().add(loadingPane);
 	}
 
 	private ChoiceBox<String> getBox(String type) {
