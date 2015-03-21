@@ -478,7 +478,7 @@ public class VeraGUI extends Application {
 				Pane botPane = device.getPane();
 				botPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 				
-				Button detailsBtn = new Button("View Details");
+				Button detailsBtn = new Button("Settings");
 				detailsBtn.setId("botPaneBtn");
 				detailsBtn.setLayoutX(525);
 				detailsBtn.setLayoutY(100);
@@ -1553,7 +1553,8 @@ public class VeraGUI extends Application {
 						} else if (!passF.getText().equals(resultSet.getString("password"))) {
 							passRes.setText("Incorrect Password!");
 						} else {
-							welcome.setText("Welcome " + resultSet.getString("user_name"));
+							String capitalizedName = resultSet.getString("user_name").substring(0, 1).toUpperCase() + resultSet.getString("user_name").substring(1);
+							welcome.setText("Welcome " + capitalizedName);
 							topDisplay.getChildren().clear();
 							topDisplay.getChildren().addAll(time, welcome);
 							displayDevices();

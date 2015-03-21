@@ -81,8 +81,10 @@ public class DanfossRadiator extends Device implements Sensor {
 		if(mode == "off") {
 			heat.setId("heatButtonRed");
 			off.setId("heatButtonGray");
+			off.setDisable(true);
 		}else {
 			heat.setId("heatButtonGray");
+			heat.setDisable(true);
 			off.setId("heatButtonRed");
 		}
 		
@@ -92,10 +94,14 @@ public class DanfossRadiator extends Device implements Sensor {
 			public void handle(ActionEvent arg0) {
 				if (heat.getId() == "heatButtonRed") {
 					heat.setId("heatButtonGray");
-					off.setId("heatButtonRed");			
+					off.setId("heatButtonRed");
+					off.setDisable(false);
+					heat.setDisable(true);
 				} else {
 					heat.setId("heatButtonRed");
 					off.setId("heatButtonGray");
+					off.setDisable(true);
+					heat.setDisable(false);
 				}
 			}
 		};
