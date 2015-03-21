@@ -38,6 +38,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -98,6 +99,7 @@ public class VeraGUI extends Application {
 	private CheckBox armedTrippedCheckBox;
 	private boolean loggedIn;
 	private ArrayList<Device> scenesSelectedDevices;
+	private final Pane graphsPane = new Pane();
 
 	public VeraGUI() {
 		CurrentReadings curr = new CurrentReadings();
@@ -515,7 +517,7 @@ public class VeraGUI extends Application {
 							} else {
 								devices.add(device);
 							}
-							show24hrGraph(devices, "24");
+							show24hrGraph(devices, "24", display);
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -594,9 +596,7 @@ public class VeraGUI extends Application {
 		
 		Pane filterPane = new Pane();  
 		
-		final ScrollPane graphScrollPane = new ScrollPane();
-		final Pane graphsPane = new Pane(); 
-		
+		final ScrollPane graphScrollPane = new ScrollPane();		
 		
 		devicesScrollPane.setPrefSize(display.getWidth(),
 				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
@@ -1066,7 +1066,7 @@ public class VeraGUI extends Application {
 							for (Device device : devicesToDisplay){
 								System.out.println(device.getReadingName());
 							}
-							show24hrGraph(devicesToDisplay, "not24"); // <--
+							show24hrGraph(devicesToDisplay, "not24", graphsPane); // <--
 																			// passes
 																			// the
 																			// devices
@@ -1294,10 +1294,12 @@ public class VeraGUI extends Application {
 	}
 
 	private void show24hrGraph(ArrayList<Device> devicesToDisplay,
-			String mode) throws SQLException {
+			String mode, Pane parent) throws SQLException {
 
 		// mode parameter determines if the method has been called from within a
 		// device or the graphs pane.
+		
+		parent.getChildren().clear();
 
 		if (mode.equals("24")) { // if mode = 24 hours set compareFromDate and
 									// compareToDate to the past 24 hours
@@ -1317,8 +1319,6 @@ public class VeraGUI extends Application {
 					+ (Long.parseLong(compareToHours.getValue()) * 3600)
 					+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
 		}
-
-		display.getChildren().clear(); // fresh window
 
 		try {
 			// ArrayList of ArrayList of reading
@@ -1411,7 +1411,7 @@ public class VeraGUI extends Application {
 				Charts chart = new Charts(readings, dates, devicesToDisplay,
 						chartType, 1, 0); // send the arrays to the chart
 												// object
-				chart.show(display);
+				chart.show(parent);
 			} else { // else split each of the readings into seperate arrayLists
 						// (to make compatable with the chart) and create a
 						// chart for each reading
@@ -1428,7 +1428,7 @@ public class VeraGUI extends Application {
 					charts.add(new Charts(singleReadings, singleDates,
 							singleDevicesToDisplay, "Line Chart",
 							devicesToDisplay.size(), i));
-					charts.get(i).show(display);
+					charts.get(i).show(parent);
 				}
 			}
 		} catch (SQLException e1) {
@@ -1439,7 +1439,7 @@ public class VeraGUI extends Application {
 			// warning.setLayoutY(150);
 			// display.getChildren().add(warning);
 
-			displayNoGraph(display);
+			displayNoGraph(parent);
 		}
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
