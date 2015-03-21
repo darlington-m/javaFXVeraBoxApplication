@@ -92,6 +92,7 @@ public class VeraGUI extends Application {
 	private Device selectedDevice;
 	private ArrayList<Room> roomsList;
 	private ArrayList<Device> devicesList;
+	private ArrayList<Device> devicesToCSV = new ArrayList<Device>();
 	private ArrayList<Button> buttons = new ArrayList<Button>();
 	private ScrollBar sc;
 	private CheckBox tempCheckBox;
@@ -160,7 +161,7 @@ public class VeraGUI extends Application {
 					changeButtons("addRoom");
 					break;
 				case "Download CSV":
-					saveToCSV(selectedDevice);
+					saveToCSV(devicesToCSV);
 					break;
 				case "Quit":
 					System.exit(0);
@@ -1305,6 +1306,9 @@ public class VeraGUI extends Application {
 
 	private void show24hrGraph(ArrayList<Device> devicesToDisplay,
 			String mode, Pane parent) throws SQLException {
+		
+		devicesToCSV.clear();
+		devicesToCSV.addAll(devicesToDisplay);
 
 		// mode parameter determines if the method has been called from within a
 		// device or the graphs pane.
@@ -1498,7 +1502,7 @@ public class VeraGUI extends Application {
 		return choicebox;
 	}
 
-	private void saveToCSV(Device device) {
+	private void saveToCSV(ArrayList<Device> devices) {
 		// TODO Auto-generated method stub
 
 		FileChooser fileChooser = new FileChooser();
@@ -1514,7 +1518,7 @@ public class VeraGUI extends Application {
 
 		CSV csv = new CSV();
 		try {
-			csv.toCSV(file, device, compareFromDate, compareToDate);
+			csv.toCSV(file, devices, compareFromDate, compareToDate);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();

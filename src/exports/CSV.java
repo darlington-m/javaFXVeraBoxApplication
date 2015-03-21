@@ -6,13 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dataretrival.MySQLConnect;
 import devices.Device;
 
 public final class CSV {
 
-	public void toCSV(File file, Device device, long startDate, long endDate)
+	public void toCSV(File file, ArrayList<Device> devices, long startDate, long endDate)
 			throws SQLException, IOException {
 
 		// CSV csv = new CSV();
@@ -24,13 +25,23 @@ public final class CSV {
 
 		MySQLConnect conn;
 		conn = new MySQLConnect();
-
-		String sqlStatement = "SELECT reading_date," + device.getReadingName() +  " FROM Reading WHERE ";
-		if (device.getId() != -1) {
-			sqlStatement += "id = '" + device.getId() + "' AND ";
+		
+		String readingNames = "";
+		String ids = "";
+		
+		for (int i = 0; i < devices.size(); i++){
+			readingNames = readingNames + devices.get(i).getReadingName();
+			ids = ids  + "id = '" + devices.get(i).getId() + "'";
+			if (i < devices.size() - 1){
+				readingNames = readingNames + ",";
+				ids = ids + " OR ";
+			}
 		}
-		sqlStatement += "reading_date >='" + startDate
-				+ "' AND reading_date <='" + endDate + "'";
+
+		String sqlStatement = "SELECT reading_date," + readingNames +  " FROM Reading WHERE " +  ids 
+		+ " AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'";
+		
+		System.out.println(sqlStatement);
 
 		// ResultSet results = conn.getRows("SELECT * FROM Reading WHERE id = '"
 		// + id + "' AND reading_date >='" + startDate +
@@ -38,8 +49,10 @@ public final class CSV {
 		ResultSet results = conn.getRows(sqlStatement);
 
 		results.first();
+		
+		
 		bufferedWriter
-				.write("reading_date," + device.getReadingName() + "\n");
+				.write("reading_date," + readingNames + "\n");
 		do {
 			int i = 1;
 			for (i = 1; i < 3; i++) {
