@@ -1296,7 +1296,7 @@ public class VeraGUI extends Application {
 													// to display all readings
 													// on one graph
 				Charts chart = new Charts(readings, dates, devicesToDisplay,
-						"Line Chart", 1, 0); // send the arrays to the chart
+						graphType.getSelectionModel().getSelectedItem(), 1, 0); // send the arrays to the chart
 												// object
 				chart.show(display);
 			} else { // else split each of the readings into seperate arrayLists

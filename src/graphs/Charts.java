@@ -57,7 +57,7 @@ public class Charts {
 		{
 			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis); // set Axis's
 			barChart.setId("BarChart"); // set ID for CSS
-			barChartGraph.checkCompare(barChart, oneLineOfReadings, oneLineOfDates, device); // send the data over to bar chart to be added to the chart
+			barChartGraph.checkCompare(barChart, readings, dates, devices); // send the data over to bar chart to be added to the chart
 			for (Node n : barChart.lookupAll(".default-color0.chart-bar")) // Set the colour of the bar in the chart
 			{
 				n.setStyle("-fx-bar-fill: #00AF33;");
