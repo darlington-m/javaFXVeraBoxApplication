@@ -97,6 +97,7 @@ public class VeraGUI extends Application {
 	private CheckBox humidityCheckBox;
 	private CheckBox armedTrippedCheckBox;
 	private boolean loggedIn;
+	private ArrayList<Device> scenesSelectedDevices;
 
 	public VeraGUI() {
 		CurrentReadings curr = new CurrentReadings();
@@ -1131,7 +1132,7 @@ public class VeraGUI extends Application {
 		action.setLayoutY(50);
 		Separator separator = new Separator();
 		separator
-				.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+		.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
 		pane.getChildren().addAll(roomName, number, action);
 		list.getChildren().addAll(pane, separator);
 
@@ -1140,6 +1141,111 @@ public class VeraGUI extends Application {
 
 	private void displayScenes() {
 		display.getChildren().clear();
+		
+		scenesSelectedDevices = new ArrayList<Device>();
+		
+		
+		FlowPane scenesPane = new FlowPane();
+		
+		Pane topScenesPane = new Pane();
+		topScenesPane.setPrefSize(display.getWidth(), display.getHeight() / 2);
+		
+		Pane bottomScenesPane = new Pane();
+		bottomScenesPane.setPrefSize(display.getWidth(), display.getHeight() / 2);
+
+
+		for (int i = 0; i < devicesList.size(); i++) // for each device 
+		{
+			final ImageView deviceImage = new ImageView(new Image(VeraGUI.class
+					.getResource("/resources/" + devicesList.get(i).getImage())
+					.toExternalForm())); // add the image
+
+			deviceImage.setFitHeight(100); // image sizing
+			deviceImage.setFitWidth(100);
+
+			deviceImage.setLayoutX(25); // image layout
+			deviceImage.setLayoutY(20);
+
+			final Label deviceLabel = new Label(devicesList.get(i).getName());
+
+			deviceLabel.setPrefWidth(100); // label sizing
+
+			deviceLabel.setLayoutX(20); // label layout
+			deviceLabel.setLayoutY(120);
+
+			final Pane imagePane = new Pane(); // pane to contain the image and
+			// the label
+			imagePane.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
+			imagePane.setPrefSize(144, 144);
+			imagePane.setLayoutX(20 + i * 150);
+			imagePane.setLayoutY(20);
+			
+			FadeTransition ft = new FadeTransition(Duration.millis(300),
+					imagePane);
+			ft.setFromValue(0.3);
+			ft.setToValue(0.3);
+			ft.setCycleCount(1);
+			ft.setAutoReverse(false);
+
+			ft.play();
+
+			
+			imagePane.setOnMouseClicked(new EventHandler<Event>() { 
+				@Override
+				public void handle(Event event) {
+					if (imagePane.getWidth() == 144) {
+						
+						for (Device device : devicesList){
+							if (device.getName().equals(deviceLabel.getText())){
+								scenesSelectedDevices.add(device);
+							}
+						}
+						
+						imagePane.setStyle("-fx-border-color:green; -fx-border-width: 3; -fx-border-style: solid;");
+						imagePane.setPrefSize(145, 145);
+
+						FadeTransition ft = new FadeTransition(Duration
+								.millis(300), imagePane);
+						ft.setFromValue(0.3);
+						ft.setToValue(1);
+						ft.setCycleCount(1);
+						ft.setAutoReverse(false);
+
+						ft.play();
+					
+						for (Device device : scenesSelectedDevices){
+								System.out.println(device.getName());
+						}
+					} else {
+						for (Device device : devicesList){
+							if (device.getName().equals(deviceLabel.getText())){
+								scenesSelectedDevices.remove(device);
+							}
+						}
+						
+						imagePane.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
+						imagePane.setPrefSize(144, 145);
+
+						FadeTransition ft = new FadeTransition(Duration
+								.millis(300), imagePane);
+						ft.setFromValue(1.0);
+						ft.setToValue(0.3);
+						ft.setCycleCount(1);
+						ft.setAutoReverse(true);
+
+						ft.play();
+					}
+				}
+			});
+			
+			imagePane.getChildren().addAll(deviceImage, deviceLabel);
+			
+			topScenesPane.getChildren().add(imagePane);
+		}
+		
+		scenesPane.getChildren().addAll(topScenesPane, bottomScenesPane);
+		
+		display.getChildren().add(scenesPane);
 	}
 
 	private void changeButtons(String name) {
@@ -1499,6 +1605,8 @@ public class VeraGUI extends Application {
 	}
 	
 	public void showLogin() {
+		
+		topDisplay.setPrefWidth(1000);
 	
 		PasswordField passwordField = new PasswordField();
 		passwordField.setPromptText("Your password");
