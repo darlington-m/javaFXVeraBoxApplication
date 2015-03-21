@@ -14,6 +14,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
 
+import javax.swing.BorderFactory;
+
 import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 
 import dataretrival.CurrentReadings;
@@ -593,10 +595,9 @@ public class VeraGUI extends Application {
 		
 		final ScrollPane devicesScrollPane = new ScrollPane();
 		final Pane devicesPane = new Pane(); 
-		
 		Pane filterPane = new Pane();  
 		
-		final ScrollPane graphScrollPane = new ScrollPane();		
+		final ScrollPane graphScrollPane = new ScrollPane();	
 		
 		devicesScrollPane.setPrefSize(display.getWidth(),
 				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
@@ -1395,6 +1396,7 @@ public class VeraGUI extends Application {
 			
 			String splitGraphs;
 			String chartType;
+			int sizeChart = 0;
 			
 			if (mode.equals("not24")) { // If method called through graph page
 				splitGraphs = seperateGraphs.getValue(); // Check type of graph
@@ -1402,16 +1404,28 @@ public class VeraGUI extends Application {
 			} else { // If method called through device page
 				splitGraphs = "One Chart"; // auto set to one chart
 				chartType = "Line Chart";
+				sizeChart =2;
+				
 			}
 
 			if (splitGraphs.equals("One Chart")) { // If one chart selected give
 													// all readings to the chart
 													// to display all readings
 													// on one graph
-				Charts chart = new Charts(readings, dates, devicesToDisplay,
-						chartType, 1, 0); // send the arrays to the chart
-												// object
-				chart.show(parent);
+				if(sizeChart==2)
+				{
+					Charts chart = new Charts(readings, dates, devicesToDisplay,
+							chartType, 1, 0, 2); // send the arrays to the chart
+													// object
+					chart.show(parent);
+				}
+				else
+				{
+					Charts chart = new Charts(readings, dates, devicesToDisplay,
+							chartType, 1, 0, 0); // send the arrays to the chart	
+					chart.show(parent);// object
+				}
+
 			} else { // else split each of the readings into seperate arrayLists
 						// (to make compatable with the chart) and create a
 						// chart for each reading
@@ -1424,10 +1438,9 @@ public class VeraGUI extends Application {
 					singleReadings.add(readings.get(i));
 					singleDates.add(dates.get(i));
 					singleDevicesToDisplay.add(devicesToDisplay.get(i));
-
 					charts.add(new Charts(singleReadings, singleDates,
 							singleDevicesToDisplay, "Line Chart",
-							devicesToDisplay.size(), i));
+							devicesToDisplay.size(), i, 1));
 					charts.get(i).show(parent);
 				}
 			}

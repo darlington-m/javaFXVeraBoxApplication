@@ -34,11 +34,12 @@ public class Charts {
 	
 	int size; // number of readings 
 	int position; // number of the current reading
+	int callRequest; // checks if one or more graphs for layout
 	/*
 	 * these variables are used to decide the size and position of the graphs. Further explaination below with the calculations
 	 */
 
-	public Charts(ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices, String type, int size, int position) 
+	public Charts(ArrayList<ArrayList> readings, ArrayList<ArrayList> dates, ArrayList<Device> devices, String type, int size, int position, int callRequest) 
 	{
 		this.readings = readings; //store the readings
 		this.dates = dates; // store the dates
@@ -46,6 +47,7 @@ public class Charts {
 		this.type = type; // the type
 		this.size = size;
 		this.position = position;
+		this.callRequest = callRequest;
 	}
 
 	public void show(Pane pane) 
@@ -66,9 +68,9 @@ public class Charts {
 			{
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
-			barChart.setPrefSize(800, 400);
+			barChart.setPrefSize(800, 350);
 			barChart.setLayoutX(0);
-			barChart.setLayoutY(150);
+			barChart.setLayoutY(0);
 			pane.getChildren().add(barChart);
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
@@ -76,9 +78,16 @@ public class Charts {
 			getYAxis(); // Checks all of the readings to find what the bounds of the axis should be
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, readings, dates, devices);  // send the data over to bar chart to be added to the chart
-			lineChart.setPrefSize(800, (500/(size))); // Size of the chart will decrease when the number of charts needed increases
-			lineChart.setLayoutX(0);
-			lineChart.setLayoutY(50 + ((550 / size) * position)); // calculation to determine y position. If you want to change where the charts
+			if(callRequest==2){
+				lineChart.setPrefSize(800, (500)); // Size of the chart will decrease when the number of charts needed increases
+				lineChart.setLayoutX(0);
+				lineChart.setLayoutY((60)); // calculation to determine y position. If you want to change where the charts
+			}
+			else{
+				lineChart.setPrefSize(800, (350)); // Size of the chart will decrease when the number of charts needed increases
+				lineChart.setLayoutX(0);
+				lineChart.setLayoutY(((400* position))); // calculation to determine y position. If you want to change where the charts
+			}
 			pane.getChildren().add(lineChart); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
 		}
 	}
