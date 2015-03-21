@@ -1,5 +1,7 @@
 package gui;
 
+import graphs.Charts;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -14,21 +16,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
 
-import javax.swing.BorderFactory;
-
-import com.sun.xml.internal.bind.v2.WellKnownNamespace;
-
-import dataretrival.CurrentReadings;
-import dataretrival.MySQLConnect;
-import dataretrival.ReadingsUpdateTimer;
-import devices.DanfossRadiator;
-import devices.Device;
-import devices.FourInOne;
-import devices.Room;
-import exports.CSV;
-import graphs.Charts;
 import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,15 +24,17 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -63,11 +53,20 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import dataretrival.CurrentReadings;
+import dataretrival.MySQLConnect;
+import dataretrival.ReadingsUpdateTimer;
+import devices.DanfossRadiator;
+import devices.Device;
+import devices.FourInOne;
+import devices.Room;
+import exports.CSV;
 
 public class VeraGUI extends Application {
 
@@ -439,7 +438,7 @@ public class VeraGUI extends Application {
 		int scrollBarSize = 0;
 		
 		vb.getChildren().clear();
-		for (Room room : rooms) {
+		for (final Room room : rooms) {
 			scrollBarSize++;
 			Pane roomPane = room.getPane(sortingPane.getPrefWidth());
 			VBox deviceBox = new VBox(10);
@@ -533,7 +532,7 @@ public class VeraGUI extends Application {
 					@Override
 					public void handle(MouseEvent arg0) {
 						changeButtons("details");
-						showDeviceDetails();
+						showDeviceSettings(device, room);
 					}
 				});
 				
@@ -1623,19 +1622,70 @@ public class VeraGUI extends Application {
 		this.devicesList = devicesList;
 	}
 	
-	public void showDeviceSettings(Device device) {
+	public void showDeviceSettings(Device device, Room room) {
 		display.getChildren().clear();
 		Pane pane = new Pane();
 		pane.setId("backPaneBackground");
 		pane.setTranslateX(10);
 		pane.setTranslateY(10);
 		
-		Label devLabel = new Label();
+		
+		Label devLabel = new Label("Edit Name: ");
+		devLabel.setLayoutX(170);
+		devLabel.setLayoutY(45);
+		devLabel.setId("genLabel");
+		
 		TextField devName = new TextField();
+		devName.setId("passFields");
+		devName.setText(device.getName());
+		devName.setLayoutX(300);
+		devName.setLayoutY(45);
+		devName.setMaxWidth(200);
+		devName.setMinWidth(200);
+		
+		Button submitName = new Button("Change Name");
+		submitName.setId("passSubmit");
+		submitName.setLayoutX(300);
+		submitName.setLayoutY(100);
+		submitName.setMaxWidth(150);
+		submitName.setMinWidth(150);
+		
+		
+		Line line = new Line(100, 180, 700, 180);
+		line.setId("settingsLine");
+		
+		String[] roomNames = new String[roomsList.size()];
+		int count = 0;
+		for (Room roomX : roomsList) {
+			roomNames[count] = roomX.getName();
+			count++;
+		}
+		
+		ObservableList<String> options = FXCollections.observableArrayList();
+		final ComboBox<String> comboBox = new ComboBox<String>(options);
+		comboBox.getItems().addAll(roomNames);
+		comboBox.setValue(room.getName());
+		comboBox.setLayoutX(300);
+		comboBox.setLayoutY(220);
+		comboBox.setMaxWidth(200);
+		comboBox.setMinWidth(200);
+		comboBox.setId("comboSty");
+		
+		Label roomLabel = new Label("Change Room: ");
+		roomLabel.setLayoutX(140);
+		roomLabel.setLayoutY(220);
+		roomLabel.setId("genLabel");
+		
+		Button submitRoom = new Button("Change Room");
+		submitRoom.setId("passSubmit");
+		submitRoom.setLayoutX(300);
+		submitRoom.setLayoutY(275);
+		submitRoom.setMaxWidth(150);
+		submitRoom.setMinWidth(150);
 		
 
-		display.getChildren().addAll(pane);
-	}
+		display.getChildren().addAll(pane, devName, devLabel, submitName, line, comboBox, roomLabel, submitRoom);
+	}	
 	
 	public void showLogin() {
 		
