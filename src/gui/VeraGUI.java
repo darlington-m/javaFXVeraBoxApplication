@@ -498,16 +498,14 @@ public class VeraGUI extends Application {
 						try {
 							ArrayList<Device> devices = new ArrayList<Device>();
 							if (device instanceof FourInOne){
-								for (String readingName : ((FourInOne)device).getReadingNames()){
 								FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
 										device.getAltid(), device.getCategory(), device.getSubcategory(),
 										device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
 										((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
 										((FourInOne) device).getArmedtripped(), device.getBatterylevel());
-								fourInOne.setReadingName(readingName);
+								fourInOne.setReadingName("armedtripped");
 								devices.add(fourInOne);
-								}
-							} else {
+								} else {
 								devices.add(device);
 							}
 							show24hrGraph(devices, "24");
