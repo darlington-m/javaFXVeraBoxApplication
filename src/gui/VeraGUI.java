@@ -1394,12 +1394,14 @@ public class VeraGUI extends Application {
 
 			
 			String splitGraphs;
-
+			String chartType;
+			
 			if (mode.equals("not24")) { // If method called through graph page
 				splitGraphs = seperateGraphs.getValue(); // Check type of graph
-															// to display
+				chartType = graphType.getSelectionModel().getSelectedItem();				// to display
 			} else { // If method called through device page
 				splitGraphs = "One Chart"; // auto set to one chart
+				chartType = "Line Chart";
 			}
 
 			if (splitGraphs.equals("One Chart")) { // If one chart selected give
@@ -1407,7 +1409,7 @@ public class VeraGUI extends Application {
 													// to display all readings
 													// on one graph
 				Charts chart = new Charts(readings, dates, devicesToDisplay,
-						graphType.getSelectionModel().getSelectedItem(), 1, 0); // send the arrays to the chart
+						chartType, 1, 0); // send the arrays to the chart
 												// object
 				chart.show(display);
 			} else { // else split each of the readings into seperate arrayLists
