@@ -1,4 +1,4 @@
-package Devices;
+package devices;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;

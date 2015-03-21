@@ -1,8 +1,8 @@
-package DataRetrival;
+package dataretrival;
+
+import gui.VeraGUI;
 
 import java.util.TimerTask;
-
-import GUI.VeraGUI;
 
 public class ReadingsUpdateTimer extends TimerTask {
 	

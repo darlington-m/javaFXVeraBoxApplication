@@ -1,17 +1,17 @@
-package DataRetrival;
+package dataretrival;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Devices.DanfossRadiator;
-import Devices.Device;
-import Devices.FourInOne;
-import Devices.HumiditySensor;
-import Devices.LightSensor;
-import Devices.Room;
-import Devices.TemperatureSensor;
+import devices.DanfossRadiator;
+import devices.Device;
+import devices.FourInOne;
+import devices.HumiditySensor;
+import devices.LightSensor;
+import devices.Room;
+import devices.TemperatureSensor;
 
 public class CurrentReadings {
 	MySQLConnect conn;

@@ -1,4 +1,6 @@
-package Devices;
+package devices;
+
+import gui.VeraGUI;
 
 import java.awt.Toolkit;
 //import java.awt.event.KeyEvent;
@@ -15,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import GUI.VeraGUI;
 
 public abstract class Device {
 
@@ -113,7 +114,7 @@ public abstract class Device {
 		Rectangle imageView = new Rectangle(100, 100);
 		imageView.setUserData(this);
 		imageView.setFill(new ImagePattern(new Image(VeraGUI.class.getResource(
-				"/Resources/" + getImage()).toExternalForm())));
+				"/resources/" + getImage()).toExternalForm())));
 		imageView.setLayoutX(30);
 		imageView.setLayoutY(30);
 
@@ -168,7 +169,7 @@ public abstract class Device {
 		Rectangle imageView = new Rectangle(100, 100);
 		imageView.setUserData(this);
 		imageView.setFill(new ImagePattern(new Image(VeraGUI.class.getResource(
-				"/Resources/" + getImage()).toExternalForm())));
+				"/resources/" + getImage()).toExternalForm())));
 		imageView.setLayoutX(50);
 		imageView.setLayoutY(30);
 

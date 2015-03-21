@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +16,15 @@ import java.util.Timer;
 
 import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 
+import dataretrival.CurrentReadings;
+import dataretrival.MySQLConnect;
+import dataretrival.ReadingsUpdateTimer;
+import devices.DanfossRadiator;
+import devices.Device;
+import devices.FourInOne;
+import devices.Room;
+import exports.CSV;
+import graphs.Charts;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
@@ -56,15 +65,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import DataRetrival.CurrentReadings;
-import DataRetrival.MySQLConnect;
-import DataRetrival.ReadingsUpdateTimer;
-import Devices.DanfossRadiator;
-import Devices.Device;
-import Devices.FourInOne;
-import Devices.Room;
-import Exports.CSV;
-import Graphs.Charts;
 
 public class VeraGUI extends Application {
 
@@ -180,7 +180,7 @@ public class VeraGUI extends Application {
 
 		//hopefully works
 		scene.getStylesheets().add(
-				VeraGUI.class.getResource("/Resources/css.css")
+				VeraGUI.class.getResource("/resources/css.css")
 						.toExternalForm());
 
 		Pane sideDisplay = new Pane();
@@ -189,7 +189,7 @@ public class VeraGUI extends Application {
 															// side bar....
 
 		ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
-				"/Resources/oem_logo.png").toExternalForm()));
+				"/resources/oem_logo.png").toExternalForm()));
 		image.setLayoutX(20);
 		image.setLayoutY(13);
 		image.setId("logo");
@@ -468,7 +468,7 @@ public class VeraGUI extends Application {
 					battery.setId("batteryLevel");
 					battery.setLayoutY(18);
 					battery.setLayoutX(597);
-					ImageView batteryImage = new ImageView(new Image(VeraGUI.class.getResource("/Resources/battery-medium.png").toExternalForm()));
+					ImageView batteryImage = new ImageView(new Image(VeraGUI.class.getResource("/resources/battery-medium.png").toExternalForm()));
 					batteryImage.setLayoutY(2);
 					batteryImage.setLayoutX(590);
 					topPane.getChildren().addAll(batteryImage, battery);
@@ -623,7 +623,7 @@ public class VeraGUI extends Application {
 													// label
 		{
 			final ImageView deviceImage = new ImageView(new Image(VeraGUI.class
-					.getResource("/Resources/" + devicesList.get(i).getImage())
+					.getResource("/resources/" + devicesList.get(i).getImage())
 					.toExternalForm())); // add the image
 
 			deviceImage.setFitHeight(100); // image sizing
@@ -1575,7 +1575,7 @@ public class VeraGUI extends Application {
 	private void showWelcomeSplash() {
 		
 		ImageView image = new ImageView(new Image(VeraGUI.class.getResource(
-				"/Resources/splash.png").toExternalForm()));
+				"/resources/splash.png").toExternalForm()));
 		image.setPreserveRatio(false);
 		image.setFitWidth(display.getWidth());
 		image.setFitHeight(display.getHeight());

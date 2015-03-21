@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import DataRetrival.MySQLConnect;
+import dataretrival.MySQLConnect;
 
 /**
  * 

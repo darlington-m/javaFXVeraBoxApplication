@@ -1,4 +1,4 @@
-package Devices;
+package devices;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

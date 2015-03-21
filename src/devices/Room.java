@@ -1,4 +1,4 @@
-package Devices;
+package devices;
 
 import java.util.ArrayList;
 

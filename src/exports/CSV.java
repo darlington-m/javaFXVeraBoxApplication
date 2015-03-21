@@ -1,4 +1,4 @@
-package Exports;
+package exports;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,8 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import DataRetrival.MySQLConnect;
-import Devices.Device;
+
+import dataretrival.MySQLConnect;
+import devices.Device;
 
 public final class CSV {
 

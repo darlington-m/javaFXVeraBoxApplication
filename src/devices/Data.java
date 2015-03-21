@@ -1,4 +1,4 @@
-package Devices;
+package devices;
 
 import com.google.gson.JsonArray;
 

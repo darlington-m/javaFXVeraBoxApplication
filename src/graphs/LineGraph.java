@@ -1,8 +1,8 @@
-package Graphs;
+package graphs;
 
 import java.util.ArrayList;
 
-import Devices.Device;
+import devices.Device;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;

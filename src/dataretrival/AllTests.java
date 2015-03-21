@@ -1,4 +1,4 @@
-package DataRetrival;
+package dataretrival;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import Devices.Data;
-import Devices.Device;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
+import devices.Data;
+import devices.Device;
 
 @RunWith(Suite.class)
 @SuiteClasses({})
@@ -35,7 +35,7 @@ public class AllTests {
 		try {
 
 			BufferedReader br = new BufferedReader(new FileReader(
-					"Resources/radiatortestfile.json"));
+					"resources/radiatortestfile.json"));
 
 			// convert the json string back to jsonArray
 			data = gson.fromJson(br, Data.class);

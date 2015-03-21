@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import Devices.HumiditySensor;
+import devices.HumiditySensor;
 
 /**
  * 

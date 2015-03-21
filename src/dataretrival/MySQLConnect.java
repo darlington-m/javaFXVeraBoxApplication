@@ -1,4 +1,4 @@
-package DataRetrival;
+package dataretrival;
 
 import java.sql.*;
 

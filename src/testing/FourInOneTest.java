@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import Devices.FourInOne;
+import devices.FourInOne;
 
 /**
  * 

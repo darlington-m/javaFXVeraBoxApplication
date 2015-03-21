@@ -1,4 +1,4 @@
-package Devices;
+package devices;
 
 public interface Sensor {
 	public int getReading();

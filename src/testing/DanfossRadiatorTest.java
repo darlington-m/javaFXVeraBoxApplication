@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import Devices.DanfossRadiator;
+import devices.DanfossRadiator;
 import javafx.scene.layout.Pane;
 
 /**
