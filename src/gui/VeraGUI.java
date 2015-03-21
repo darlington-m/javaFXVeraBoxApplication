@@ -143,6 +143,7 @@ public class VeraGUI extends Application {
 					displaySettings();
 					break;
 				case "Graphs":
+					changeButtons("graphs");
 					displayGraphs();
 					break;
 				case "Scenes":
@@ -583,6 +584,8 @@ public class VeraGUI extends Application {
 				.addAll(addRoom, enterDetails, warning, input, add);
 	}
 	public void displayGraphs() {
+		
+		
 		if(display.getLayoutY()!=0){
 			display.getChildren().clear();
 			topDisplay.setLayoutY(-(topDisplay.getPrefHeight()));
@@ -1017,6 +1020,7 @@ public class VeraGUI extends Application {
 																		// method
 					@Override
 					public void handle(ActionEvent arg0) {
+						if (selectedDevices.size() > 0) {
 						try {
 							ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
 
@@ -1033,7 +1037,7 @@ public class VeraGUI extends Application {
 								selectedDevices.add( "4 in 1 sensor: armedTripped");
 							}
 
-							
+
 							for (String selectedDevice : selectedDevices) {
 								for (Device device : devicesList) {
 									if (selectedDevice.contains(device.getName())) {
@@ -1049,17 +1053,17 @@ public class VeraGUI extends Application {
 										} else {
 											devicesToDisplay.add(device); // basically
 										}						// finds
-																		// which
-																		// devices
-																		// are
-																		// selected
-																		// and
-																		// adds
-																		// them
-																		// to
-																		// this
-																		// array
-																		// list
+										// which
+										// devices
+										// are
+										// selected
+										// and
+										// adds
+										// them
+										// to
+										// this
+										// array
+										// list
 									}
 								}
 							}
@@ -1068,26 +1072,27 @@ public class VeraGUI extends Application {
 								System.out.println(device.getReadingName());
 							}
 							show24hrGraph(devicesToDisplay, "not24", graphsPane); // <--
-																			// passes
-																			// the
-																			// devices
-																			// to
-																			// be
-																			// displayed
-																			// in
-																			// the
-																			// graph
-																			// and
-																			// tells
-																			// the
-																			// method
-																			// to
-																			// use
+							// passes
+							// the
+							// devices
+							// to
+							// be
+							// displayed
+							// in
+							// the
+							// graph
+							// and
+							// tells
+							// the
+							// method
+							// to
+							// use
 						} catch (SQLException e) { // the dates selected in the
-													// dropdown boxes.
+							// dropdown boxes.
 							e.printStackTrace();
 						}
-					}
+						}
+					} 
 				});
 
 		filterPane.getChildren().addAll(graphType, seperateGraphs,
@@ -1244,14 +1249,14 @@ public class VeraGUI extends Application {
 					}
 				}
 			});
-			
+
 			imagePane.getChildren().addAll(deviceImage, deviceLabel);
-			
+
 			topScenesPane.getChildren().add(imagePane);
 		}
-		
+
 		scenesPane.getChildren().addAll(topScenesPane, bottomScenesPane);
-		
+
 		display.getChildren().add(scenesPane);
 	}
 
@@ -1261,12 +1266,16 @@ public class VeraGUI extends Application {
 		switch (name) {
 		case "mainMenu":
 			String[] words = { "Dashboard", "Graphs", "Settings", "Scenes",
-					"Quit" };
+			"Quit" };
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
 			String[] words2 = { "Download CSV", "Back", "Quit" };
 			names = Arrays.<String> asList(words2);
+			break;
+		case "graphs":
+			String[] words3 = { "Download CSV", "Back", "Quit" };
+			names = Arrays.<String> asList(words3);
 			break;
 		case "settings":
 			String[] words4 = { "Add a room", "Back", "Quit" };
@@ -1300,49 +1309,49 @@ public class VeraGUI extends Application {
 
 		// mode parameter determines if the method has been called from within a
 		// device or the graphs pane.
-		
-		parent.getChildren().clear();
+		if (devicesToDisplay.size() > 0) {
+			parent.getChildren().clear();
 
-		if (mode.equals("24")) { // if mode = 24 hours set compareFromDate and
-									// compareToDate to the past 24 hours
-			Calendar currentDate = Calendar.getInstance();
+			if (mode.equals("24")) { // if mode = 24 hours set compareFromDate and
+				// compareToDate to the past 24 hours
+				Calendar currentDate = Calendar.getInstance();
 
-			String trimmedCurrentDate = Long.toString(currentDate
-					.getTimeInMillis() / 1000);
-			trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
+				String trimmedCurrentDate = Long.toString(currentDate
+						.getTimeInMillis() / 1000);
+				trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
 
-			compareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
-			compareToDate = Long.parseLong(trimmedCurrentDate);
-		} else { // else use the times selected using the dropdown boxes.
-			compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
-					+ (Long.parseLong(compareFromHours.getValue()) * 3600)
-					+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
-			compareToDate = (compareTo.getValue().toEpochDay() * 86400)
-					+ (Long.parseLong(compareToHours.getValue()) * 3600)
-					+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
-		}
+				compareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
+				compareToDate = Long.parseLong(trimmedCurrentDate);
+			} else { // else use the times selected using the dropdown boxes.
+				compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
+						+ (Long.parseLong(compareFromHours.getValue()) * 3600)
+						+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
+				compareToDate = (compareTo.getValue().toEpochDay() * 86400)
+						+ (Long.parseLong(compareToHours.getValue()) * 3600)
+						+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
+			}
 
-		try {
-			// ArrayList of ArrayList of reading
-			ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
-			// ArrayList of ArrayList of dates
-			ArrayList<ArrayList> dates = new ArrayList<ArrayList>(); // Array
+			try {
+				// ArrayList of ArrayList of reading
+				ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
+				// ArrayList of ArrayList of dates
+				ArrayList<ArrayList> dates = new ArrayList<ArrayList>(); // Array
 
-			/*
-			 * This is required as we need to send an array list of readings for
-			 * each devices and all of these array lists need to be held within
-			 * an array list to be pasted over to the charts method.
-			 */
-			ResultSet results;
-			for (Device device : devicesToDisplay) { // For each device
-				if (device instanceof FourInOne){
-					results = conn.getRows(((FourInOne) device).readingFromSQL(device.getReadingName(),
-									compareFromDate, compareToDate)); 
-				} else {
-					results = conn.getRows(device.readingFromSQL(
-							compareFromDate, compareToDate)); 
-				}
-					
+				/*
+				 * This is required as we need to send an array list of readings for
+				 * each devices and all of these array lists need to be held within
+				 * an array list to be pasted over to the charts method.
+				 */
+				ResultSet results;
+				for (Device device : devicesToDisplay) { // For each device
+					if (device instanceof FourInOne){
+						results = conn.getRows(((FourInOne) device).readingFromSQL(device.getReadingName(),
+								compareFromDate, compareToDate)); 
+					} else {
+						results = conn.getRows(device.readingFromSQL(
+								compareFromDate, compareToDate)); 
+					}
+
 					// get a result set
 					// from the database
 					// containing dates
@@ -1356,8 +1365,8 @@ public class VeraGUI extends Application {
 
 					while (results.next()) { // while there is still date in the
 						// array
-							String deviceReading = results.getString(device
-									.getReadingName());
+						String deviceReading = results.getString(device
+								.getReadingName());
 						// assign the reading to
 						// deviceReading
 						long readingDate = results.getInt("reading_date"); // assign
@@ -1394,65 +1403,68 @@ public class VeraGUI extends Application {
 					// the array of date arrays
 				}
 
-			
-			String splitGraphs;
-			String chartType;
-			int sizeChart = 0;
-			
-			if (mode.equals("not24")) { // If method called through graph page
-				splitGraphs = seperateGraphs.getValue(); // Check type of graph
-				chartType = graphType.getSelectionModel().getSelectedItem();				// to display
-			} else { // If method called through device page
-				splitGraphs = "One Chart"; // auto set to one chart
-				chartType = "Line Chart";
-				sizeChart =2;
-				
+
+				String splitGraphs;
+				String chartType;
+				int sizeChart = 0;
+
+				if (mode.equals("not24")) { // If method called through graph page
+					splitGraphs = seperateGraphs.getValue(); // Check type of graph
+					chartType = graphType.getSelectionModel().getSelectedItem();				// to display
+				} else { // If method called through device page
+					splitGraphs = "One Chart"; // auto set to one chart
+					chartType = "Line Chart";
+					sizeChart =2;
+
+				}
+
+				if (splitGraphs.equals("One Chart")) { // If one chart selected give
+					// all readings to the chart
+					// to display all readings
+					// on one graph
+					if(sizeChart==2)
+					{
+						Charts chart = new Charts(readings, dates, devicesToDisplay,
+								chartType, 1, 0, 2); // send the arrays to the chart
+						// object
+						chart.show(parent);
+					}
+					else
+					{
+						Charts chart = new Charts(readings, dates, devicesToDisplay,
+								chartType, 1, 0, 0); // send the arrays to the chart	
+						chart.show(parent);// object
+					}
+
+				} else { // else split each of the readings into seperate arrayLists
+					// (to make compatable with the chart) and create a
+					// chart for each reading
+					ArrayList<Charts> charts = new ArrayList<Charts>();
+					for (int i = 0; i < devicesToDisplay.size(); i++) {
+						ArrayList<ArrayList> singleReadings = new ArrayList<ArrayList>();
+						ArrayList<ArrayList> singleDates = new ArrayList<ArrayList>();
+						ArrayList<Device> singleDevicesToDisplay = new ArrayList<Device>();
+
+						singleReadings.add(readings.get(i));
+						singleDates.add(dates.get(i));
+						singleDevicesToDisplay.add(devicesToDisplay.get(i));
+						charts.add(new Charts(singleReadings, singleDates,
+								singleDevicesToDisplay, "Line Chart",
+								devicesToDisplay.size(), i, 1));
+						charts.get(i).show(parent);
+					}
+				}
+			} catch (SQLException e1) {
+				// Label warning = new Label("Sorry No Graph Data Available");
+				// warning.setPrefSize(600, 300);
+				// warning.setId("graphWarning");
+				// warning.setLayoutX(50);
+				// warning.setLayoutY(150);
+				// display.getChildren().add(warning);
+
+				displayNoGraph(parent);
 			}
-
-			if (splitGraphs.equals("One Chart")) { // If one chart selected give
-													// all readings to the chart
-													// to display all readings
-													// on one graph
-				if(sizeChart==2)
-				{
-					Charts chart = new Charts(readings, dates, devicesToDisplay,
-							chartType, 1, 0, 2); // send the arrays to the chart
-													// object
-					chart.show(parent);
-				}
-				else
-				{
-					Charts chart = new Charts(readings, dates, devicesToDisplay,
-							chartType, 1, 0, 0); // send the arrays to the chart	
-					chart.show(parent);// object
-				}
-
-			} else { // else split each of the readings into seperate arrayLists
-						// (to make compatable with the chart) and create a
-						// chart for each reading
-				ArrayList<Charts> charts = new ArrayList<Charts>();
-				for (int i = 0; i < devicesToDisplay.size(); i++) {
-					ArrayList<ArrayList> singleReadings = new ArrayList<ArrayList>();
-					ArrayList<ArrayList> singleDates = new ArrayList<ArrayList>();
-					ArrayList<Device> singleDevicesToDisplay = new ArrayList<Device>();
-
-					singleReadings.add(readings.get(i));
-					singleDates.add(dates.get(i));
-					singleDevicesToDisplay.add(devicesToDisplay.get(i));
-					charts.add(new Charts(singleReadings, singleDates,
-							singleDevicesToDisplay, "Line Chart",
-							devicesToDisplay.size(), i, 1));
-					charts.get(i).show(parent);
-				}
-			}
-		} catch (SQLException e1) {
-			// Label warning = new Label("Sorry No Graph Data Available");
-			// warning.setPrefSize(600, 300);
-			// warning.setId("graphWarning");
-			// warning.setLayoutX(50);
-			// warning.setLayoutY(150);
-			// display.getChildren().add(warning);
-
+		} else {
 			displayNoGraph(parent);
 		}
 		// this adds a change listener to the drop down box and creates a new
