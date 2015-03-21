@@ -482,12 +482,12 @@ public class VeraGUI extends Application {
 				botPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 				
 				Button detailsBtn = new Button("Settings");
-				detailsBtn.setId("botPaneBtn");
+				detailsBtn.setId("devicePaneBtn");
 				detailsBtn.setLayoutX(525);
 				detailsBtn.setLayoutY(100);
 				
 				Button graphBtn = new Button("24hr Graph");
-				graphBtn.setId("botPaneBtn");
+				graphBtn.setId("devicePaneBtn");
 				graphBtn.setLayoutX(525);
 				graphBtn.setLayoutY(60);
 				

@@ -262,6 +262,23 @@
     -fx-effect: dropshadow( one-pass-box , white , 0, 0.0 , 0 , 1 );
 }
 
+
+#devicePaneBtn {
+    -fx-background-color:#cccccc;
+    -fx-background-radius: 15px;
+    -fx-padding:5px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-min-width: 130px;
+    -fx-max-width: 130px;
+}
+
+
+#devicePaneBtn:hover {
+    -fx-background-color:#41997D;
+}
+
+
 #readingLabel {
     -fx-font-size: 60px;
     -fx-font-weight: 400;
