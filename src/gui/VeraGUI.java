@@ -599,7 +599,7 @@ public class VeraGUI extends Application {
 		
 		final ScrollPane graphScrollPane = new ScrollPane();	
 		
-		devicesScrollPane.setPrefSize(display.getWidth(),
+		devicesScrollPane.setPrefSize(display.getWidth()-19,
 				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
 												 // the top and two below, evenly
 												 // spaces
@@ -607,7 +607,7 @@ public class VeraGUI extends Application {
 				display.getHeight() / 3 * 0.65);
 		
 		graphScrollPane.setPrefSize(display.getWidth(),
-				display.getHeight() /3 * 1.775 );
+				scene.getHeight());
 
 		// -------------------------------- Setting up the devicesPane
 
@@ -1103,17 +1103,18 @@ public class VeraGUI extends Application {
 		devicesScrollPane.setContent(devicesPane);
 		devicesScrollPane.setLayoutX(-1);
 		devicesScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		devicesScrollPane.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+		devicesScrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		devicesScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
 		
-		graphScrollPane.setContent(graphsPane);
-		graphScrollPane.setLayoutX(-1);
+		graphSettingsContainer.getChildren().addAll(devicesScrollPane, filterPane, graphsPane);
+		
+		graphScrollPane.setContent(graphSettingsContainer);
+		graphScrollPane.setLayoutX(0);
 		graphScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		graphScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		graphScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
 		
-		graphSettingsContainer.getChildren().addAll(devicesScrollPane, filterPane, graphScrollPane);
-		display.getChildren().add(graphSettingsContainer);
+		display.getChildren().add(graphScrollPane);
 		
 		}
 	}
