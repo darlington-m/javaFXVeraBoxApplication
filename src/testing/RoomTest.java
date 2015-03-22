@@ -2,118 +2,80 @@ package testing;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
+import javafx.scene.layout.Pane;
+
 import org.junit.Test;
+
+import devices.Device;
+import devices.LightSensor;
+import devices.Room;
 
 public class RoomTest {
 
+	Room testRoom;
+	Device testDevice = new LightSensor("name", 1, "altid", 2, 3, 4, 5, 3);
 	@Test
 	public void testRoomStringInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRoom() {
-		fail("Not yet implemented");
+		testRoom = new Room("Room",1);
+		assertEquals(testRoom.getName(),"Room");
+		assertEquals(testRoom.getId(),1);
+		
 	}
 
 	@Test
 	public void testGetName() {
-		fail("Not yet implemented");
+		assertEquals(testRoom.getName(),"Room");
 	}
 
 	@Test
 	public void testGetId() {
-		fail("Not yet implemented");
+		assertEquals(testRoom.getId(),1);
 	}
 
 	@Test
 	public void testGetSection() {
-		fail("Not yet implemented");
+		assertEquals(testRoom.getSection(),null);
 	}
 
 	@Test
 	public void testAddDeviceToRoom() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveDeviceFromRoom() {
-		fail("Not yet implemented");
+		assertTrue(testRoom.getDevices().isEmpty());
+		
+		testRoom.addDeviceToRoom(testDevice);
+		
+		assertFalse(testRoom.getDevices().isEmpty());
+		assertTrue(testRoom.getDevices().contains(testDevice));
 	}
 
 	@Test
 	public void testGetDevices() {
-		fail("Not yet implemented");
+		assertTrue(testRoom.getDevices() instanceof ArrayList);
 	}
+	@Test
+	public void testRemoveDeviceFromRoom() {
+		assertFalse(testRoom.getDevices().isEmpty());
+		
+		testRoom.removeDeviceFromRoom(testDevice);
+		
+		assertFalse(testRoom.getDevices().contains(testDevice));
+		assertTrue(testRoom.getDevices().isEmpty());
+		assertFalse(testRoom.getDevices().contains(testDevice));
+	}
+
+	
 
 	@Test
 	public void testGetPane() {
-		fail("Not yet implemented");
+		assertTrue(testRoom.getPane(19)!=null);
+		assertTrue(testRoom.getPane(19) instanceof Pane);
 	}
 
 	@Test
 	public void testGetDetailsPane() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testObject() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetClass() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testHashCode() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testEquals() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testClone() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotify() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testNotifyAll() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLong() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWaitLongInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWait() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testFinalize() {
-		fail("Not yet implemented");
+		assertTrue(testRoom.getDetailsPane()!=null);
+		assertTrue(testRoom.getDetailsPane() instanceof Pane);
 	}
 
 }
