@@ -374,13 +374,15 @@ public class VeraGUI extends Application {
 
 		Label roomText = new Label("Select Room:");
 		roomText.setId("sortingLabel");
-
-		final ChoiceBox<String> roomDropDown = new ChoiceBox<String>();
+		
+		ObservableList<String> options = FXCollections.observableArrayList();
+		final ComboBox<String> roomDropDown = new ComboBox<String>(options);
 		roomDropDown.getItems().addAll(roomNames);
 		roomDropDown.getSelectionModel().selectFirst();
-		roomDropDown.setId("sortingDropDown");
 		roomDropDown.setMaxWidth(100);
 		roomDropDown.setMinWidth(100);
+		roomDropDown.setLayoutY(-10);
+		roomDropDown.setId("comboSty2");
 		roomDropDown.valueProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -1666,8 +1668,8 @@ public class VeraGUI extends Application {
 		pane.setTranslateY(10);
 		
 		
-		Label devLabel = new Label("Edit Name: ");
-		devLabel.setLayoutX(170);
+		Label devLabel = new Label("Edit Name");
+		devLabel.setLayoutX(350);
 		devLabel.setLayoutY(45);
 		devLabel.setId("genLabel");
 		
@@ -1675,19 +1677,19 @@ public class VeraGUI extends Application {
 		devName.setId("passFields");
 		devName.setText(device.getName());
 		devName.setLayoutX(300);
-		devName.setLayoutY(45);
+		devName.setLayoutY(100);
 		devName.setMaxWidth(200);
 		devName.setMinWidth(200);
 		
 		Button submitName = new Button("Change Name");
 		submitName.setId("passSubmit");
-		submitName.setLayoutX(300);
-		submitName.setLayoutY(100);
+		submitName.setLayoutX(322);
+		submitName.setLayoutY(160);
 		submitName.setMaxWidth(150);
 		submitName.setMinWidth(150);
 		
 		
-		Line line = new Line(100, 180, 700, 180);
+		Line line = new Line(100, 220, 700, 220);
 		line.setId("settingsLine");
 		
 		String[] roomNames = new String[roomsList.size()];
@@ -1702,22 +1704,38 @@ public class VeraGUI extends Application {
 		comboBox.getItems().addAll(roomNames);
 		comboBox.setValue(room.getName());
 		comboBox.setLayoutX(300);
-		comboBox.setLayoutY(220);
+		comboBox.setLayoutY(300);
 		comboBox.setMaxWidth(200);
 		comboBox.setMinWidth(200);
 		comboBox.setId("comboSty");
 		
-		Label roomLabel = new Label("Change Room: ");
-		roomLabel.setLayoutX(140);
-		roomLabel.setLayoutY(220);
+		Label roomLabel = new Label("Change Room");
+		roomLabel.setLayoutX(340);
+		roomLabel.setLayoutY(250);
 		roomLabel.setId("genLabel");
 		
 		Button submitRoom = new Button("Change Room");
 		submitRoom.setId("passSubmit");
-		submitRoom.setLayoutX(300);
-		submitRoom.setLayoutY(275);
+		submitRoom.setLayoutX(322);
+		submitRoom.setLayoutY(360);
 		submitRoom.setMaxWidth(150);
 		submitRoom.setMinWidth(150);
+		
+		submitName.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+			}
+		});
+		
+		submitRoom.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+			}
+		});
 		
 
 		display.getChildren().addAll(pane, devName, devLabel, submitName, line, comboBox, roomLabel, submitRoom);
