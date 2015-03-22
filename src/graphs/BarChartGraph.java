@@ -19,7 +19,7 @@ public class BarChartGraph
 		int i = 0;
 		int lineOneReadings = 0;
 		
-		for (int j = 0; j < devices.size(); j++){
+		for (int j = 0; j < readings.size(); j++){
 		// Information for line one displayed on the graph
 		XYChart.Series lineOfReadings = new XYChart.Series(); // Default first line, second line added if id = compare2
 		lineOfReadings.setName(devices.get(j).getName() + " Reading"); // Legend (bottom colour indicator) name

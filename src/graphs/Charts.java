@@ -97,7 +97,7 @@ public class Charts {
 		int upperBound = (int) readings.get(0).get(0);
 		
 		// Information for line one displayed on the graph
-		for (int j = 0; j < devices.size(); j++){ // for each device
+		for (int j = 0; j < readings.size(); j++){ // for each device
 			int i = 0;
 
 			while (i < readings.get(j).size()-1)  // for each reading for the device
