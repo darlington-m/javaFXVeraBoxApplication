@@ -63,7 +63,6 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import com.sun.prism.paint.Color;
-import com.thehowtotutorial.splashscreen.JSplash;
 
 import dataretrival.CurrentReadings;
 import dataretrival.MySQLConnect;
@@ -603,6 +602,8 @@ public class VeraGUI extends Application {
 	}
 	public void displayGraphs() {	
 		
+		final Button createGraphButton = new Button("Generate Graph");
+		
 		if(display.getLayoutY()!=0){
 			display.getChildren().clear();
 			topDisplay.setLayoutY(-(topDisplay.getPrefHeight()));
@@ -770,8 +771,12 @@ public class VeraGUI extends Application {
 									humidityCheckBox.setDisable(false);
 									armedTrippedCheckBox.setSelected(true);
 									armedTrippedCheckBox.setDisable(false);
+									createGraphButton.setId("passSubmit");
 								} else {
 									selectedDevices.add(deviceLabel.getText());
+								}
+								if (selectedDevices.size() > 0) {
+									createGraphButton.setId("passSubmit");
 								}
 								// System.out.println("Added: " +
 								// deviceLabel.getText());
@@ -799,6 +804,11 @@ public class VeraGUI extends Application {
 									armedTrippedCheckBox.setDisable(true);
 								} else {
 									selectedDevices.remove(deviceLabel.getText());
+								}
+								if (selectedDevices.size() == 0 && tempCheckBox.isSelected() == false
+										 && lightCheckBox.isSelected() == false  && humidityCheckBox.isSelected() == false
+										 && armedTrippedCheckBox.isSelected() == false) {
+									createGraphButton.setId("passSubmitGrey");
 								}
 								if (imagePane.getWidth() == 145){
 									imagePane.setPrefSize(144, 145);
@@ -903,56 +913,62 @@ public class VeraGUI extends Application {
 			}
 		};
 
-		Label compareLabel = new Label("Compare From"); // compare from label
-		compareLabel.setLayoutX(30);
-		compareLabel.setLayoutY(10);
+		Label compareLabel = new Label("From:"); // compare from label
+		compareLabel.setLayoutX(20);
+		compareLabel.setLayoutY(27);
 		compareLabel.setId("CompareName");
 
 		HBox compareFromRow = new HBox(5); // hbox for the compare from elements
-		compareFromRow.setLayoutX(30);
-		compareFromRow.setLayoutY(40);
+		compareFromRow.setLayoutX(75);
+		compareFromRow.setLayoutY(24);
 
 		compareFrom = new DatePicker(); // allows to pick a date
-		compareFrom.setMaxWidth(110);
+		compareFrom.setMaxWidth(140);
 		compareFrom.setValue(compareTo.getValue().minusDays(1));
-		compareFrom.setId("datePicker");
+		compareFrom.setId("dropdownStyle");
 		compareFrom.setEditable(false);
 		compareFrom.valueProperty().addListener(dateChanger);
 
 		compareFromHours = getBox("hours"); // allows to pick an hour
+		compareFromHours.setId("dropdownStyle");
 		compareFromHours.setMaxWidth(2);
 
 		Label colonLabel = new Label(":");
+		colonLabel.setId("colonPadding");
 
 		compareFromMinutes = getBox("minutes"); // allows to pick a minute
+		compareFromMinutes.setId("dropdownStyle");
 		compareFromMinutes.setMaxWidth(2);
 
 		compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
 				colonLabel, compareFromMinutes); // adds the date picker and
 													// hour and minute pickers
 
-		Label compareToLabel = new Label("Compare To"); // compare to label
-		compareToLabel.setLayoutX(30);
-		compareToLabel.setLayoutY(75);
+		Label compareToLabel = new Label("To:"); // compare to label
+		compareToLabel.setLayoutX(42);
+		compareToLabel.setLayoutY(90);
 		compareToLabel.setId("CompareName");
 
 		HBox compareToRow = new HBox(5); // hbox for the compare from elements
-		compareToRow.setLayoutX(30);
-		compareToRow.setLayoutY(105);
+		compareToRow.setLayoutX(75);
+		compareToRow.setLayoutY(87);
 
 		compareTo = new DatePicker(); // allows to pick a date
-		compareTo.setMaxWidth(110);
+		compareTo.setMaxWidth(140);
 		compareTo.setValue(LocalDate.now());
-		compareTo.setId("datePicker");
+		compareTo.setId("dropdownStyle");
 		compareTo.setEditable(false);
 		compareTo.valueProperty().addListener(dateChanger);
 
 		compareToHours = getBox("hours"); // allows to pick an hour
+		compareToHours.setId("dropdownStyle");
 		compareToHours.setMaxWidth(2);
 
 		Label colonLabel2 = new Label(":");
+		colonLabel2.setId("colonPadding");
 
 		compareToMinutes = getBox("minutes"); // allows to pick an minute
+		compareToMinutes.setId("dropdownStyle");
 		compareToMinutes.setMaxWidth(2);
 
 		compareToRow.getChildren().addAll(compareTo, compareToHours,
@@ -991,42 +1007,38 @@ public class VeraGUI extends Application {
 
 		graphType = new ChoiceBox<String>(); // creates a combo box to select
 												// the type of graph
+		graphType.setId("dropdownStyle");
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
-		graphType.setLayoutX(330);
-		graphType.setLayoutY(42);
-		graphType.setMinWidth(120);
-		graphType.setMaxWidth(120);
-		graphType.setMaxHeight(30);
-		graphType.setMinHeight(30);
+		graphType.setLayoutX(380);
+		graphType.setLayoutY(22);
+		graphType.setMinWidth(160);
+		graphType.setMaxWidth(160);
+		graphType.setMaxHeight(45);
+		graphType.setMinHeight(45);
 		
 		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
 													// select the type of graph
+		seperateGraphs.setId("dropdownStyle");
 		seperateGraphs.getItems().addAll("One Chart", "Multiple Charts");
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
 		seperateGraphs.getSelectionModel().selectFirst();
-		seperateGraphs.setLayoutX(330);
-		seperateGraphs.setLayoutY(97);
-		seperateGraphs.setMinWidth(120);
-		seperateGraphs.setMaxWidth(120);
-		seperateGraphs.setMaxHeight(30);
-		seperateGraphs.setMinHeight(30);
-		seperateGraphs.setId("center");
+		seperateGraphs.setLayoutX(380);
+		seperateGraphs.setLayoutY(87);
+		seperateGraphs.setMinWidth(160);
+		seperateGraphs.setMaxWidth(160);
+		seperateGraphs.setMaxHeight(45);
+		seperateGraphs.setMinHeight(45);
 
-		Button createGraphButton = new Button("Generate Graph"); // creates a
-																	// button
-																	// used to
-																	// generate
-																	// the graph
+		createGraphButton.setId("passSubmitGrey");
 		createGraphButton.setLayoutX(560);
-		createGraphButton.setLayoutY(44);
+		createGraphButton.setLayoutY(39);
 		createGraphButton.setMinWidth(200);
 		createGraphButton.setMaxWidth(200);
 		createGraphButton.setMaxHeight(80);
 		createGraphButton.setMinHeight(80);
-		createGraphButton.setId("listCSS");
 		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when
 																		// button
 																		// is
