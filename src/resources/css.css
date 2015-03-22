@@ -390,7 +390,7 @@
 }
 
 #colonPadding {
-	-fx-padding: 10 0 10 0;
+    -fx-padding: 10 0 10 0;
     -fx-font-size: 15px;
 	
 }
@@ -399,6 +399,14 @@
 #passSubmit:hover {
     -fx-background-color:#41997D;
 }
+
+
+#selectedDevice {
+    -fx-background-radius: 45px;
+    -fx-border-radius: 45px;
+    -fx-font-size: 12px;
+}
+
 
 
 #passFail {

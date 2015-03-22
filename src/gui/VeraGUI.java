@@ -654,11 +654,11 @@ public class VeraGUI extends Application {
 					.getResource("/resources/" + devicesList.get(i).getImage())
 					.toExternalForm())); // add the image
 
-			deviceImage.setFitHeight(100); // image sizing
-			deviceImage.setFitWidth(100);
+			deviceImage.setFitHeight(80); // image sizing
+			deviceImage.setFitWidth(80);
 
-			deviceImage.setLayoutX(25); // image layout
-			deviceImage.setLayoutY(20);
+			deviceImage.setLayoutX(35); // image layout
+			deviceImage.setLayoutY(25);
 			
 			
 			
@@ -671,11 +671,12 @@ public class VeraGUI extends Application {
 
 			deviceLabel.setPrefWidth(100); // label sizing
 
-			deviceLabel.setLayoutX(20); // label layout
-			deviceLabel.setLayoutY(120);
+			deviceLabel.setLayoutX(22); // label layout
+			deviceLabel.setLayoutY(115);
 
 			final Pane imagePane = new Pane(); // pane to contain the image and
 												// the label
+			imagePane.setId("selectedDevice");
 			imagePane.setLayoutY(22);
 			imagePane
 					.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
@@ -756,7 +757,7 @@ public class VeraGUI extends Application {
 						public void handle(Event event) {
 							if (imagePane.getWidth() == 144 || imagePane.getWidth() == 288) {
 								imagePane
-										.setStyle("-fx-border-color:green; -fx-border-width: 3; -fx-border-style: solid;");
+										.setStyle("-fx-border-color:#12805C; -fx-border-width: 3; -fx-border-style: solid;");
 								if (imagePane.getWidth() == 144){
 									imagePane.setPrefSize(145, 145);
 								} else {
