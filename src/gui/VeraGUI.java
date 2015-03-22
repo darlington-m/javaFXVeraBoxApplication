@@ -2,7 +2,7 @@ package gui;
 
 import graphs.Charts;
 
-import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -28,6 +27,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -61,6 +61,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
+
+import com.sun.prism.paint.Color;
+import com.thehowtotutorial.splashscreen.JSplash;
+
 import dataretrival.CurrentReadings;
 import dataretrival.MySQLConnect;
 import dataretrival.ReadingsUpdateTimer;
@@ -77,7 +81,7 @@ public class VeraGUI extends Application {
 	private Scene scene;
 	private Stage stage;
 	private Pane root, display, topDisplay;
-	final private Pane sortingPane = new Pane();
+	final private Pane sortingPane = new Pane(), loadingPane = new Pane();
 	private Label time, welcome ;
 	private long compareToDate, compareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
@@ -101,7 +105,7 @@ public class VeraGUI extends Application {
 	private CheckBox lightCheckBox;
 	private CheckBox humidityCheckBox;
 	private CheckBox armedTrippedCheckBox;
-	private boolean loggedIn;
+	private boolean loggedIn = true;
 	private ArrayList<Device> scenesSelectedDevices;
 	private final Pane graphsPane = new Pane();
 
@@ -139,7 +143,7 @@ public class VeraGUI extends Application {
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
 					displayLoading();
-					displayDevices();
+					displayDevices();					
 					break;
 				case "Settings":
 					displayLoading();
@@ -342,13 +346,13 @@ public class VeraGUI extends Application {
 		}
 	}
 
-	public void displayDevices() {
+	public void displayDevices() {	
+
 		if(topDisplay.getLayoutY()!=0){
 			topDisplay.setLayoutY(0);
 			display.setLayoutY(topDisplay.getPrefHeight());
 			display.setPrefHeight(scene.getHeight() - topDisplay.getPrefHeight() + 10);
-		}
-		
+		}	
 		
 		display.getChildren().clear();
 		Pane paneBackground = new Pane();
@@ -425,6 +429,8 @@ public class VeraGUI extends Application {
 		
 		updateDashboard(sortRooms("All"));
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
+		
+		root.getChildren().remove(loadingPane);
 	}
 	
 
@@ -594,8 +600,7 @@ public class VeraGUI extends Application {
 		display.getChildren()
 				.addAll(addRoom, enterDetails, warning, input, add);
 	}
-	public void displayGraphs() {
-		
+	public void displayGraphs() {	
 		
 		if(display.getLayoutY()!=0){
 			display.getChildren().clear();
@@ -1171,6 +1176,10 @@ public class VeraGUI extends Application {
 		pane.getChildren().addAll(roomName, number, action);
 		list.getChildren().addAll(pane, separator);
 
+		
+		for(Room room : roomsList){
+			list.getChildren().add(room.getDetailsPane());
+		}
 		display.getChildren().add(list);
 	}
 
@@ -1328,7 +1337,7 @@ public class VeraGUI extends Application {
 	}
 
 	private void show24hrGraph(ArrayList<Device> devicesToDisplay,
-			String mode, Pane parent) throws SQLException {
+		String mode, Pane parent) throws SQLException {
 		
 		devicesToCSV.clear();
 		devicesToCSV.addAll(devicesToDisplay);
@@ -1508,13 +1517,12 @@ public class VeraGUI extends Application {
 		// graph when you select one.
 	}
 	
-	private void displayLoading(){		
-		display.getChildren().clear();
-		
-		Pane loadingPane = new Pane();
-		loadingPane.setPrefSize(200,40);
-		loadingPane.setLayoutX(300);
-		loadingPane.setLayoutY(230);
+	private void displayLoading(){
+
+		loadingPane.setStyle("-fx-background-color:white");
+		loadingPane.setPrefSize(display.getPrefWidth(),display.getPrefHeight());
+		loadingPane.setLayoutX(display.getLayoutX());
+		loadingPane.setLayoutY(display.getLayoutY());
 		
 		ImageView loadingImage = new ImageView(new Image(VeraGUI.class.getResource(
 				"/resources/loadingGif.gif").toExternalForm()));
@@ -1522,14 +1530,14 @@ public class VeraGUI extends Application {
 		loadingImage.setFitWidth(50);
 		loadingImage.setLayoutX(5);
 		loadingImage.setLayoutY(5);
-		
+
 		Label loadingLabel = new Label("Loading...");
 		loadingLabel.setLayoutX(80);
 		loadingLabel.setLayoutY(23);
-		
+
 		loadingPane.getChildren().addAll(loadingImage, loadingLabel);
-		
-		display.getChildren().add(loadingPane);
+
+		root.getChildren().add(loadingPane);
 	}
 
 	private ChoiceBox<String> getBox(String type) {
@@ -1850,9 +1858,5 @@ public class VeraGUI extends Application {
 		image.setFitHeight(display.getHeight());
 		display.getChildren().addAll(image);
 		
-		
-	}
-	
-	
-	
+	}	
 }
