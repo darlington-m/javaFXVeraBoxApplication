@@ -2,6 +2,7 @@ package gui;
 
 import graphs.Charts;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -611,11 +612,11 @@ public class VeraGUI extends Application {
 		final ScrollPane graphScrollPane = new ScrollPane();	
 		
 		devicesScrollPane.setPrefSize(display.getWidth()-19,
-				display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
+				display.getHeight() / 3 * 0.95); // sets the layout of 1 pane on
 												 // the top and two below, evenly
 												 // spaces
 		filterPane.setPrefSize(display.getWidth(),
-				display.getHeight() / 3 * 0.65);
+				display.getHeight() / 3 * 0.75);
 		
 		graphScrollPane.setPrefSize(display.getWidth(),
 				scene.getHeight());
@@ -871,7 +872,7 @@ public class VeraGUI extends Application {
 		
 
 		// -------------------------------- Setting up the comparePane -----------------------------------------------------
-
+		
 		ChangeListener<LocalDate> dateChanger = new ChangeListener<LocalDate>() {
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> arg0,
@@ -896,12 +897,12 @@ public class VeraGUI extends Application {
 
 		Label compareLabel = new Label("Compare From"); // compare from label
 		compareLabel.setLayoutX(30);
-		compareLabel.setLayoutY(5);
+		compareLabel.setLayoutY(10);
 		compareLabel.setId("CompareName");
 
 		HBox compareFromRow = new HBox(5); // hbox for the compare from elements
 		compareFromRow.setLayoutX(30);
-		compareFromRow.setLayoutY(30);
+		compareFromRow.setLayoutY(40);
 
 		compareFrom = new DatePicker(); // allows to pick a date
 		compareFrom.setMaxWidth(110);
@@ -924,12 +925,12 @@ public class VeraGUI extends Application {
 
 		Label compareToLabel = new Label("Compare To"); // compare to label
 		compareToLabel.setLayoutX(30);
-		compareToLabel.setLayoutY(55);
+		compareToLabel.setLayoutY(75);
 		compareToLabel.setId("CompareName");
 
 		HBox compareToRow = new HBox(5); // hbox for the compare from elements
 		compareToRow.setLayoutX(30);
-		compareToRow.setLayoutY(80);
+		compareToRow.setLayoutY(105);
 
 		compareTo = new DatePicker(); // allows to pick a date
 		compareTo.setMaxWidth(110);
@@ -985,8 +986,8 @@ public class VeraGUI extends Application {
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
-		graphType.setLayoutX(350);
-		graphType.setLayoutY(25);
+		graphType.setLayoutX(330);
+		graphType.setLayoutY(42);
 		graphType.setMinWidth(120);
 		graphType.setMaxWidth(120);
 		graphType.setMaxHeight(30);
@@ -998,8 +999,8 @@ public class VeraGUI extends Application {
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
 		seperateGraphs.getSelectionModel().selectFirst();
-		seperateGraphs.setLayoutX(350);
-		seperateGraphs.setLayoutY(76);
+		seperateGraphs.setLayoutX(330);
+		seperateGraphs.setLayoutY(97);
 		seperateGraphs.setMinWidth(120);
 		seperateGraphs.setMaxWidth(120);
 		seperateGraphs.setMaxHeight(30);
@@ -1012,7 +1013,7 @@ public class VeraGUI extends Application {
 																	// generate
 																	// the graph
 		createGraphButton.setLayoutX(560);
-		createGraphButton.setLayoutY(25);
+		createGraphButton.setLayoutY(44);
 		createGraphButton.setMinWidth(200);
 		createGraphButton.setMaxWidth(200);
 		createGraphButton.setMaxHeight(80);
@@ -1028,7 +1029,6 @@ public class VeraGUI extends Application {
 																		// method
 					@Override
 					public void handle(ActionEvent arg0) {
-						if (selectedDevices.size() > 0) {
 						try {
 							ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
 
@@ -1044,91 +1044,104 @@ public class VeraGUI extends Application {
 							if (armedTrippedCheckBox.isSelected() ==  true){
 								selectedDevices.add( "4 in 1 sensor: armedTripped");
 							}
-
-
-							for (String selectedDevice : selectedDevices) {
-								for (Device device : devicesList) {
-									if (selectedDevice.contains(device.getName())) {
-										if (device instanceof FourInOne){
-											FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
-													device.getAltid(), device.getCategory(), device.getSubcategory(),
-													device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
-													((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
-													((FourInOne) device).getArmedtripped(), device.getBatterylevel());
-											fourInOne.setReadingName(selectedDevice.substring(15));
-											System.out.println(selectedDevice);
-											devicesToDisplay.add(fourInOne);
-										} else {
-											devicesToDisplay.add(device); // basically
-										}						// finds
-										// which
-										// devices
-										// are
-										// selected
-										// and
-										// adds
-										// them
-										// to
-										// this
-										// array
-										// list
+							if (selectedDevices.size() > 0) {
+								for (String selectedDevice : selectedDevices) {
+									for (Device device : devicesList) {
+										if (selectedDevice.contains(device.getName())) {
+											if (device instanceof FourInOne){
+												FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
+														device.getAltid(), device.getCategory(), device.getSubcategory(),
+														device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
+														((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
+														((FourInOne) device).getArmedtripped(), device.getBatterylevel());
+												fourInOne.setReadingName(selectedDevice.substring(15));
+												System.out.println(selectedDevice);
+												devicesToDisplay.add(fourInOne);
+											} else {
+												devicesToDisplay.add(device); // basically
+											}						// finds
+											// which
+											// devices
+											// are
+											// selected
+											// and
+											// adds
+											// them
+											// to
+											// this
+											// array
+											// list
+										}
 									}
 								}
+								if (tempCheckBox.isSelected() ==  true){
+									selectedDevices.remove( "4 in 1 sensor: temperature");
+								}
+								if (lightCheckBox.isSelected() ==  true){
+									selectedDevices.remove( "4 in 1 sensor: light");
+								}
+								if (humidityCheckBox.isSelected() ==  true){
+									selectedDevices.remove( "4 in 1 sensor: humidity");
+								}
+								if (armedTrippedCheckBox.isSelected() ==  true){
+									selectedDevices.remove( "4 in 1 sensor: armedTripped");
+								}
+								System.out.println("--------------------------");
+								for (Device device : devicesToDisplay){
+									System.out.println(device.getReadingName());
+								}
+								show24hrGraph(devicesToDisplay, "not24", graphsPane); // <--
+								// passes
+								// the
+								// devices
+								// to
+								// be
+								// displayed
+								// in
+								// the
+								// graph
+								// and
+								// tells
+								// the
+								// method
+								// to
+								// use
 							}
-							System.out.println("--------------------------");
-							for (Device device : devicesToDisplay){
-								System.out.println(device.getReadingName());
-							}
-							show24hrGraph(devicesToDisplay, "not24", graphsPane); // <--
-							// passes
-							// the
-							// devices
-							// to
-							// be
-							// displayed
-							// in
-							// the
-							// graph
-							// and
-							// tells
-							// the
-							// method
-							// to
-							// use
 						} catch (SQLException e) { // the dates selected in the
 							// dropdown boxes.
 							e.printStackTrace();
 						}
-						}
 					} 
-				});
+		});
+
+		filterPane.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color: #cccccc;");
 
 		filterPane.getChildren().addAll(graphType, seperateGraphs,
 				createGraphButton); // add graph selecter and button to the
-									// submitPane
-		
+		// submitPane
+
 		displayNoGraph(graphsPane);
 
 		// -------------------------------- Setting up the
 		// graphSettingsContainer
 		// -----------------------------------------------------
-		
+
 		devicesScrollPane.setContent(devicesPane);
 		devicesScrollPane.setLayoutX(-1);
 		devicesScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		devicesScrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		devicesScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
-		
+
 		graphSettingsContainer.getChildren().addAll(devicesScrollPane, filterPane, graphsPane);
-		
+
 		graphScrollPane.setContent(graphSettingsContainer);
 		graphScrollPane.setLayoutX(0);
 		graphScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		graphScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		graphScrollPane.setStyle("-fx-background: rgb(255,255,255); -fx-border-color: white;");
-		
+
 		display.getChildren().add(graphScrollPane);
-		
+
 		}
 	}
 
@@ -1354,12 +1367,12 @@ public class VeraGUI extends Application {
 				 * an array list to be pasted over to the charts method.
 				 */
 				ResultSet results;
-				for (Device device : devicesToDisplay) { // For each device
-					if (device instanceof FourInOne){
-						results = conn.getRows(((FourInOne) device).readingFromSQL(device.getReadingName(),
+				for (int i = 0; i < devicesToDisplay.size(); i++) { // For each device
+					if (devicesToDisplay.get(i) instanceof FourInOne){
+						results = conn.getRows(((FourInOne) devicesToDisplay.get(i)).readingFromSQL(devicesToDisplay.get(i).getReadingName(),
 								compareFromDate, compareToDate)); 
 					} else {
-						results = conn.getRows(device.readingFromSQL(
+						results = conn.getRows(devicesToDisplay.get(i).readingFromSQL(
 								compareFromDate, compareToDate)); 
 					}
 
@@ -1373,10 +1386,10 @@ public class VeraGUI extends Application {
 					dateArray = new ArrayList<String>(); // array list for the
 					// devices readings
 					// dates
-
+		
 					while (results.next()) { // while there is still date in the
 						// array
-						String deviceReading = results.getString(device
+						String deviceReading = results.getString(devicesToDisplay.get(i)
 								.getReadingName());
 						// assign the reading to
 						// deviceReading
@@ -1407,12 +1420,23 @@ public class VeraGUI extends Application {
 							dateArray.add(date); // add date to the array
 						}
 					}
-					readings.add(readingsArray); // add the current devices reading
+					
+					if (readingsArray.size() > 1)
+						readings.add(readingsArray); // add the current devices reading
 					// array to the array of reading
 					// arrays
-					dates.add(dateArray); // add the current devices date array to
-					// the array of date arrays
+					if (readingsArray.size() > 1)
+						dates.add(dateArray); // add the current devices date array to
+						// the array of date arrays
 				}
+				System.out.println("+++++++++++++++++++++");
+				for (Device device : devicesToDisplay){
+					System.out.println(device.getReadingName());
+				}
+				System.out.println(devicesToDisplay.size());
+				System.out.println(readings.size());
+				System.out.println(dates.size());
+				System.out.println("+++++++++++++++++++++");
 
 
 				String splitGraphs;

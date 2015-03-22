@@ -23,7 +23,7 @@ public class LineGraph
 		int lineReadings = 0;
 		
 		// Information for line one displayed on the graph
-		for (int j = 0; j < devices.size(); j++){
+		for (int j = 0; j < readings.size(); j++){
 			System.out.println("Size: " + j);
 
 			XYChart.Series<String, Number> lineOfReadings = new XYChart.Series<String, Number>(); // Default first line, second line added if id = compare2
