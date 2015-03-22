@@ -36,7 +36,7 @@ public class RoomTest {
 
 	@Test
 	public void testGetSection() {
-		assertEquals(testRoom.getSection(),null);
+		assertEquals(testRoom.getSection(),1);
 	}
 
 	@Test

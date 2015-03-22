@@ -19,6 +19,7 @@ public class Room {
 	public Room(String name, int id) {
 		this.name = name;
 		this.id = id;
+		this.section = 1;
 	}
 
 	Room() {
