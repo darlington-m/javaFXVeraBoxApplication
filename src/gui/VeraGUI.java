@@ -142,35 +142,35 @@ public class VeraGUI extends Application {
 
 				switch (((Button) arg0.getSource()).getText()) {
 				case "Dashboard":
-					displayLoading();
+					//displayLoading();
 					displayDevices();					
 					break;
 				case "Settings":
-					displayLoading();
+					//displayLoading();
 					changeButtons("settings");
 					displaySettings();
 					break;
 				case "Graphs":
-					displayLoading();
+					//displayLoading();
 					changeButtons("graphs");
 					displayGraphs();
 					break;
 				case "Scenes":
-					displayLoading();
+					//displayLoading();
 					displayScenes();
 					break;
 				case "Back":
-					displayLoading();
+					//displayLoading();
 					display.getChildren().clear();
 					changeButtons("mainMenu");
 					displayDevices();
 					break;
 				case "Cancel":
-					displayLoading();
+					//displayLoading();
 					displaySettings();
 					break;
 				case "Add a room":
-					displayLoading();
+					//displayLoading();
 					changeButtons("addRoom");
 					break;
 				case "Download CSV":
@@ -431,6 +431,7 @@ public class VeraGUI extends Application {
 		display.getChildren().addAll(vb, paneBackground, sortingPane, sc);
 		
 		root.getChildren().remove(loadingPane);
+		
 	}
 	
 
@@ -1517,27 +1518,30 @@ public class VeraGUI extends Application {
 		// graph when you select one.
 	}
 	
-	private void displayLoading(){
-
-		loadingPane.setStyle("-fx-background-color:white");
-		loadingPane.setPrefSize(display.getPrefWidth(),display.getPrefHeight());
-		loadingPane.setLayoutX(display.getLayoutX());
-		loadingPane.setLayoutY(display.getLayoutY());
+	private synchronized void displayLoading(){
 		
-		ImageView loadingImage = new ImageView(new Image(VeraGUI.class.getResource(
-				"/resources/loadingGif.gif").toExternalForm()));
-		loadingImage.setFitHeight(50);
-		loadingImage.setFitWidth(50);
-		loadingImage.setLayoutX(5);
-		loadingImage.setLayoutY(5);
+			loadingPane.setStyle("-fx-background-color:white");
+			loadingPane.setPrefSize(display.getPrefWidth(),display.getPrefHeight());
+			loadingPane.setLayoutX(0);
+			loadingPane.setLayoutY(0);
 
-		Label loadingLabel = new Label("Loading...");
-		loadingLabel.setLayoutX(80);
-		loadingLabel.setLayoutY(23);
+			ImageView loadingImage = new ImageView(new Image(VeraGUI.class.getResource(
+					"/resources/loadingGif.gif").toExternalForm()));
+			loadingImage.setFitHeight(50);
+			loadingImage.setFitWidth(50);
+			loadingImage.setLayoutX(5);
+			loadingImage.setLayoutY(5);
 
-		loadingPane.getChildren().addAll(loadingImage, loadingLabel);
+			Label loadingLabel = new Label("Loading...");
+			loadingLabel.setLayoutX(80);
+			loadingLabel.setLayoutY(23);
 
-		root.getChildren().add(loadingPane);
+			loadingPane.getChildren().addAll(loadingImage, loadingLabel);
+
+			root.getChildren().add(loadingPane);
+			
+	
+
 	}
 
 	private ChoiceBox<String> getBox(String type) {
