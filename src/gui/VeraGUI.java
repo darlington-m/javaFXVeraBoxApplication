@@ -1064,7 +1064,7 @@ public class VeraGUI extends Application {
 								selectedDevices.add( "4 in 1 sensor: humidity");
 							}
 							if (armedTrippedCheckBox.isSelected() ==  true){
-								selectedDevices.add( "4 in 1 sensor: armedTripped");
+								selectedDevices.add( "4 in 1 sensor: armedtripped");
 							}
 							if (selectedDevices.size() > 0) {
 								for (String selectedDevice : selectedDevices) {
@@ -1106,7 +1106,7 @@ public class VeraGUI extends Application {
 									selectedDevices.remove( "4 in 1 sensor: humidity");
 								}
 								if (armedTrippedCheckBox.isSelected() ==  true){
-									selectedDevices.remove( "4 in 1 sensor: armedTripped");
+									selectedDevices.remove( "4 in 1 sensor: armedtripped");
 								}
 								System.out.println("--------------------------");
 								for (Device device : devicesToDisplay){
