@@ -173,7 +173,7 @@ public class VeraGUI extends Application {
 					changeButtons("addRoom");
 					break;
 				case "Download CSV":
-					saveToCSV(devicesToCSV);
+					saveToCSV(devicesToCSV, "24");
 					break;
 				case "Quit":
 					System.exit(0);
@@ -604,6 +604,7 @@ public class VeraGUI extends Application {
 	public void displayGraphs() {	
 		
 		final Button createGraphButton = new Button("Generate Graph");
+		final Button createCSVButton = new Button("Download CSV");
 		
 		if(display.getLayoutY()!=0){
 			display.getChildren().clear();
@@ -645,9 +646,9 @@ public class VeraGUI extends Application {
 		
 		boolean prevFourInOne = false;
 
-		int j = 0;
+		double j = 0;
 		
-		for (int i = 0; i < devicesList.size(); i++) // for each device create a
+		for (int i = 0; i < devicesList.size(); i++) // for each device  a
 													// pane with an image and a
 													// label
 		{
@@ -678,7 +679,7 @@ public class VeraGUI extends Application {
 			final Pane imagePane = new Pane(); // pane to contain the image and
 												// the label
 			imagePane.setId("selectedDevice");
-			imagePane.setLayoutY(22);
+			imagePane.setLayoutY(10);
 			imagePane
 					.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 			
@@ -774,11 +775,13 @@ public class VeraGUI extends Application {
 									armedTrippedCheckBox.setSelected(true);
 									armedTrippedCheckBox.setDisable(false);
 									createGraphButton.setId("passSubmit");
+									createCSVButton.setId("passSubmit");
 								} else {
 									selectedDevices.add(deviceLabel.getText());
 								}
 								if (selectedDevices.size() > 0) {
 									createGraphButton.setId("passSubmit");
+									createCSVButton.setId("passSubmit");
 								}
 								// System.out.println("Added: " +
 								// deviceLabel.getText());
@@ -811,6 +814,7 @@ public class VeraGUI extends Application {
 										 && lightCheckBox.isSelected() == false  && humidityCheckBox.isSelected() == false
 										 && armedTrippedCheckBox.isSelected() == false) {
 									createGraphButton.setId("passSubmitGrey");
+									createCSVButton.setId("passSubmitGrey");
 								}
 								if (imagePane.getWidth() == 189){
 									imagePane.setPrefSize(188, 145);
@@ -832,18 +836,22 @@ public class VeraGUI extends Application {
 						}
 					});
 			
-			imagePane.setLayoutX(j * 150 + 30); // x layout position spread
+			if (j==2){
+				imagePane.setLayoutX(j * 200 + 30); // x layout position spread
+			} else {
+				imagePane.setLayoutX(j * 200 + 30); // x layout position spread
+			}
 			
 			if (prevFourInOne == true) {
-				j += 2;
+				j += 1.5;
 			} else {
 				j++;
 			}
 
 			imagePane.getChildren().addAll(deviceImage, deviceLabel);
 			
-			devicesPane.setPrefSize(j * 150 + 30,
-					display.getHeight() / 3 * 1.1); // sets the layout of 1 pane on
+			devicesPane.setPrefSize(j * 200 + 30,
+					display.getHeight() / 3 * 0.85); // sets the layout of 1 pane on
 													// the top and two below, evenly
 													// spaces
 			System.out.println(devicesPane.getChildren().size());
@@ -1013,12 +1021,10 @@ public class VeraGUI extends Application {
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
-		graphType.setLayoutX(380);
-		graphType.setLayoutY(22);
+		graphType.setLayoutX(368);
+		graphType.setLayoutY(24);
 		graphType.setMinWidth(160);
 		graphType.setMaxWidth(160);
-		graphType.setMaxHeight(45);
-		graphType.setMinHeight(45);
 		
 		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
 													// select the type of graph
@@ -1027,20 +1033,16 @@ public class VeraGUI extends Application {
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
 		seperateGraphs.getSelectionModel().selectFirst();
-		seperateGraphs.setLayoutX(380);
+		seperateGraphs.setLayoutX(368);
 		seperateGraphs.setLayoutY(87);
 		seperateGraphs.setMinWidth(160);
 		seperateGraphs.setMaxWidth(160);
-		seperateGraphs.setMaxHeight(45);
-		seperateGraphs.setMinHeight(45);
 
 		createGraphButton.setId("passSubmitGrey");
 		createGraphButton.setLayoutX(560);
-		createGraphButton.setLayoutY(39);
+		createGraphButton.setLayoutY(24);
 		createGraphButton.setMinWidth(200);
 		createGraphButton.setMaxWidth(200);
-		createGraphButton.setMaxHeight(80);
-		createGraphButton.setMinHeight(80);
 		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when
 																		// button
 																		// is
@@ -1136,10 +1138,107 @@ public class VeraGUI extends Application {
 					} 
 		});
 
-		filterPane.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color: #cccccc;");
+		createCSVButton.setId("passSubmitGrey");
+		createCSVButton.setLayoutX(560);
+		createCSVButton.setLayoutY(87);
+		createCSVButton.setMinWidth(200);
+		createCSVButton.setOnAction(new EventHandler<ActionEvent>() { // when
+			// button
+			// is
+			// pressed
+			// call
+			// the
+			// showDeviceDetails
+			// method
+			@Override
+				public void handle(ActionEvent arg0) {
+					try {
+						ArrayList<Device> devicesToDisplay = new ArrayList<Device>();
+
+						if (tempCheckBox.isSelected() ==  true){
+							selectedDevices.add( "4 in 1 sensor: temperature");
+						}
+						if (lightCheckBox.isSelected() ==  true){
+							selectedDevices.add( "4 in 1 sensor: light");
+						}
+						if (humidityCheckBox.isSelected() ==  true){
+							selectedDevices.add( "4 in 1 sensor: humidity");
+						}
+						if (armedTrippedCheckBox.isSelected() ==  true){
+							selectedDevices.add( "4 in 1 sensor: armedtripped");
+						}
+						if (selectedDevices.size() > 0) {
+							for (String selectedDevice : selectedDevices) {
+								for (Device device : devicesList) {
+									if (selectedDevice.contains(device.getName())) {
+										if (device instanceof FourInOne){
+											FourInOne fourInOne = new FourInOne(device.getName(), device.getId(),
+													device.getAltid(), device.getCategory(), device.getSubcategory(),
+													device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
+													((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
+													((FourInOne) device).getArmedtripped(), device.getBatterylevel());
+											fourInOne.setReadingName(selectedDevice.substring(15));
+											System.out.println(selectedDevice);
+											devicesToDisplay.add(fourInOne);
+										} else {
+											devicesToDisplay.add(device); // basically
+										}						// finds
+										// which
+										// devices
+										// are
+										// selected
+										// and
+										// adds
+										// them
+										// to
+										// this
+										// array
+										// list
+									}
+								}
+							}
+							if (tempCheckBox.isSelected() ==  true){
+								selectedDevices.remove( "4 in 1 sensor: temperature");
+							}
+							if (lightCheckBox.isSelected() ==  true){
+								selectedDevices.remove( "4 in 1 sensor: light");
+							}
+							if (humidityCheckBox.isSelected() ==  true){
+								selectedDevices.remove( "4 in 1 sensor: humidity");
+							}
+							if (armedTrippedCheckBox.isSelected() ==  true){
+								selectedDevices.remove( "4 in 1 sensor: armedtripped");
+							}
+							System.out.println("--------------------------");
+							for (Device device : devicesToDisplay){
+								System.out.println(device.getReadingName());
+							}
+							saveToCSV(devicesToDisplay, "not 24"); // <--
+							// passes
+							// the
+							// devices
+							// to
+							// be
+							// displayed
+							// in
+							// the
+							// graph
+							// and
+							// tells
+							// the
+							// method
+							// to
+							// use
+						}
+					} catch (Exception e) { // the dates selected in the
+						// dropdown boxes.
+						e.printStackTrace();
+					}
+				} 
+		});
 
 		filterPane.getChildren().addAll(graphType, seperateGraphs,
-				createGraphButton); // add graph selecter and button to the
+				createGraphButton, createCSVButton); // add graph selecter and button to the
 		// submitPane
 
 		displayNoGraph(graphsPane);
@@ -1584,9 +1683,28 @@ public class VeraGUI extends Application {
 		return choicebox;
 	}
 
-	private void saveToCSV(ArrayList<Device> devices) {
+	private void saveToCSV(ArrayList<Device> devices, String mode) {
 		// TODO Auto-generated method stub
 
+		if (mode.equals("24")) { // if mode = 24 hours set compareFromDate and
+			// compareToDate to the past 24 hours
+			Calendar currentDate = Calendar.getInstance();
+
+			String trimmedCurrentDate = Long.toString(currentDate
+					.getTimeInMillis() / 1000);
+			trimmedCurrentDate = trimmedCurrentDate.substring(0, 10);
+
+			compareFromDate = Long.parseLong(trimmedCurrentDate) - 86400;
+			compareToDate = Long.parseLong(trimmedCurrentDate);
+		} else { // else use the times selected using the dropdown boxes.
+			compareFromDate = (compareFrom.getValue().toEpochDay() * 86400)
+					+ (Long.parseLong(compareFromHours.getValue()) * 3600)
+					+ (Long.parseLong(compareFromMinutes.getValue()) * 60);
+			compareToDate = (compareTo.getValue().toEpochDay() * 86400)
+					+ (Long.parseLong(compareToHours.getValue()) * 3600)
+					+ (Long.parseLong(compareToMinutes.getValue()) * 60) + 60;
+		}
+		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Enter File or Choose File to Overwrite");
 		fileChooser.setInitialFileName("veraData_" + compareFromDate + "_to_"
