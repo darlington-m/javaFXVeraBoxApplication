@@ -1709,86 +1709,7 @@ public class VeraGUI extends Application {
 		this.devicesList = devicesList;
 	}
 	
-	public void showDeviceSettings(Device device, Room room) {
-		display.getChildren().clear();
-		Pane pane = new Pane();
-		pane.setId("backPaneBackground");
-		pane.setTranslateX(10);
-		pane.setTranslateY(10);
 		
-		
-		Label devLabel = new Label("Edit Name");
-		devLabel.setLayoutX(350);
-		devLabel.setLayoutY(45);
-		devLabel.setId("genLabel");
-		
-		TextField devName = new TextField();
-		devName.setId("passFields");
-		devName.setText(device.getName());
-		devName.setLayoutX(300);
-		devName.setLayoutY(100);
-		devName.setMaxWidth(200);
-		devName.setMinWidth(200);
-		
-		Button submitName = new Button("Change Name");
-		submitName.setId("passSubmit");
-		submitName.setLayoutX(322);
-		submitName.setLayoutY(160);
-		submitName.setMaxWidth(150);
-		submitName.setMinWidth(150);
-		
-		
-		Line line = new Line(100, 220, 700, 220);
-		line.setId("settingsLine");
-		
-		String[] roomNames = new String[roomsList.size()];
-		int count = 0;
-		for (Room roomX : roomsList) {
-			roomNames[count] = roomX.getName();
-			count++;
-		}
-		
-		ObservableList<String> options = FXCollections.observableArrayList();
-		final ComboBox<String> comboBox = new ComboBox<String>(options);
-		comboBox.getItems().addAll(roomNames);
-		comboBox.setValue(room.getName());
-		comboBox.setLayoutX(300);
-		comboBox.setLayoutY(300);
-		comboBox.setMaxWidth(200);
-		comboBox.setMinWidth(200);
-		comboBox.setId("comboSty");
-		
-		Label roomLabel = new Label("Change Room");
-		roomLabel.setLayoutX(340);
-		roomLabel.setLayoutY(250);
-		roomLabel.setId("genLabel");
-		
-		Button submitRoom = new Button("Change Room");
-		submitRoom.setId("passSubmit");
-		submitRoom.setLayoutX(322);
-		submitRoom.setLayoutY(360);
-		submitRoom.setMaxWidth(150);
-		submitRoom.setMinWidth(150);
-		
-		submitName.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				
-			}
-		});
-		
-		submitRoom.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				
-			}
-		});
-		
-
-		display.getChildren().addAll(pane, devName, devLabel, submitName, line, comboBox, roomLabel, submitRoom);
-	}	
 	
 	public void showLogin() {
 		
@@ -1874,6 +1795,138 @@ public class VeraGUI extends Application {
 		image.setFitWidth(display.getWidth());
 		image.setFitHeight(display.getHeight());
 		display.getChildren().addAll(image);
-		
 	}	
+	
+	
+	public void showDeviceSettings(final Device device, final Room room) {
+		display.getChildren().clear();
+		Pane pane = new Pane();
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
+		
+		
+		Label devLabel = new Label("Edit Name");
+		devLabel.setLayoutX(350);
+		devLabel.setLayoutY(45);
+		devLabel.setId("genLabel");
+		
+		final TextField devName = new TextField();
+		devName.setId("passFields");
+		devName.setText(device.getName());
+		devName.setLayoutX(300);
+		devName.setLayoutY(100);
+		devName.setMaxWidth(200);
+		devName.setMinWidth(200);
+		
+		Button submitName = new Button("Change Name");
+		submitName.setId("passSubmit");
+		submitName.setLayoutX(322);
+		submitName.setLayoutY(160);
+		submitName.setMaxWidth(150);
+		submitName.setMinWidth(150);
+		
+		
+		Line line = new Line(100, 220, 700, 220);
+		line.setId("settingsLine");
+		
+		String[] roomNames = new String[roomsList.size()];
+		int count = 0;
+		for (Room roomX : roomsList) {
+			roomNames[count] = roomX.getName();
+			count++;
+		}
+		
+		ObservableList<String> options = FXCollections.observableArrayList();
+		final ComboBox<String> comboBox = new ComboBox<String>(options);
+		comboBox.getItems().addAll(roomNames);
+		comboBox.setValue(room.getName());
+		comboBox.setLayoutX(300);
+		comboBox.setLayoutY(300);
+		comboBox.setMaxWidth(200);
+		comboBox.setMinWidth(200);
+		comboBox.setId("comboSty");
+		
+		Label roomLabel = new Label("Change Room");
+		roomLabel.setLayoutX(340);
+		roomLabel.setLayoutY(250);
+		roomLabel.setId("genLabel");
+		
+		Button submitRoom = new Button("Change Room");
+		submitRoom.setId("passSubmit");
+		submitRoom.setLayoutX(322);
+		submitRoom.setLayoutY(360);
+		submitRoom.setMaxWidth(150);
+		submitRoom.setMinWidth(150);
+		
+		submitName.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+
+//				String url = "http://146.87.40.27:3480/data_request?id=device&action=rename&device=" + 
+//				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
+//				if (executeHttp(url)) {
+//					System.out.println("Command Sent");
+//					device.setName(devName.getText());
+//				} else {
+//					System.out.println("Device out of Reach");
+//				}
+//					
+			}
+		});
+		
+		submitRoom.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+//				String url = "http://146.87.40.27:3480/data_request?id=device&action=add&device=" + 
+//				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
+//				if (executeHttp(url)) {
+//					
+//					System.out.println("Command Sent");
+//					for(Room room: roomsList) {
+//						if (room.getName().equalsIgnoreCase(comboBox.getValue())) {
+//							room.addDeviceToRoom(device);
+//						}
+//					}
+//					room.removeDeviceFromRoom(device);
+//				} else {
+//					System.out.println("Device out of Reach");
+//				}
+			}
+		});
+		
+
+		display.getChildren().addAll(pane, devName, devLabel, submitName, line, comboBox, roomLabel, submitRoom);
+	}	
+
+
+	private boolean executeHttp(String urlS) {
+		// TODO Auto-generated method stub
+		
+		boolean check = false;
+
+		try {
+			try {
+				URL url = new URL(urlS);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+				if (con.getResponseCode() == 200) {
+					// Internet available
+					check = true;
+				}
+			} catch (Exception exception) {
+				// No Internet
+				check = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return check;
+		
+	}
 }
