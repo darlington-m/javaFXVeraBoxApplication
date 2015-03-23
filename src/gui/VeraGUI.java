@@ -1507,8 +1507,9 @@ public class VeraGUI extends Application {
 					dateArray = new ArrayList<String>(); // array list for the
 					// devices readings
 					// dates
-		
+					int k = 0;
 					while (results.next()) { // while there is still date in the
+						
 						// array
 						String deviceReading = results.getString(devicesToDisplay.get(i)
 								.getReadingName());
@@ -1528,17 +1529,24 @@ public class VeraGUI extends Application {
 									"MM/dd/yyyy HH:mm").format(new java.util.Date(
 											readingDate * 1000)); // convert the date into a
 							// more readable format
-							date = date.replaceAll("/", "");
-							date = date.replaceAll(":", "");
-							date = date.replaceAll(" ", "");
-							String dateHours = date.substring(8, 10);
-							String dateMinutes = date.substring(10, 12);
-							date = dateHours + ":" + dateMinutes;
+							System.out.println(date.substring(11, 16));
+							
+							if (date.substring(11, 16).equals("00:00")){
+								date = new java.text.SimpleDateFormat(
+										"HH:mm - MM/dd").format(new java.util.Date(
+												readingDate * 1000));
+							} else {
+								date = new java.text.SimpleDateFormat(
+										"HH:mm - MM/dd").format(new java.util.Date(
+												readingDate * 1000));
+							}
+
 							readingsArray.add(convertedDeviceReading); // add
 							// reading
 							// to the
 							// array
 							dateArray.add(date); // add date to the array
+							k++;
 						}
 					}
 					

@@ -1,3 +1,7 @@
+#chartStyling {
+	-fx-font-size: 11px;
+}
+
 #sideButton  {
 -fx-background-color: #F4F4F4;
 -fx-pref-width: 200px;

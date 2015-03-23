@@ -76,16 +76,29 @@ public class Charts {
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
 			if (callRequest == 2) {
-				barChart.setPrefSize(800, 500);
-				barChart.setLayoutX(0);
-				barChart.setLayoutY(0);
+				chartsScrollPane.setPrefSize(800, 500);
+				chartsScrollPane.setLayoutX(0);
+				chartsScrollPane.setLayoutY((60)); // calculation to determine y position. If you want to change where the charts
+			
+				if (8 * readings.get(0).size() > 800){
+					barChart.setPrefSize(8 * readings.get(0).size(), 500);
+				} else {
+					barChart.setPrefSize(800, 500); // Size of the chart will decrease when the number of charts needed increases
+				}
 			}
 			else
 			{
-				barChart.setPrefSize(800, 350);
-				barChart.setLayoutX(0);
-				barChart.setLayoutY(400* position);
+				chartsScrollPane.setPrefSize(800, 350);
+				chartsScrollPane.setLayoutX(0);
+				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
+			
+				if (8 * readings.get(0).size() > 800){
+					barChart.setPrefSize(8 * readings.get(0).size(), 350);
+				} else {
+					barChart.setPrefSize(800, 350); // Size of the chart will decrease when the number of charts needed increases
+				}
 			}
+			barChart.setId("chartStyling");
 			
 			chartsScrollPane.setContent(barChart);
 			
@@ -112,12 +125,15 @@ public class Charts {
 				chartsScrollPane.setPrefSize(800, 350);
 				chartsScrollPane.setLayoutX(0);
 				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
-				if (4.5 * readings.get(0).size() > 800){
+				if (8 * readings.get(0).size() > 800){
 					lineChart.setPrefSize(8 * readings.get(0).size(), 350);
 				} else {
 					lineChart.setPrefSize(800, 350); // Size of the chart will decrease when the number of charts needed increases
 				}
 			}
+			
+			lineChart.setId("chartStyling");
+			
 			chartsScrollPane.setContent(lineChart);
 			
 			pane.getChildren().add(chartsScrollPane); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
