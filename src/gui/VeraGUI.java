@@ -1358,9 +1358,6 @@ public class VeraGUI extends Application {
 
 		// mode parameter determines if the method has been called from within a
 		// device or the graphs pane.
-		if (devicesToDisplay.size() > 0) {
-			parent.getChildren().clear();
-
 			if (mode.equals("24")) { // if mode = 24 hours set compareFromDate and
 				// compareToDate to the past 24 hours
 				Calendar currentDate = Calendar.getInstance();
@@ -1514,22 +1511,22 @@ public class VeraGUI extends Application {
 						charts.get(i).show(parent);
 					}
 				}
-			} catch (SQLException e1) {
+			} catch (Exception e1) {
 				// Label warning = new Label("Sorry No Graph Data Available");
 				// warning.setPrefSize(600, 300);
 				// warning.setId("graphWarning");
 				// warning.setLayoutX(50);
 				// warning.setLayoutY(150);
 				// display.getChildren().add(warning);
-
+				System.out.println("here");
+				parent.getChildren().clear();
 				displayNoGraph(parent);
 			}
-		} else {
-			displayNoGraph(parent);
-		}
+		
 		// this adds a change listener to the drop down box and creates a new
 		// graph when you select one.
 	}
+	
 	
 	private synchronized void displayLoading(){
 		
@@ -1647,7 +1644,7 @@ public class VeraGUI extends Application {
 	}
 
 	public void displayNoGraph(Pane givenPane) {
-		display.getChildren().clear();
+		givenPane.getChildren().clear();
 		Pane pane = new Pane();
 		pane.setId("backPaneBackground");
 		pane.setTranslateX(10);

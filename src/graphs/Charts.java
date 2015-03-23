@@ -52,6 +52,7 @@ public class Charts {
 
 	public void show(Pane pane) 
 	{
+		pane.getChildren().clear();
 		xAxis.setLabel("Timescale");
 		yAxis.setLabel("Readings"); // Change to make more dynamic, heat = C(o) etc... <------------ change
 
@@ -103,9 +104,9 @@ public class Charts {
 	}
 	
 	public void getYAxis(){
-		int lowerBound = (int) readings.get(0).get(0);
-		int upperBound = (int) readings.get(0).get(0);
-		
+			int lowerBound = 0;
+			int upperBound = 0;
+
 		// Information for line one displayed on the graph
 		for (int j = 0; j < readings.size(); j++){ // for each device
 			int i = 0;
