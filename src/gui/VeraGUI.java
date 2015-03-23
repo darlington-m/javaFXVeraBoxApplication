@@ -1484,12 +1484,14 @@ public class VeraGUI extends Application {
 						Charts chart = new Charts(readings, dates, devicesToDisplay,
 								chartType, 1, 0, 2); // send the arrays to the chart
 						// object
+						parent.getChildren().clear();
 						chart.show(parent);
 					}
 					else
 					{
 						Charts chart = new Charts(readings, dates, devicesToDisplay,
-								chartType, 1, 0, 0); // send the arrays to the chart	
+								chartType, 1, 0, 0); // send the arrays to the chart
+						parent.getChildren().clear();
 						chart.show(parent);// object
 					}
 

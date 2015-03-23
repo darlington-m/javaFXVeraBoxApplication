@@ -52,7 +52,6 @@ public class Charts {
 
 	public void show(Pane pane) 
 	{
-		pane.getChildren().clear();
 		xAxis.setLabel("Timescale");
 		yAxis.setLabel("Readings"); // Change to make more dynamic, heat = C(o) etc... <------------ change
 
