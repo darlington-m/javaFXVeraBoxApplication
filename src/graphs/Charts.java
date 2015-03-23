@@ -10,6 +10,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Pane;
 
 public class Charts {
@@ -28,6 +30,8 @@ public class Charts {
 	ArrayList<ArrayList> readings = new ArrayList<ArrayList>();
 	ArrayList<ArrayList> dates = new ArrayList<ArrayList>();
 	ArrayList<Device> devices = new ArrayList<Device>();
+	
+	ScrollPane chartsScrollPane = new ScrollPane();
 
 	ArrayList<Integer> oneLineOfReadings; // Array storing readings for line one
 	ArrayList<String> oneLineOfDates; // Array storing dates for line one
@@ -52,6 +56,9 @@ public class Charts {
 
 	public void show(Pane pane) 
 	{
+		chartsScrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		chartsScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+		
 		xAxis.setLabel("Timescale");
 		yAxis.setLabel("Readings"); // Change to make more dynamic, heat = C(o) etc... <------------ change
 
@@ -69,7 +76,7 @@ public class Charts {
 				n.setStyle("-fx-bar-fill: #66CD00;");
 			}
 			if (callRequest == 2) {
-				barChart.setPrefSize(800, 350);
+				barChart.setPrefSize(800, 500);
 				barChart.setLayoutX(0);
 				barChart.setLayoutY(0);
 			}
@@ -80,7 +87,9 @@ public class Charts {
 				barChart.setLayoutY(400* position);
 			}
 			
-			pane.getChildren().add(barChart);
+			chartsScrollPane.setContent(barChart);
+			
+			pane.getChildren().add(chartsScrollPane);
 				
 		} 
 		else if (type.equalsIgnoreCase("Line Chart"))  // if user select line chart, do this
@@ -89,16 +98,29 @@ public class Charts {
 			final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis); // set Axis's
 			lineChartGraph.checkCompare(lineChart, readings, dates, devices);  // send the data over to bar chart to be added to the chart
 			if(callRequest==2){
-				lineChart.setPrefSize(800, (500)); // Size of the chart will decrease when the number of charts needed increases
-				lineChart.setLayoutX(0);
-				lineChart.setLayoutY((60)); // calculation to determine y position. If you want to change where the charts
+				chartsScrollPane.setPrefSize(800, 500);
+				chartsScrollPane.setLayoutX(0);
+				chartsScrollPane.setLayoutY((60)); // calculation to determine y position. If you want to change where the charts
+			
+				if (8 * readings.get(0).size() > 800){
+					lineChart.setPrefSize(8 * readings.get(0).size(), 500);
+				} else {
+					lineChart.setPrefSize(800, 500); // Size of the chart will decrease when the number of charts needed increases
+				}
 			}
 			else{
-				lineChart.setPrefSize(800, 350); // Size of the chart will decrease when the number of charts needed increases
-				lineChart.setLayoutX(0);
-				lineChart.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
+				chartsScrollPane.setPrefSize(800, 350);
+				chartsScrollPane.setLayoutX(0);
+				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
+				if (4.5 * readings.get(0).size() > 800){
+					lineChart.setPrefSize(8 * readings.get(0).size(), 350);
+				} else {
+					lineChart.setPrefSize(800, 350); // Size of the chart will decrease when the number of charts needed increases
+				}
 			}
-			pane.getChildren().add(lineChart); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
+			chartsScrollPane.setContent(lineChart);
+			
+			pane.getChildren().add(chartsScrollPane); // 					 appears in the layoutY then change the 550. 50 determines where to place the first chart.
 		}
 	}
 	
