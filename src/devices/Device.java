@@ -99,6 +99,47 @@ public abstract class Device {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+
+	public int getCurrentReading() {
+		return currentReading;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setAltid(String altid) {
+		this.altid = altid;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
+
+	public void setSubcategory(int subcategory) {
+		this.subcategory = subcategory;
+	}
+
+	public void setRoom(int room) {
+		this.room = room;
+	}
+
+	public void setParent(int parent) {
+		this.parent = parent;
+	}
+
+	public void setReadingName(String readingName) {
+		this.readingName = readingName;
+	}
+
+	public void setCurrentReading(int currentReading) {
+		this.currentReading = currentReading;
+	}
 
 	public abstract String readingFromSQL(long startDate, long endDate);
 

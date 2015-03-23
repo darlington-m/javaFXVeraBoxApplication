@@ -475,13 +475,13 @@ public class VeraGUI extends Application {
 				topPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 				topPane.setMinHeight(50);
 				topPane.setMaxHeight(50);
-//				topPane.setMinWidth(780);
+				topPane.setId("deviceBoxTop");
 				topPane.setStyle("-fx-background-color: #f4f4f4");
 				
 				Label name = new Label(device.getName());
 				name.setId("DeviceName");
 				name.setLayoutX(10);
-				name.setLayoutY(5);
+				name.setLayoutY(10);
 				
 				topPane.getChildren().add(name);
 				
