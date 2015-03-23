@@ -600,6 +600,7 @@ public class VeraGUI extends Application {
 		display.getChildren()
 				.addAll(addRoom, enterDetails, warning, input, add);
 	}
+	
 	public void displayGraphs() {	
 		
 		final Button createGraphButton = new Button("Generate Graph");
@@ -657,7 +658,7 @@ public class VeraGUI extends Application {
 			deviceImage.setFitHeight(80); // image sizing
 			deviceImage.setFitWidth(80);
 
-			deviceImage.setLayoutX(35); // image layout
+			deviceImage.setLayoutX(60); // image layout
 			deviceImage.setLayoutY(25);
 			
 			
@@ -669,9 +670,9 @@ public class VeraGUI extends Application {
 																			// the
 																			// device
 
-			deviceLabel.setPrefWidth(100); // label sizing
+			deviceLabel.setPrefWidth(180); // label sizing
 
-			deviceLabel.setLayoutX(22); // label layout
+			deviceLabel.setLayoutX(30); // label layout
 			deviceLabel.setLayoutY(115);
 
 			final Pane imagePane = new Pane(); // pane to contain the image and
@@ -725,7 +726,7 @@ public class VeraGUI extends Application {
 			
 				prevFourInOne = true;
 			} else {
-				imagePane.setPrefSize(144, 145); // sizing the pane
+				imagePane.setPrefSize(188, 145); // sizing the pane
 				prevFourInOne = false;
 			}
 
@@ -755,11 +756,11 @@ public class VeraGUI extends Application {
 						 */
 						@Override
 						public void handle(Event event) {
-							if (imagePane.getWidth() == 144 || imagePane.getWidth() == 288) {
+							if (imagePane.getWidth() == 188 || imagePane.getWidth() == 288) {
 								imagePane
 										.setStyle("-fx-border-color:#12805C; -fx-border-width: 3; -fx-border-style: solid;");
-								if (imagePane.getWidth() == 144){
-									imagePane.setPrefSize(145, 145);
+								if (imagePane.getWidth() == 188){
+									imagePane.setPrefSize(189, 145);
 								} else {
 									imagePane.setPrefSize(289, 145);
 								}
@@ -811,8 +812,8 @@ public class VeraGUI extends Application {
 										 && armedTrippedCheckBox.isSelected() == false) {
 									createGraphButton.setId("passSubmitGrey");
 								}
-								if (imagePane.getWidth() == 145){
-									imagePane.setPrefSize(144, 145);
+								if (imagePane.getWidth() == 189){
+									imagePane.setPrefSize(188, 145);
 								} else {
 									imagePane.setPrefSize(288, 145);
 								}
@@ -926,19 +927,19 @@ public class VeraGUI extends Application {
 		compareFrom = new DatePicker(); // allows to pick a date
 		compareFrom.setMaxWidth(140);
 		compareFrom.setValue(compareTo.getValue().minusDays(1));
-		compareFrom.setId("dropdownStyle");
+		compareFrom.setId("comboSty");
 		compareFrom.setEditable(false);
 		compareFrom.valueProperty().addListener(dateChanger);
 
 		compareFromHours = getBox("hours"); // allows to pick an hour
-		compareFromHours.setId("dropdownStyle");
+		compareFromHours.setId("comboSty");
 		compareFromHours.setMaxWidth(2);
 
 		Label colonLabel = new Label(":");
 		colonLabel.setId("colonPadding");
 
 		compareFromMinutes = getBox("minutes"); // allows to pick a minute
-		compareFromMinutes.setId("dropdownStyle");
+		compareFromMinutes.setId("comboSty");
 		compareFromMinutes.setMaxWidth(2);
 
 		compareFromRow.getChildren().addAll(compareFrom, compareFromHours,
@@ -957,19 +958,19 @@ public class VeraGUI extends Application {
 		compareTo = new DatePicker(); // allows to pick a date
 		compareTo.setMaxWidth(140);
 		compareTo.setValue(LocalDate.now());
-		compareTo.setId("dropdownStyle");
+		compareTo.setId("comboSty");
 		compareTo.setEditable(false);
 		compareTo.valueProperty().addListener(dateChanger);
 
 		compareToHours = getBox("hours"); // allows to pick an hour
-		compareToHours.setId("dropdownStyle");
+		compareToHours.setId("comboSty");
 		compareToHours.setMaxWidth(2);
 
 		Label colonLabel2 = new Label(":");
 		colonLabel2.setId("colonPadding");
 
 		compareToMinutes = getBox("minutes"); // allows to pick an minute
-		compareToMinutes.setId("dropdownStyle");
+		compareToMinutes.setId("comboSty");
 		compareToMinutes.setMaxWidth(2);
 
 		compareToRow.getChildren().addAll(compareTo, compareToHours,
@@ -1008,7 +1009,7 @@ public class VeraGUI extends Application {
 
 		graphType = new ChoiceBox<String>(); // creates a combo box to select
 												// the type of graph
-		graphType.setId("dropdownStyle");
+		graphType.setId("comboSty");
 		graphType.getItems().addAll("Line Chart", "Bar Chart");
 		graphType.setTooltip(new Tooltip("Select Type Of Graph"));
 		graphType.getSelectionModel().selectFirst();
@@ -1021,7 +1022,7 @@ public class VeraGUI extends Application {
 		
 		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
 													// select the type of graph
-		seperateGraphs.setId("dropdownStyle");
+		seperateGraphs.setId("comboSty");
 		seperateGraphs.getItems().addAll("One Chart", "Multiple Charts");
 		seperateGraphs.setTooltip(new Tooltip(
 				"Display readings on one graph or many"));
@@ -1165,7 +1166,6 @@ public class VeraGUI extends Application {
 
 		}
 	}
-
 
 	public void displaySettings() {
 		display.getChildren().clear();
@@ -1509,7 +1509,7 @@ public class VeraGUI extends Application {
 						singleDates.add(dates.get(i));
 						singleDevicesToDisplay.add(devicesToDisplay.get(i));
 						charts.add(new Charts(singleReadings, singleDates,
-								singleDevicesToDisplay, "Line Chart",
+								singleDevicesToDisplay, chartType,
 								devicesToDisplay.size(), i, 1));
 						charts.get(i).show(parent);
 					}
