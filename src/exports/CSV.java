@@ -27,16 +27,17 @@ public final class CSV {
 		conn = new MySQLConnect();
 		
 		String readingNames = "";
-		String ids = "";
+		String ids = "id IN (";
 		
 		for (int i = 0; i < devices.size(); i++){
 			readingNames = readingNames + devices.get(i).getReadingName();
-			ids = ids  + "id = '" + devices.get(i).getId() + "'";
+			ids = ids  + "'" + devices.get(i).getId() + "'";
 			if (i < devices.size() - 1){
 				readingNames = readingNames + ",";
-				ids = ids + " OR ";
+				ids = ids + ",";
 			}
 		}
+		ids = ids + ")";
 
 		String sqlStatement = "SELECT reading_date," + readingNames +  " FROM Reading WHERE " +  ids 
 		+ " AND reading_date >='" + startDate + "' AND reading_date <='" + endDate + "'";
@@ -55,9 +56,9 @@ public final class CSV {
 				.write("reading_date," + readingNames + "\n");
 		do {
 			int i = 1;
-			for (i = 1; i < 3; i++) {
+			for (i = 1; i < devices.size() + 2; i++) {
 				bufferedWriter.append(results.getString(i));
-				if (i < 2) {
+				if (i < devices.size() + 1) {
 					bufferedWriter.append(",");
 				}
 			}

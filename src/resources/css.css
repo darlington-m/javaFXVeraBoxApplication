@@ -1,3 +1,7 @@
+#chartStyling {
+	-fx-font-size: 11px;
+}
+
 #sideButton  {
 -fx-background-color: #F4F4F4;
 -fx-pref-width: 200px;
@@ -42,6 +46,8 @@
 -fx-border-color: #12805C;
 -fx-border-width: 2px;
 -fx-padding: 10px 0 20px 10px;
+-fx-border-radius: 5px 5px 5px 5px;
+-fx-background-radius: 5px 5px 5px 5px;
 }
 
 
@@ -66,7 +72,8 @@
 
 #sortingPane{
 -fx-background-color: #12805C;
--fx-background-radius: 0;
+-fx-border-radius: 5px 5px 0 0;
+-fx-background-radius: 5px 5px 0 0;
 }
 
 /*
@@ -84,10 +91,13 @@
 #devices{
 -fx-border-color: #f4f4f4;
 -fx-border-width: 5px;
+    -fx-border-radius: 0 0 5px 5px;
+    -fx-background-radius: 0 0 5px 5px;
+
 }
 
 #DeviceName{
--fx-font-size: 30px;
+-fx-font-size: 20px;
 -fx-text-fill: #12805C;
 }
 
@@ -207,6 +217,8 @@
 	-fx-background-color:#f4f4f4; 
 	-fx-pref-height:550px; 
 	-fx-pref-width:780px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 
@@ -441,3 +453,10 @@
     -fx-border-color: #cccccc;
     -fx-border-width:1px;
 }
+
+
+#deviceBoxTop{
+    -fx-border-radius: 5px 5px 0 0 ;
+    -fx-background-radius: 5px 5px 0 0;
+}
+
