@@ -163,36 +163,42 @@ public class Charts {
 			}
 		} 
 		
-		
-		int check =  (int) (lowerBound* 1.1- upperBound* 0.9);
-		//System.out.println(check);
-		if(check < -200)
+		if(!(upperBound==0))
 		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/20));	
-		}
-		else if(check < -150)
-		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/15));	
-		}
-		else if(check < -100)
-		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/10));	
-		}
-		else if(check < -50)
-		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/8));	
-		}
-		else if(check < -25)
-		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/5));	
-		}
-		else if(check > -24)
-		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/4));	
+			int check =  (int) (lowerBound* 1.1- upperBound* 0.9);
+			//System.out.println(check);
+			if(check < -200)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/20));	
+			}
+			else if(check < -150)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/15));	
+			}
+			else if(check < -100)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/10));	
+			}
+			else if(check < -50)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/8));	
+			}
+			else if(check < -25)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/5));	
+			}
+			else if(check > -24)
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/(int)(check/4));	
+			}
+			else
+			{
+				yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/3);	
+			}
 		}
 		else
 		{
-			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound * 1.1), (int)(check)/3);	
+			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound = 5), (int)(5)/3);	
 		}
 	}
 }
