@@ -61,7 +61,7 @@ public class Room {
 		roomPane.setPrefWidth(length);
 		
 		Label roomName = new Label("Room : " + getName());
-		roomName.setLayoutX(0);
+		roomName.setLayoutX(20);
 		roomName.setLayoutY(15);
 		roomName.setId("roomName");
 		
