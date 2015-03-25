@@ -134,7 +134,7 @@ public class Room {
 				
 			}});
 		
-		button.setOnAction(new EventHandler<ActionEvent>(){
+		deleteB.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent arg0) {
