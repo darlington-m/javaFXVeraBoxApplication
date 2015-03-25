@@ -1,5 +1,7 @@
 package devices;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -112,6 +114,7 @@ public class Room {
 					nameLabel.setVisible(true);
 					editName.setVisible(false);
 					button.setText("Edit");
+					//executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
 				}
 			}});
 		
@@ -130,7 +133,44 @@ public class Room {
 				}
 				
 			}});
+		
+		button.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+				//executeHttp("http://146.87.40.27:3480/data_request?id=room&action=delete&room=" + getId());
+			}});
+		
 		pane.getChildren().addAll(nameLabel,deviceNum,button,deleteB,editName,warning);
 		return pane;
+	}
+	
+	
+	private boolean executeHttp(String urlS) {
+		// TODO Auto-generated method stub
+		
+		boolean check = false;
+
+		try {
+			try {
+				URL url = new URL(urlS);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+				if (con.getResponseCode() == 200) {
+					// Internet available
+					check = true;
+				}
+			} catch (Exception exception) {
+				// No Internet
+				check = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return check;
+		
 	}
 }
