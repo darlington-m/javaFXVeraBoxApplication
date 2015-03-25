@@ -59,28 +59,40 @@ public class Room {
 		roomPane.setPrefWidth(length);
 		
 		Label roomName = new Label("Room : " + getName());
-		roomName.setLayoutX(20);
+		roomName.setLayoutX(0);
 		roomName.setLayoutY(15);
 		roomName.setId("roomName");
 		
 		roomPane.getChildren().addAll(roomName);
 		return roomPane;
 	}
+	
 	public Pane getDetailsPane(){
 		final Pane pane = new Pane();
-		pane.setPrefSize(600,70);
+		pane.setPrefSize(740,70);
 		pane.setId("roomDetails");
 		
 		final Label nameLabel = new Label(getName());
 		nameLabel.setLayoutY(25);
-		final Label deviceNum = new Label("Holds " + devices.size() + " devices");
+		final Label deviceNum = new Label(devices.size() + " Devices");
 		deviceNum.setLayoutX(250);
 		deviceNum.setLayoutY(25);
 		final Button button = new Button("Edit");
-		button.setLayoutX(600);
-		button.setLayoutY(25);
+		button.setLayoutX(520);
+		button.setLayoutY(20);
+		button.setMaxWidth(100);
+		button.setMinWidth(100);
+		button.setId("passSubmit");
 		button.setTooltip(new Tooltip("Click to edit the name"));
+		final Button deleteB = new Button("Delete");
+		deleteB.setLayoutX(640);
+		deleteB.setLayoutY(20);
+		deleteB.setMaxWidth(100);
+		deleteB.setMinWidth(100);
+		deleteB.setId("passSubmitRed");
+		deleteB.setTooltip(new Tooltip("Click to delete Room"));
 		final TextField editName = new TextField(getName());
+		editName.setId("passFields");
 		editName.setVisible(false);
 		editName.setLayoutY(20);
 		final Label warning = new Label("Name cannot be empty");
@@ -94,10 +106,12 @@ public class Room {
 			public void handle(ActionEvent arg0) {
 				if(nameLabel.isVisible()){
 					nameLabel.setVisible(false);
-					editName.setVisible(true);						
+					editName.setVisible(true);
+					button.setText("Save");
 				}else{
 					nameLabel.setVisible(true);
-					editName.setVisible(false);	
+					editName.setVisible(false);
+					button.setText("Edit");
 				}
 			}});
 		
@@ -116,7 +130,7 @@ public class Room {
 				}
 				
 			}});
-		pane.getChildren().addAll(nameLabel,deviceNum,button,editName,warning);
+		pane.getChildren().addAll(nameLabel,deviceNum,button,deleteB,editName,warning);
 		return pane;
 	}
 }

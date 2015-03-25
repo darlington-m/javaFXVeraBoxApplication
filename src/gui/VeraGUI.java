@@ -1268,33 +1268,83 @@ public class VeraGUI extends Application {
 
 	public void displaySettings() {
 		display.getChildren().clear();
-		VBox list = new VBox();
-		list.setLayoutX(60);
+		
 		Pane pane = new Pane();
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
+		
+		Line line = new Line(20, 100, 760, 100);
+		line.setId("settingsLine2");
+		
+		final Button addRoom = new Button("Add Room");
+		addRoom.setId("passSubmit");
+		addRoom.setLayoutX(660);
+		addRoom.setLayoutY(35);
+		addRoom.setMaxWidth(100);
+		addRoom.setMinWidth(100);
+		
+		final TextField newRoomName = new TextField();
+		newRoomName.setPromptText("Room Name");
+		newRoomName.setId("passFields");
+		newRoomName.setLayoutX(490);
+		newRoomName.setLayoutY(35);
+		newRoomName.setMaxWidth(150);
+		newRoomName.setMinWidth(150);
+		newRoomName.setVisible(false);
+		
+		
+		VBox list = new VBox();
+		list.setLayoutX(20);
+		list.setLayoutY(105);
+//		Pane paneX = new Pane();
+//
+//		Label roomName = new Label("Name");
+//		roomName.setId("DeviceName");
+//		roomName.setLayoutY(50);
+//		Label number = new Label("Number of devices");
+//		number.setId("DeviceName");
+//		number.setLayoutX(250);
+//		number.setLayoutY(50);
+//		Label action = new Label("Action");
+//		action.setId("DeviceName");
+//		action.setLayoutX(600);
+//		action.setLayoutY(50);
+//		Separator separator = new Separator();
+//		separator
+//		.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
+//		paneX.getChildren().addAll(roomName, number, action);
+//		list.getChildren().addAll(paneX, separator);
 
-		Label roomName = new Label("Name");
-		roomName.setId("DeviceName");
-		roomName.setLayoutY(50);
-		Label number = new Label("Number of devices");
-		number.setId("DeviceName");
-		number.setLayoutX(250);
-		number.setLayoutY(50);
-		Label action = new Label("Action");
-		action.setId("DeviceName");
-		action.setLayoutX(600);
-		action.setLayoutY(50);
-		Separator separator = new Separator();
-		separator
-		.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
-		pane.getChildren().addAll(roomName, number, action);
-		list.getChildren().addAll(pane, separator);
 
+		
+		
+		addRoom.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				
+				if(addRoom.getText() == "Add Room") {
+					newRoomName.setVisible(true);
+					addRoom.setText("Save");
+				}else if(addRoom.getText() == "Save") {
+					
+					roomsList.add(new Room(newRoomName.getText(), roomsList.size()+2));
+					//executeHttp("http://ip_address:3480/data_request?id=room&action=create&name=" + newRoomName.getText());
+					displaySettings();
+				}
+				
+		 	}
+		});
 		
 		for(Room room : roomsList){
 			list.getChildren().add(room.getDetailsPane());
 		}
-		display.getChildren().add(list);
+		
+		pane.getChildren().addAll(line, addRoom, newRoomName, list);		
+		display.getChildren().add(pane);
 	}
+	
 
 	private void displayScenes() {
 		display.getChildren().clear();

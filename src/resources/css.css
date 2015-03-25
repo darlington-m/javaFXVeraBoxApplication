@@ -393,6 +393,20 @@
     -fx-text-fill: #ffffff;
 }
 
+
+#passSubmitRed{
+    -fx-background-color: #cc0000;
+    -fx-background-radius: 15px;
+    -fx-padding:5px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+}
+
+#passSubmit:hover {
+    -fx-background-color:#FF0000;
+}
+
+
 #dropdownStyle {
     -fx-background-color:#f4f4f4;
     -fx-background-radius: 15px;
@@ -436,6 +450,12 @@
 #settingsLine {
     -fx-stroke:#12805C;
     -fx-stroke-width: 5px;
+}
+
+
+#settingsLine2 {
+    -fx-stroke:#12805C;
+    -fx-stroke-width: 2px;
 }
 
 
