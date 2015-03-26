@@ -531,6 +531,23 @@ public class VeraGUI extends Application {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						
+						Button csvButton = new Button("Download CSV");
+						csvButton.setId("passSubmit");
+						csvButton.setLayoutX(620);
+						csvButton.setLayoutY(25);
+						csvButton.setMinWidth(150);
+						
+						csvButton.setOnAction(new EventHandler<ActionEvent>() {
+
+							@Override
+							public void handle(ActionEvent arg0) {
+								saveToCSV(devicesToCSV, "24");
+							}
+						});
+						
+						display.getChildren().add(csvButton);
+						
 					}
 				});
 				
