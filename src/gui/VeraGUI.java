@@ -2,7 +2,6 @@ package gui;
 
 import graphs.Charts;
 
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -27,7 +26,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -41,11 +39,9 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -61,8 +57,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
-
-import com.sun.prism.paint.Color;
 
 import dataretrival.CurrentReadings;
 import dataretrival.MySQLConnect;
@@ -84,13 +78,9 @@ public class VeraGUI extends Application {
 	private Label time, welcome ;
 	private long compareToDate, compareFromDate;
 	private ChoiceBox<String> compareToHours, compareToMinutes,
-			compareFromHours, compareFromMinutes, secondCompareFromHours,
-			secondCompareFromMinutes, secondCompareFromHours2,
-			secondCompareFromMinutes2;
-	private DatePicker compareTo, compareFrom, secondCompareTo,
-			secondCompareFrom;
+			compareFromHours, compareFromMinutes;
+	private DatePicker compareTo, compareFrom;
 	final private VBox sideButtons = new VBox(0), vb = new VBox(30);
-	private RadioButton compareone;
 	private ChoiceBox<String> graphType, seperateGraphs;
 	private ArrayList<Integer> readingsArray = new ArrayList<Integer>();
 	private ArrayList<String> dateArray = new ArrayList<String>();
@@ -104,7 +94,7 @@ public class VeraGUI extends Application {
 	private CheckBox lightCheckBox;
 	private CheckBox humidityCheckBox;
 	private CheckBox armedTrippedCheckBox;
-	private boolean loggedIn = true;
+	private boolean loggedIn = false;
 	private ArrayList<Device> scenesSelectedDevices;
 	private final Pane graphsPane = new Pane();
 
@@ -229,7 +219,6 @@ public class VeraGUI extends Application {
 
 		topDisplay = new Pane();
 		topDisplay.setLayoutX(sideDisplay.getPrefWidth());
-		//topDisplay.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
 		topDisplay.setPrefSize(
 				(scene.getWidth() - sideDisplay.getPrefWidth() + 10), 100);
 		topDisplay.setId("topDisplay");
@@ -265,7 +254,6 @@ public class VeraGUI extends Application {
 				(scene.getHeight() - topDisplay.getPrefHeight() + 10));
 		display.setLayoutX(sideDisplay.getPrefWidth());
 		display.setLayoutY(topDisplay.getPrefHeight());
-		//display.setStyle("-fx-border-color:black; -fx-border-width: 0 0 0 1; -fx-border-style: solid;");
 
 		root.getChildren().addAll(display, sideDisplay, topDisplay);
 
@@ -516,7 +504,7 @@ public class VeraGUI extends Application {
 					@Override
 					public void handle(MouseEvent arg0) {
 						changeButtons("details");
-						selectedDevice = device;
+						setSelectedDevice(device);
 						try {
 							ArrayList<Device> devices = new ArrayList<Device>();
 							if (device instanceof FourInOne){
@@ -537,6 +525,7 @@ public class VeraGUI extends Application {
 							} else {
 								devices.add(device);
 							}
+							
 							show24hrGraph(devices, "24", display);
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
@@ -563,18 +552,6 @@ public class VeraGUI extends Application {
 			vb.getChildren().add(roomPane);
 		}
 		sc.setMax(scrollBarSize * 60);
-	}
-	
-	
-	private void showDeviceDetails() {
-		// TODO Auto-generated method stub
-		display.getChildren().clear();
-		Pane pane = new Pane();
-		pane.setId("backPaneBackground");
-		pane.setTranslateX(10);
-		pane.setTranslateY(10);
-		
-		display.getChildren().add(pane);
 	}
 	
 
@@ -634,13 +611,7 @@ public class VeraGUI extends Application {
 
 		// -------------------------------- Setting up the devicesPane
 
-		final ArrayList<String> selectedDevices = new ArrayList<String>(); // array
-																			// of
-																			// names
-																			// of
-																			// the
-																			// selected
-																			// devices
+		final ArrayList<String> selectedDevices = new ArrayList<String>(); 
 		
 		// and adds them to the local variable devices
 		
@@ -665,19 +636,18 @@ public class VeraGUI extends Application {
 			
 			
 			//If statement for adding further images for the 4in1 sensor
-
-			final Label deviceLabel = new Label(devicesList.get(i).getName()); // name
-																			// of
-																			// the
-																			// device
+			// name of the device
+			final Label deviceLabel = new Label(devicesList.get(i).getName()); 
 
 			deviceLabel.setPrefWidth(180); // label sizing
 
 			deviceLabel.setLayoutX(30); // label layout
 			deviceLabel.setLayoutY(115);
 
-			final Pane imagePane = new Pane(); // pane to contain the image and
-												// the label
+			final Pane imagePane = new Pane(); // name
+			// of
+			// the
+			// device
 			imagePane.setId("selectedDevice");
 			imagePane.setLayoutY(10);
 			imagePane
@@ -1025,9 +995,8 @@ public class VeraGUI extends Application {
 		graphType.setLayoutY(24);
 		graphType.setMinWidth(160);
 		graphType.setMaxWidth(160);
-		
-		seperateGraphs = new ChoiceBox<String>(); // creates a combo box to
-													// select the type of graph
+		// creates a combo box to select the type of graph
+		seperateGraphs = new ChoiceBox<String>();
 		seperateGraphs.setId("comboSty");
 		seperateGraphs.getItems().addAll("One Chart", "Multiple Charts");
 		seperateGraphs.setTooltip(new Tooltip(
@@ -1043,14 +1012,8 @@ public class VeraGUI extends Application {
 		createGraphButton.setLayoutY(24);
 		createGraphButton.setMinWidth(200);
 		createGraphButton.setMaxWidth(200);
-		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { // when
-																		// button
-																		// is
-																		// pressed
-																		// call
-																		// the
-																		// showDeviceDetails
-																		// method
+		//when button is pressed call the  showDeviceDetails method
+		createGraphButton.setOnAction(new EventHandler<ActionEvent>() { 
 					@Override
 					public void handle(ActionEvent arg0) {
 						try {
@@ -1082,19 +1045,9 @@ public class VeraGUI extends Application {
 												System.out.println(selectedDevice);
 												devicesToDisplay.add(fourInOne);
 											} else {
-												devicesToDisplay.add(device); // basically
-											}						// finds
-											// which
-											// devices
-											// are
-											// selected
-											// and
-											// adds
-											// them
-											// to
-											// this
-											// array
-											// list
+												devicesToDisplay.add(device); 
+											}						
+											
 										}
 									}
 								}
@@ -1115,24 +1068,10 @@ public class VeraGUI extends Application {
 									System.out.println(device.getReadingName());
 								}
 								show24hrGraph(devicesToDisplay, "not24", graphsPane); // <--
-								// passes
-								// the
-								// devices
-								// to
-								// be
-								// displayed
-								// in
-								// the
-								// graph
-								// and
-								// tells
-								// the
-								// method
-								// to
-								// use
+							
 							}
-						} catch (SQLException e) { // the dates selected in the
-							// dropdown boxes.
+						} catch (SQLException e) { 
+							// the dates selected in the drop down boxes.
 							e.printStackTrace();
 						}
 					} 
@@ -1142,14 +1081,8 @@ public class VeraGUI extends Application {
 		createCSVButton.setLayoutX(560);
 		createCSVButton.setLayoutY(87);
 		createCSVButton.setMinWidth(200);
-		createCSVButton.setOnAction(new EventHandler<ActionEvent>() { // when
-			// button
-			// is
-			// pressed
-			// call
-			// the
-			// showDeviceDetails
-			// method
+		createCSVButton.setOnAction(new EventHandler<ActionEvent>() {
+			
 			@Override
 				public void handle(ActionEvent arg0) {
 					try {
@@ -1181,19 +1114,9 @@ public class VeraGUI extends Application {
 											System.out.println(selectedDevice);
 											devicesToDisplay.add(fourInOne);
 										} else {
-											devicesToDisplay.add(device); // basically
-										}						// finds
-										// which
-										// devices
-										// are
-										// selected
-										// and
-										// adds
-										// them
-										// to
-										// this
-										// array
-										// list
+											devicesToDisplay.add(device);
+										}					
+										
 									}
 								}
 							}
@@ -1214,32 +1137,17 @@ public class VeraGUI extends Application {
 								System.out.println(device.getReadingName());
 							}
 							saveToCSV(devicesToDisplay, "not 24"); // <--
-							// passes
-							// the
-							// devices
-							// to
-							// be
-							// displayed
-							// in
-							// the
-							// graph
-							// and
-							// tells
-							// the
-							// method
-							// to
-							// use
+							
 						}
-					} catch (Exception e) { // the dates selected in the
-						// dropdown boxes.
+					} catch (Exception e) { // the dates selected in the drop down boxes.
 						e.printStackTrace();
 					}
 				} 
 		});
 
 		filterPane.getChildren().addAll(graphType, seperateGraphs,
-				createGraphButton, createCSVButton); // add graph selecter and button to the
-		// submitPane
+				createGraphButton, createCSVButton); 
+		// add graph selecter and button to thesubmitPane
 
 		displayNoGraph(graphsPane);
 
@@ -1297,24 +1205,6 @@ public class VeraGUI extends Application {
 		VBox list = new VBox();
 		list.setLayoutX(20);
 		list.setLayoutY(105);
-//		Pane paneX = new Pane();
-//
-//		Label roomName = new Label("Name");
-//		roomName.setId("DeviceName");
-//		roomName.setLayoutY(50);
-//		Label number = new Label("Number of devices");
-//		number.setId("DeviceName");
-//		number.setLayoutX(250);
-//		number.setLayoutY(50);
-//		Label action = new Label("Action");
-//		action.setId("DeviceName");
-//		action.setLayoutX(600);
-//		action.setLayoutY(50);
-//		Separator separator = new Separator();
-//		separator
-//		.setStyle("-fx-background-color:#12805C; -fx-pref-height:2px;");
-//		paneX.getChildren().addAll(roomName, number, action);
-//		list.getChildren().addAll(paneX, separator);
 
 
 		
@@ -1365,23 +1255,25 @@ public class VeraGUI extends Application {
 		{
 			final ImageView deviceImage = new ImageView(new Image(VeraGUI.class
 					.getResource("/resources/" + devicesList.get(i).getImage())
-					.toExternalForm())); // add the image
-
-			deviceImage.setFitHeight(100); // image sizing
+					.toExternalForm())); 
+			// add the image
+			// image sizing
+			deviceImage.setFitHeight(100);
 			deviceImage.setFitWidth(100);
-
-			deviceImage.setLayoutX(25); // image layout
+			// image layout
+			deviceImage.setLayoutX(25); 
 			deviceImage.setLayoutY(20);
 
 			final Label deviceLabel = new Label(devicesList.get(i).getName());
 
-			deviceLabel.setPrefWidth(100); // label sizing
-
-			deviceLabel.setLayoutX(20); // label layout
+			deviceLabel.setPrefWidth(100); 
+			// label sizing
+			deviceLabel.setLayoutX(20); 
+			// label layout
 			deviceLabel.setLayoutY(120);
 
-			final Pane imagePane = new Pane(); // pane to contain the image and
-			// the label
+			final Pane imagePane = new Pane(); 
+			// pane to contain the image and the label
 			imagePane.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 			imagePane.setPrefSize(144, 144);
 			imagePane.setLayoutX(20 + i * 150);
@@ -1465,15 +1357,15 @@ public class VeraGUI extends Application {
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Download CSV", "Back", "Quit" };
+			String[] words2 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "graphs":
-			String[] words3 = { "Download CSV", "Back", "Quit" };
+			String[] words3 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
 			names = Arrays.<String> asList(words3);
 			break;
 		case "settings":
-			String[] words4 = { "Add a room", "Back", "Quit" };
+			String[] words4 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
 			names = Arrays.<String> asList(words4);
 			break;
 		case "addRoom":
@@ -1558,18 +1450,10 @@ public class VeraGUI extends Application {
 					// devices readings
 					// dates
 					int k = 0;
-					while (results.next()) { // while there is still date in the
-						
-						// array
+					while (results.next()) {
 						String deviceReading = results.getString(devicesToDisplay.get(i)
 								.getReadingName());
-						// assign the reading to
-						// deviceReading
-						long readingDate = results.getInt("reading_date"); // assign
-						// the
-						// date
-						// to
-						// readingDate
+						long readingDate = results.getInt("reading_date"); 
 						if (!(deviceReading == null)) { // if the reading is not
 							// null
 							int convertedDeviceReading = Integer
@@ -1577,8 +1461,7 @@ public class VeraGUI extends Application {
 							// into an int
 							String date = new java.text.SimpleDateFormat(
 									"MM/dd/yyyy HH:mm").format(new java.util.Date(
-											readingDate * 1000)); // convert the date into a
-							// more readable format
+											readingDate * 1000)); 
 							System.out.println(date.substring(11, 16));
 							
 							if (date.substring(11, 16).equals("00:00")){
@@ -1591,22 +1474,16 @@ public class VeraGUI extends Application {
 												readingDate * 1000));
 							}
 
-							readingsArray.add(convertedDeviceReading); // add
-							// reading
-							// to the
-							// array
+							readingsArray.add(convertedDeviceReading); 
 							dateArray.add(date); // add date to the array
 							k++;
 						}
 					}
 					
 					if (readingsArray.size() > 1)
-						readings.add(readingsArray); // add the current devices reading
-					// array to the array of reading
-					// arrays
+						readings.add(readingsArray); 
 					if (readingsArray.size() > 1)
-						dates.add(dateArray); // add the current devices date array to
-						// the array of date arrays
+						dates.add(dateArray); 
 				}
 				System.out.println("+++++++++++++++++++++");
 				for (Device device : devicesToDisplay){
@@ -1632,24 +1509,22 @@ public class VeraGUI extends Application {
 
 				}
 
-				if (splitGraphs.equals("One Chart")) { // If one chart selected give
-					// all readings to the chart
-					// to display all readings
-					// on one graph
+				if (splitGraphs.equals("One Chart")) { 
 					if(sizeChart==2)
 					{
 						Charts chart = new Charts(readings, dates, devicesToDisplay,
-								chartType, 1, 0, 2); // send the arrays to the chart
-						// object
+								chartType, 1, 0, 2); 
 						parent.getChildren().clear();
 						chart.show(parent);
 					}
 					else
 					{
 						Charts chart = new Charts(readings, dates, devicesToDisplay,
-								chartType, 1, 0, 0); // send the arrays to the chart
+								chartType, 1, 0, 0); 
+						// send the arrays to the chart
 						parent.getChildren().clear();
-						chart.show(parent);// object
+						chart.show(parent);
+						// object
 					}
 
 				} else { // else split each of the readings into seperate arrayLists
@@ -2103,5 +1978,13 @@ public class VeraGUI extends Application {
 
 		return check;
 		
+	}
+
+	public Device getSelectedDevice() {
+		return selectedDevice;
+	}
+
+	public void setSelectedDevice(Device selectedDevice) {
+		this.selectedDevice = selectedDevice;
 	}
 }
