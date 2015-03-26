@@ -392,11 +392,9 @@ public class VeraGUI extends Application {
 		//vb.setStyle("-fx-padding: 0 0 0 45px");
 
 		sc = new ScrollBar();
-		sc.setLayoutX(display.getPrefWidth() - (display.getPrefWidth()/45));
+		sc.setLayoutX(display.getPrefWidth() - (display.getPrefWidth()/45) + 5);
 		sc.setPrefHeight(display.getPrefHeight());
 		sc.setOrientation(Orientation.VERTICAL);
-		sc.setMinWidth(20);
-		sc.setMaxWidth(20);
 		sc.setVisibleAmount(200);
 		sc.setUnitIncrement(160);
 		sc.setBlockIncrement(160);
@@ -508,20 +506,8 @@ public class VeraGUI extends Application {
 						try {
 							ArrayList<Device> devices = new ArrayList<Device>();
 							if (device instanceof FourInOne){
-								FourInOne fourInOneArmedTripped = new FourInOne(device.getName(), device.getId(),
-										device.getAltid(), device.getCategory(), device.getSubcategory(),
-										device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
-										((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
-										((FourInOne) device).getArmedtripped(), device.getBatterylevel());
-								fourInOneArmedTripped.setReadingName("armedtripped");
-								devices.add(fourInOneArmedTripped);
-								FourInOne fourInOneArmed = new FourInOne(device.getName(), device.getId(),
-										device.getAltid(), device.getCategory(), device.getSubcategory(),
-										device.getRoom(), device.getParent(), ((FourInOne) device).getTemperature(),
-										((FourInOne) device).getLight(), ((FourInOne) device).getHumidity(), 
-										((FourInOne) device).getArmedtripped(), device.getBatterylevel());
-								fourInOneArmedTripped.setReadingName("armed");
-								devices.add(fourInOneArmed);
+								device.setReadingName("armedtripped");
+								devices.add(device);
 							} else {
 								devices.add(device);
 							}
@@ -617,7 +603,7 @@ public class VeraGUI extends Application {
 		final ScrollPane graphScrollPane = new ScrollPane();	
 		
 		devicesScrollPane.setPrefSize(display.getWidth()-19,
-				display.getHeight() / 3 * 0.95); // sets the layout of 1 pane on
+				display.getHeight() / 3 * 0.80); // sets the layout of 1 pane on
 												 // the top and two below, evenly
 												 // spaces
 		filterPane.setPrefSize(display.getWidth(),
@@ -644,11 +630,11 @@ public class VeraGUI extends Application {
 					.getResource("/resources/" + devicesList.get(i).getImage())
 					.toExternalForm())); // add the image
 
-			deviceImage.setFitHeight(80); // image sizing
-			deviceImage.setFitWidth(80);
+			deviceImage.setFitHeight(60); // image sizing
+			deviceImage.setFitWidth(60);
 
-			deviceImage.setLayoutX(60); // image layout
-			deviceImage.setLayoutY(25);
+			deviceImage.setLayoutX(65); // image layout
+			deviceImage.setLayoutY(15);
 			
 			
 			
@@ -659,7 +645,7 @@ public class VeraGUI extends Application {
 			deviceLabel.setPrefWidth(180); // label sizing
 
 			deviceLabel.setLayoutX(30); // label layout
-			deviceLabel.setLayoutY(115);
+			deviceLabel.setLayoutY(90);
 
 			final Pane imagePane = new Pane(); // name
 			// of
@@ -671,50 +657,52 @@ public class VeraGUI extends Application {
 					.setStyle("-fx-border-color:grey; -fx-border-width: 3; -fx-border-style: solid;");
 			
 			if (devicesList.get(i) instanceof FourInOne){
-				imagePane.setPrefSize(288, 145); // sizing the pane
+				imagePane.setPrefSize(288, 120); // sizing the pane
+				
+				deviceImage.setLayoutX(45);
 				
 				tempCheckBox = new CheckBox();
 				tempCheckBox.setLayoutX(140);
-				tempCheckBox.setLayoutY(20);
+				tempCheckBox.setLayoutY(10);
 				tempCheckBox.setDisable(true);
 				
 				Label tempLabel = new Label("Temperature");
 				tempLabel.setLayoutX(170);
-				tempLabel.setLayoutY(20);
+				tempLabel.setLayoutY(10);
 
 				lightCheckBox = new CheckBox();
 				lightCheckBox.setLayoutX(140);
-				lightCheckBox.setLayoutY(50);
+				lightCheckBox.setLayoutY(37);
 				lightCheckBox.setDisable(true);
 				
 				Label lightLabel = new Label("Light");
 				lightLabel.setLayoutX(170);
-				lightLabel.setLayoutY(50);
+				lightLabel.setLayoutY(37);
 
 				humidityCheckBox = new CheckBox();
 				humidityCheckBox.setLayoutX(140);
-				humidityCheckBox.setLayoutY(80);
+				humidityCheckBox.setLayoutY(64);
 				humidityCheckBox.setDisable(true);
 				
 				Label humidityLabel = new Label("Humidity");
 				humidityLabel.setLayoutX(170);
-				humidityLabel.setLayoutY(80);
+				humidityLabel.setLayoutY(64);
 
 				armedTrippedCheckBox = new CheckBox();
 				armedTrippedCheckBox.setLayoutX(140);
-				armedTrippedCheckBox.setLayoutY(110);
+				armedTrippedCheckBox.setLayoutY(91);
 				armedTrippedCheckBox.setDisable(true);
 				
 				Label armedTrippedLabel = new Label("Armed Tripped");
 				armedTrippedLabel.setLayoutX(170);
-				armedTrippedLabel.setLayoutY(110);
+				armedTrippedLabel.setLayoutY(91);
 
 				imagePane.getChildren().addAll(tempCheckBox,tempLabel, lightCheckBox,lightLabel, humidityCheckBox,humidityLabel, armedTrippedCheckBox, armedTrippedLabel);
 				
 			
 				prevFourInOne = true;
 			} else {
-				imagePane.setPrefSize(188, 145); // sizing the pane
+				imagePane.setPrefSize(188, 120); // sizing the pane
 				prevFourInOne = false;
 			}
 
@@ -748,9 +736,9 @@ public class VeraGUI extends Application {
 								imagePane
 										.setStyle("-fx-border-color:#12805C; -fx-border-width: 3; -fx-border-style: solid;");
 								if (imagePane.getWidth() == 188){
-									imagePane.setPrefSize(189, 145);
+									imagePane.setPrefSize(189, 120);
 								} else {
-									imagePane.setPrefSize(289, 145);
+									imagePane.setPrefSize(289, 120);
 								}
 								if (deviceLabel.getText().equals("4 in 1 sensor")){
 									tempCheckBox.setSelected(true);
@@ -804,9 +792,9 @@ public class VeraGUI extends Application {
 									createCSVButton.setId("passSubmitGrey");
 								}
 								if (imagePane.getWidth() == 189){
-									imagePane.setPrefSize(188, 145);
+									imagePane.setPrefSize(188, 120);
 								} else {
-									imagePane.setPrefSize(288, 145);
+									imagePane.setPrefSize(288, 120);
 								}
 								// System.out.println("Removed: " +
 								// deviceLabel.getText());
@@ -838,7 +826,7 @@ public class VeraGUI extends Application {
 			imagePane.getChildren().addAll(deviceImage, deviceLabel);
 			
 			devicesPane.setPrefSize(j * 200 + 30,
-					display.getHeight() / 3 * 0.85); // sets the layout of 1 pane on
+					display.getHeight() / 3 * 0.79); // sets the layout of 1 pane on
 													// the top and two below, evenly
 													// spaces
 			System.out.println(devicesPane.getChildren().size());
@@ -1194,6 +1182,12 @@ public class VeraGUI extends Application {
 	public void displaySettings() {
 		display.getChildren().clear();
 		
+		if(topDisplay.getLayoutY()!=0){
+			topDisplay.setLayoutY(0);
+			display.setLayoutY(topDisplay.getPrefHeight());
+			display.setPrefHeight(scene.getHeight() - topDisplay.getPrefHeight() + 10);
+		}	
+		
 		Pane pane = new Pane();
 		pane.setId("backPaneBackground");
 		pane.setTranslateX(10);
@@ -1236,8 +1230,8 @@ public class VeraGUI extends Application {
 					addRoom.setText("Save");
 				}else if(addRoom.getText() == "Save") {
 					
-					roomsList.add(new Room(newRoomName.getText(), roomsList.size()+2));
-					//executeHttp("http://ip_address:3480/data_request?id=room&action=create&name=" + newRoomName.getText());
+					roomsList.add(new Room(newRoomName.getText(), roomsList.size()+1));
+					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=create&name=" + newRoomName.getText());
 					displaySettings();
 				}
 				
@@ -1369,24 +1363,28 @@ public class VeraGUI extends Application {
 		java.util.List<String> names = new ArrayList<String>();
 		switch (name) {
 		case "mainMenu":
-			String[] words = { "Dashboard", "Graphs", "Settings", "Scenes",
+			String[] words = { "Dashboard", "Graphs", "Settings",
 			"Quit" };
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
+			String[] words2 = { "Dashboard", "Graphs", "Settings",
+			"Quit" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "graphs":
-			String[] words3 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
+			String[] words3 = { "Dashboard", "Graphs", "Settings",
+			"Quit" };
 			names = Arrays.<String> asList(words3);
 			break;
 		case "settings":
-			String[] words4 = { "Dashboard", "Graphs", "Settings", "Scenes", "Back", "Quit" };
+			String[] words4 = { "Dashboard", "Graphs", "Settings",
+			"Quit" };
 			names = Arrays.<String> asList(words4);
 			break;
 		case "addRoom":
-			String[] words5 = { "Cancel", "Back", "Quit" };
+			String[] words5 = { "Dashboard", "Graphs", "Settings",
+			"Quit" };
 			names = Arrays.<String> asList(words5);
 			break;
 		}
@@ -1449,6 +1447,8 @@ public class VeraGUI extends Application {
 				ResultSet results;
 				for (int i = 0; i < devicesToDisplay.size(); i++) { // For each device
 					if (devicesToDisplay.get(i) instanceof FourInOne){
+						System.out.println(((FourInOne) devicesToDisplay.get(i)).readingFromSQL(devicesToDisplay.get(i).getReadingName(),
+								compareFromDate, compareToDate));
 						results = conn.getRows(((FourInOne) devicesToDisplay.get(i)).readingFromSQL(devicesToDisplay.get(i).getReadingName(),
 								compareFromDate, compareToDate)); 
 					} else {
@@ -1523,7 +1523,6 @@ public class VeraGUI extends Application {
 					splitGraphs = "One Chart"; // auto set to one chart
 					chartType = "Line Chart";
 					sizeChart =2;
-
 				}
 
 				if (splitGraphs.equals("One Chart")) { 
@@ -1543,7 +1542,6 @@ public class VeraGUI extends Application {
 						chart.show(parent);
 						// object
 					}
-
 				} else { // else split each of the readings into seperate arrayLists
 					// (to make compatable with the chart) and create a
 					// chart for each reading

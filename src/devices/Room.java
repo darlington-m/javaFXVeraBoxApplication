@@ -31,6 +31,10 @@ public class Room {
 	public String getName() {
 		return name;
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public int getId() {
 		return id;
@@ -76,7 +80,9 @@ public class Room {
 		
 		final Label nameLabel = new Label(getName());
 		nameLabel.setLayoutY(25);
+		nameLabel.setId("sizedFont");
 		final Label deviceNum = new Label(devices.size() + " Devices");
+		deviceNum.setId("sizedFont");
 		deviceNum.setLayoutX(250);
 		deviceNum.setLayoutY(25);
 		final Button button = new Button("Edit");
@@ -114,7 +120,7 @@ public class Room {
 					nameLabel.setVisible(true);
 					editName.setVisible(false);
 					button.setText("Edit");
-					//executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
+					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
 				}
 			}});
 		
@@ -122,13 +128,15 @@ public class Room {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(editName.getText().matches("[a-zA-z]")){
-					name = editName.getText();
-					nameLabel.setText(name);
+				if(editName.getText() != ""){
+					String newName = editName.getText();
+					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
+					setName(newName);
 					nameLabel.setVisible(true);
+					nameLabel.setText(newName);
 					editName.setVisible(false);
 					warning.setVisible(false);
-				}else{
+					}else{
 					warning.setVisible(true);
 				}
 				
@@ -139,7 +147,9 @@ public class Room {
 			@Override
 			public void handle(ActionEvent arg0) {
 				
-				//executeHttp("http://146.87.40.27:3480/data_request?id=room&action=delete&room=" + getId());
+				executeHttp("http://146.87.40.27:3480/data_request?id=room&action=delete&room=" + getId());
+				pane.setId("");
+				pane.getChildren().clear();
 			}});
 		
 		pane.getChildren().addAll(nameLabel,deviceNum,button,deleteB,editName,warning);

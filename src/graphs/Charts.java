@@ -91,7 +91,7 @@ public class Charts {
 			}
 			else
 			{
-				chartsScrollPane.setPrefSize(800, 350);
+				chartsScrollPane.setPrefSize(790, 350);
 				chartsScrollPane.setLayoutX(0);
 				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
 			
@@ -125,8 +125,7 @@ public class Charts {
 				}
 			}
 			else{
-				chartsScrollPane.setPrefSize(800, 370);
-				chartsScrollPane.setVmax(0);
+				chartsScrollPane.setPrefSize(790, 370);
 				chartsScrollPane.setLayoutX(0);
 				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
 				if (8 * readings.get(0).size() > 800){
@@ -167,10 +166,12 @@ public class Charts {
 				i++;
 			}
 		} 
-		
-		if(!(upperBound==0))
+		if ((upperBound == 1) && (lowerBound==0)){
+			yAxis = new NumberAxis(0, 1, 0.5);	
+		}
+		else if(!(upperBound==0))
 		{
-			int check =  (int) (lowerBound* 1.1- upperBound* 0.9);
+			int check =  (int) (upperBound * 1.1 - lowerBound * 0.9);
 			//System.out.println(check);
 			if(check < -200)
 			{
