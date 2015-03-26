@@ -56,6 +56,8 @@ public class Charts {
 
 	public void show(Pane pane) 
 	{
+		getSkippedReadings();
+		
 		chartsScrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		chartsScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		
@@ -122,11 +124,13 @@ public class Charts {
 				}
 			}
 			else{
-				chartsScrollPane.setPrefSize(800, 350);
+				chartsScrollPane.setPrefSize(800, 370);
+				chartsScrollPane.setVmax(0);
 				chartsScrollPane.setLayoutX(0);
 				chartsScrollPane.setLayoutY(400* position); // calculation to determine y position. If you want to change where the charts
 				if (8 * readings.get(0).size() > 800){
 					lineChart.setPrefSize(8 * readings.get(0).size(), 350);
+					System.out.println("Readings size: " + readings.get(0).size());
 				} else {
 					lineChart.setPrefSize(800, 350); // Size of the chart will decrease when the number of charts needed increases
 				}
@@ -200,5 +204,119 @@ public class Charts {
 		{
 			yAxis = new NumberAxis((int)(lowerBound * 0.9), (int)(upperBound = 5), (int)(5)/3);	
 		}
+	}
+	
+	public void getSkippedReadings(){
+		ArrayList<Integer> skippedReadings = new ArrayList<Integer>();
+		ArrayList<String> skippedDates = new ArrayList<String>();
+		ArrayList<ArrayList> newReadings = new ArrayList<ArrayList>();
+		ArrayList<ArrayList> newDates = new ArrayList<ArrayList>();
+		
+		
+		for(int j = 0; j < readings.size(); j++){
+			
+			System.out.println(readings.get(j).size());			
+			
+			skippedReadings = new ArrayList<Integer>();
+			
+			if(readings.get(j).size() >= 107000 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=96){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+			else if(readings.get(j).size() >= 8064 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=48){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+			else if(readings.get(j).size() >= 4032 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=24){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+			else if(readings.get(j).size() >= 2016 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=12){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+		
+			else if(readings.get(j).size() >= 864 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=6){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+			else if(readings.get(j).size() >= 288 ){
+				for(int skip = 0; skip < readings.get(j).size(); skip+=2){
+					skippedReadings.add((int)readings.get(j).get(skip));
+				}
+				newReadings.add(skippedReadings);
+			}
+			else
+			{
+				newReadings.add(readings.get(j));
+			}
+		}
+		
+		System.out.println("dates size" + dates.size());
+		
+		for(int j = 0; j < dates.size(); j++){
+			
+			System.out.println("dates size 2 " + dates.size());
+			System.out.println("dates size 3 " + dates.get(j).size());
+			
+			skippedDates = new ArrayList<String>();
+			
+			if(dates.get(j).size() >= 107000 ){
+				for(int skip = 0; skip < dates.get(j).size(); skip+=64){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+			}
+			else if(dates.get(j).size() >= 8064 ){
+				for(int skip = 0; skip < dates.get(j).size(); skip+=32){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+			}
+			else if(dates.get(j).size() >= 4032 ){
+				for(int skip = 0; skip < dates.get(j).size(); skip+=16){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+			}
+			else if(dates.get(j).size() >= 2016 ){
+				for(int skip = 0; skip < dates.get(j).size(); skip+=8){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+			}
+			else if(dates.get(j).size() >= 864 ){
+				for(int skip = 0; skip < dates.get(j).size(); skip+=3){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+			}
+			else if(dates.get(j).size() >= 288 ){
+				System.out.println("dates: " + dates.get(j).size());
+				for(int skip = 0; skip < dates.get(j).size(); skip+=2){
+					skippedDates.add((String)dates.get(j).get(skip));
+				}
+				newDates.add(skippedDates);
+				System.out.println("new dates: " + newDates.size());
+			}
+			else
+			{
+				newDates.add(dates.get(j));
+			}
+		}
+
+		//override
+		readings = newReadings;
+		dates = newDates;
 	}
 }

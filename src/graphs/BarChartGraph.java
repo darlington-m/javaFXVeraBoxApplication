@@ -41,13 +41,11 @@ public class BarChartGraph
 				numberOfDisplayedPointsOfData = readings.get(j).size(); // default retrieval, can't get an error.
 				checkCompare(chart, readings, dates, devices); // Pass everything back to the method and try again.
 			}
-			chart.setBarGap(0); // styling
-			chart.setCategoryGap(20); //styling
-			chart.getData().addAll(readingsList); // add both readings to the chart
-			chart.setBarGap(5); // styling
-			chart.setCategoryGap(20); //styling// add both readings to the chart
 		}
+		chart.setBarGap(10); // styling
+		chart.setCategoryGap(20); //styling// add both readings to the chart
 		chart.setLegendVisible(true); // show the icons to indicate which line is which
+		chart.getData().addAll(readingsList); // add both readings to the chart
 		return chart;
 	}
 }

@@ -22,6 +22,7 @@ public class LineGraph
 		int i = 0;
 		int lineReadings = 0;
 		
+		
 		// Information for line one displayed on the graph
 		for (int j = 0; j < readings.size(); j++){
 			System.out.println("Size: " + j);
