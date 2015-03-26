@@ -1914,7 +1914,7 @@ public class VeraGUI extends Application {
 		passRes.setLayoutX(50);
 		passRes.setLayoutY(20);
 		
-		Button submit = new Button("Submit");
+		Button submit = new Button("Login");
 		submit.setId("passSubmit");
 		submit.setLayoutX(350);
 		submit.setLayoutY(45);
