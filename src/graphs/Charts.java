@@ -1,6 +1,7 @@
 package graphs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import devices.Device;
 import javafx.scene.Node;
@@ -212,6 +213,13 @@ public class Charts {
 		ArrayList<ArrayList> newReadings = new ArrayList<ArrayList>();
 		ArrayList<ArrayList> newDates = new ArrayList<ArrayList>();
 		
+		int maxSize = 0;
+		
+		for(ArrayList<Integer> arrayList : readings){
+			if (arrayList.size() > maxSize){
+				maxSize = arrayList.size();
+			}
+		}
 		
 		for(int j = 0; j < readings.size(); j++){
 			
