@@ -1,5 +1,7 @@
 package devices;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -77,7 +79,7 @@ public class FourInOne extends Device {
 				+ humidity;
 	}
 
-	public Pane getPane() {
+	public Pane getPane(final String ip) {
 		Pane pane = super.getPane();
 		Label light = new Label("Light: " + this.light);
 		light.setLayoutY(25);
@@ -111,17 +113,20 @@ public class FourInOne extends Device {
 		final Button armedButton = new Button();
 		armedButton.setId("armedButton");
 		armedButton.setPrefSize(45, 42);
+		
 		if (armed == 1){
-			armedButton.setLayoutX(219);
-			armedLabel.setLayoutX(230);
-			armedLabel.setText("Bypassed");
-			armedLabel.setId("armedLabelGray");
-		} else {
 			armedButton.setLayoutX(245);
 			armedLabel.setLayoutX(237);
 			armedLabel.setText("Armed");
 			armedLabel.setId("armedLabelRed");
-
+			armedBackgroundLabel.setId("armedOnLabel");
+		} else {
+			
+			armedButton.setLayoutX(219);
+			armedLabel.setLayoutX(230);
+			armedLabel.setText("Bypassed");
+			armedLabel.setId("armedLabelGray");
+			armedBackgroundLabel.setId("armedOffLabel");
 		}
 		armedButton.setLayoutY(49);
 		
@@ -130,12 +135,16 @@ public class FourInOne extends Device {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (armedButton.getLayoutX() == 245){
+					executeHttp("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=0&device="+ id);
+					armed = 0;
 					armedButton.setLayoutX(219);
 					armedLabel.setLayoutX(230);
 					armedLabel.setText("Bypassed");
 					armedLabel.setId("armedLabelGray");
 					armedBackgroundLabel.setId("armedOffLabel");
 				} else {
+					executeHttp("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=1&device="+ id);
+					armed = 1;
 					armedButton.setLayoutX(245);
 					armedLabel.setLayoutX(237);
 					armedLabel.setText("Armed");
@@ -150,6 +159,33 @@ public class FourInOne extends Device {
 		
 		pane.getChildren().addAll(armedBackgroundLabel, armedButton, armedLabel);
 		return pane;
+	}
+	
+	private boolean executeHttp(String urlS) {
+		// TODO Auto-generated method stub
+		
+		boolean check = false;
+
+		try {
+			try {
+				URL url = new URL(urlS);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+				if (con.getResponseCode() == 200) {
+					// Internet available
+					check = true;
+				}
+			} catch (Exception exception) {
+				// No Internet
+				check = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return check;
+		
 	}
 
 	public int getBatterylevel() {

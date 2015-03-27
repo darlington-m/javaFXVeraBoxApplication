@@ -100,6 +100,7 @@ public class VeraGUI extends Application {
 	private boolean loggedIn = false;
 	private String userName;
 	String ip = null;
+	String currentIp;
 	private ArrayList<Device> scenesSelectedDevices;
 	private final Pane graphsPane = new Pane();
 
@@ -491,8 +492,15 @@ public class VeraGUI extends Application {
 					topPane.getChildren().addAll(batteryImage, battery);
 				}
 				
+				Pane botPane;
 				
-				Pane botPane = device.getPane();
+				if (device instanceof FourInOne){
+					botPane = ((FourInOne)device).getPane(ip);
+
+				} else {
+					botPane = device.getPane();
+
+				}
 				botPane.setPrefWidth(sortingPane.getPrefWidth() - 100);
 				
 				Button detailsBtn = new Button("Settings");
@@ -1848,6 +1856,7 @@ public class VeraGUI extends Application {
 							displayDevices();
 							loggedIn = true;
 							userName = resultSet.getString("user_name");
+							ip = resultSet.getString("ip_address");
 						}
 					}
 				} catch (SQLException e) {
