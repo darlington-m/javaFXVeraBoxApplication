@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Timer;
 
 import javafx.animation.Animation;
@@ -31,7 +32,10 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -57,7 +61,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
-
 import dataretrival.CurrentReadings;
 import dataretrival.MySQLConnect;
 import dataretrival.ReadingsUpdateTimer;
@@ -95,6 +98,8 @@ public class VeraGUI extends Application {
 	private CheckBox humidityCheckBox;
 	private CheckBox armedTrippedCheckBox;
 	private boolean loggedIn = false;
+	private String userName;
+	String ip = null;
 	private ArrayList<Device> scenesSelectedDevices;
 	private final Pane graphsPane = new Pane();
 
@@ -164,6 +169,9 @@ public class VeraGUI extends Application {
 					break;
 				case "Download CSV":
 					saveToCSV(devicesToCSV, "24");
+					break;
+				case "Advanced":
+					displayAdvancedSettings();
 					break;
 				case "Quit":
 					System.exit(0);
@@ -1363,27 +1371,27 @@ public class VeraGUI extends Application {
 		java.util.List<String> names = new ArrayList<String>();
 		switch (name) {
 		case "mainMenu":
-			String[] words = { "Dashboard", "Graphs", "Settings",
+			String[] words = { "Dashboard", "Graphs", "Settings", "Advanced",
 			"Quit" };
 			names = Arrays.<String> asList(words);
 			break;
 		case "details":
-			String[] words2 = { "Dashboard", "Graphs", "Settings",
+			String[] words2 = { "Dashboard", "Graphs", "Settings", "Advanced",
 			"Quit" };
 			names = Arrays.<String> asList(words2);
 			break;
 		case "graphs":
-			String[] words3 = { "Dashboard", "Graphs", "Settings",
+			String[] words3 = { "Dashboard", "Graphs", "Settings", "Advanced",
 			"Quit" };
 			names = Arrays.<String> asList(words3);
 			break;
 		case "settings":
-			String[] words4 = { "Dashboard", "Graphs", "Settings",
+			String[] words4 = { "Dashboard", "Graphs", "Settings", "Advanced", 
 			"Quit" };
 			names = Arrays.<String> asList(words4);
 			break;
-		case "addRoom":
-			String[] words5 = { "Dashboard", "Graphs", "Settings",
+		case "advanced":
+			String[] words5 = { "Dashboard", "Graphs", "Settings", "Advanced",
 			"Quit" };
 			names = Arrays.<String> asList(words5);
 			break;
@@ -1839,6 +1847,7 @@ public class VeraGUI extends Application {
 							topDisplay.getChildren().addAll(time, welcome);
 							displayDevices();
 							loggedIn = true;
+							userName = resultSet.getString("user_name");
 						}
 					}
 				} catch (SQLException e) {
@@ -2001,5 +2010,120 @@ public class VeraGUI extends Application {
 
 	public void setSelectedDevice(Device selectedDevice) {
 		this.selectedDevice = selectedDevice;
+	}
+	
+	private void displayAdvancedSettings() {
+		// TODO Auto-generated method stub
+		
+		if(topDisplay.getLayoutY()!=0){
+			topDisplay.setLayoutY(0);
+			display.setLayoutY(topDisplay.getPrefHeight());
+			display.setPrefHeight(scene.getHeight() - topDisplay.getPrefHeight() + 10);
+		}	
+		
+		ResultSet resultSet = null;
+		Label ipLab2 = null;
+		
+		try {
+			resultSet = conn.getRows("SELECT * FROM Users WHERE user_name = " + "'" + userName + "'");
+			if(resultSet.next()) {
+				ipLab2 = new Label(resultSet.getString("ip_address"));
+				ipLab2.setLayoutX(140);
+				ipLab2.setLayoutY(20);
+				ipLab2.setId("genText");
+				ip = resultSet.getString("ip_address");
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		display.getChildren().clear();
+		Pane pane = new Pane();
+		pane.setId("backPaneBackground");
+		pane.setTranslateX(10);
+		pane.setTranslateY(10);
+		
+		Line line = new Line(20, 120, 760, 120);
+		line.setId("settingsLine2");
+		
+		Label ipLab = new Label("Current IP: ");
+		ipLab.setLayoutX(20);
+		ipLab.setLayoutY(20);
+		ipLab.setId("genText");
+		
+		final Button changeIpBtn = new Button("Change IP");
+		changeIpBtn.setId("passSubmit");
+		changeIpBtn.setLayoutX(20);
+		changeIpBtn.setLayoutY(70);
+		changeIpBtn.setMaxWidth(150);
+		changeIpBtn.setMinWidth(150);
+		
+		final TextField newIpTxt = new TextField();
+		newIpTxt.setText(ip);
+		newIpTxt.setId("passFields");
+		newIpTxt.setLayoutX(200);
+		newIpTxt.setLayoutY(70);
+		newIpTxt.setMaxWidth(200);
+		newIpTxt.setMinWidth(200);
+		newIpTxt.setVisible(false);
+		
+		Label changePassLab = new Label("Change Password");
+		changePassLab.setLayoutX(20);
+		changePassLab.setLayoutY(140);
+		changePassLab.setId("genText");
+		
+		final Button changePassBtn = new Button("Change Password");
+		changePassBtn.setId("passSubmit");
+		changePassBtn.setLayoutX(20);
+		changePassBtn.setLayoutY(190);
+		changePassBtn.setMaxWidth(150);
+		changePassBtn.setMinWidth(150);
+		
+		final TextField newPassTxt = new TextField();
+		newPassTxt.setText(ip);
+		newPassTxt.setId("passFields");
+		newPassTxt.setLayoutX(200);
+		newPassTxt.setLayoutY(190);
+		newPassTxt.setMaxWidth(200);
+		newPassTxt.setMinWidth(200);
+		newPassTxt.setVisible(false);
+		
+		
+		changeIpBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				
+				if(changeIpBtn.getText() == "Change IP") {
+					newIpTxt.setVisible(true);
+					changeIpBtn.setText("Save IP");
+				}else if(changeIpBtn.getText() == "Save IP") {
+					
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Confirm Change");
+					alert.setHeaderText("Change IP Address?");
+
+					Optional<ButtonType> result = alert.showAndWait();
+					if (result.get() == ButtonType.OK){
+						
+						conn.insertRow("UPDATE Users SET ip_address = " + "'" + ip + "'" + " WHERE user_name = " + "'" + userName + "'");
+						displayAdvancedSettings();
+					} else {
+						
+					    //user chose CANCEL or closed the dialog
+						displayAdvancedSettings();
+					}
+				}
+		 	}
+		});
+		
+		pane.getChildren().addAll(ipLab, ipLab2, changeIpBtn, newIpTxt, line, changePassLab, changePassBtn, newPassTxt);
+		
+		display.getChildren().add(pane);
+		
+		
 	}
 }
