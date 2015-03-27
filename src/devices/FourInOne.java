@@ -136,6 +136,7 @@ public class FourInOne extends Device {
 			public void handle(ActionEvent arg0) {
 				if (armedButton.getLayoutX() == 245){
 					executeHttp("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=0&device="+ id);
+					System.out.println("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=0&device="+ id);
 					armed = 0;
 					armedButton.setLayoutX(219);
 					armedLabel.setLayoutX(230);
@@ -144,6 +145,7 @@ public class FourInOne extends Device {
 					armedBackgroundLabel.setId("armedOffLabel");
 				} else {
 					executeHttp("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=1&device="+ id);
+					System.out.println("http://" + ip + "/data_request?id=device&action=SetArmed&newArmedValue=1&device="+ id);
 					armed = 1;
 					armedButton.setLayoutX(245);
 					armedLabel.setLayoutX(237);
