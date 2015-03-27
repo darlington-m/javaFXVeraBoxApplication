@@ -74,8 +74,8 @@ public class RoomTest {
 
 	@Test
 	public void testGetDetailsPane() {
-		assertTrue(testRoom.getDetailsPane()!=null);
-		assertTrue(testRoom.getDetailsPane() instanceof Pane);
+		assertTrue(testRoom.getDetailsPane("")!=null);
+		assertTrue(testRoom.getDetailsPane("") instanceof Pane);
 	}
 
 }

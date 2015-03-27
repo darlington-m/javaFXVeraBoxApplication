@@ -74,7 +74,7 @@ public class Room {
 		return roomPane;
 	}
 	
-	public Pane getDetailsPane(){
+	public Pane getDetailsPane(final String ip){
 		final Pane pane = new Pane();
 		pane.setPrefSize(740,70);
 		pane.setId("roomDetails");
@@ -82,10 +82,12 @@ public class Room {
 		final Label nameLabel = new Label(getName());
 		nameLabel.setLayoutY(25);
 		nameLabel.setId("sizedFont");
+		
 		final Label deviceNum = new Label(devices.size() + " Devices");
 		deviceNum.setId("sizedFont");
 		deviceNum.setLayoutX(250);
 		deviceNum.setLayoutY(25);
+		
 		final Button button = new Button("Edit");
 		button.setLayoutX(520);
 		button.setLayoutY(20);
@@ -93,6 +95,7 @@ public class Room {
 		button.setMinWidth(100);
 		button.setId("passSubmit");
 		button.setTooltip(new Tooltip("Click to edit the name"));
+		
 		final Button deleteB = new Button("Delete");
 		deleteB.setLayoutX(640);
 		deleteB.setLayoutY(20);
@@ -100,10 +103,12 @@ public class Room {
 		deleteB.setMinWidth(100);
 		deleteB.setId("passSubmitRed");
 		deleteB.setTooltip(new Tooltip("Click to delete Room"));
+		
 		final TextField editName = new TextField(getName());
 		editName.setId("passFields");
 		editName.setVisible(false);
 		editName.setLayoutY(20);
+		
 		final Label warning = new Label("Name cannot be empty");
 		warning.setVisible(false);
 		warning.setLayoutY(44);
@@ -113,88 +118,82 @@ public class Room {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(nameLabel.isVisible()){
-					nameLabel.setVisible(false);
-					editName.setVisible(true);
-					button.setText("Save");
-				}else{
-					nameLabel.setVisible(true);
-					editName.setVisible(false);
+				if (button.getText().equals("Edit")){
+					if(nameLabel.isVisible()){
+						nameLabel.setVisible(false);
+						editName.setVisible(true);
+						button.setText("Save");
+					}
+				} else {  
 					button.setText("Edit");
-					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
-				}
-			}});
-		
-		editName.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				if(editName.getText() != ""){
-					String newName = editName.getText();
-					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
-					setName(newName);
-					nameLabel.setVisible(true);
-					nameLabel.setText(newName);
-					editName.setVisible(false);
-					warning.setVisible(false);
+					if(editName.getText() != ""){
+						String newName = editName.getText();
+						executeHttp("http://" + ip + ":3480/data_request?id=room&action=rename&room=" + getId() +  "&name=" + editName.getText());
+						setName(newName);
+						nameLabel.setVisible(true);
+						nameLabel.setText(newName);
+						editName.setVisible(false);
+						warning.setVisible(false);
 					}else{
-					warning.setVisible(true);
-				}
-				
-			}});
-		
+						warning.setVisible(true);
+					}
+				}}});
+
 		deleteB.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
-				executeHttp("http://146.87.40.27:3480/data_request?id=room&action=delete&room=" + getId());
-				pane.setId("");
-				pane.getChildren().clear();
+				if (deleteB.getText().equals("Delete")){
+						deleteB.setText("Confirm?");
+				} else { 
+					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=delete&room=" + getId());
+					pane.setId("");
+					pane.getChildren().clear();
+				}
 			}});
-		
+
 		pane.getChildren().addAll(nameLabel,deviceNum,button,deleteB,editName,warning);
 		return pane;
-	}
-	
-	
-	private boolean executeHttp(String urlS) {
-		// TODO Auto-generated method stub
-		
-		boolean check = false;
-
-		try {
-			try {
-				URL url = new URL(urlS);
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.connect();
-				if (con.getResponseCode() == 200) {
-					// Internet available
-					check = true;
-				}
-			} catch (Exception exception) {
-				// No Internet
-				check = false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
-		return check;
-		
-	}
-	
-//	private boolean getConfirmAlert(String message) {
-//		
-//		Alert alert = new Alert(AlertType.CONFIRMATION);
-//		alert.setTitle(message);
-//		Optional<ButtonType> result = alert.showAndWait();
-//		
-//		if (result.get() == ButtonType.OK){
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
-}
+
+			private boolean executeHttp(String urlS) {
+				// TODO Auto-generated method stub
+
+				boolean check = false;
+
+				try {
+					try {
+						URL url = new URL(urlS);
+						HttpURLConnection con = (HttpURLConnection) url
+								.openConnection();
+						con.connect();
+						if (con.getResponseCode() == 200) {
+							// Internet available
+							check = true;
+						}
+					} catch (Exception exception) {
+						// No Internet
+						check = false;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				return check;
+
+			}
+
+			//	private boolean getConfirmAlert(String message) {
+			//		
+			//		Alert alert = new Alert(AlertType.CONFIRMATION);
+			//		alert.setTitle(message);
+			//		Optional<ButtonType> result = alert.showAndWait();
+			//		
+			//		if (result.get() == ButtonType.OK){
+			//			return true;
+			//		} else {
+			//			return false;
+			//		}
+			//	}
+		}

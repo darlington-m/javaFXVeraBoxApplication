@@ -62,7 +62,7 @@ public class DanfossRadiator extends Device implements Sensor {
 				+ "\nState:  " + state + "\nComment: " + comment;
 	}
 
-	public Pane getPane() {
+	public Pane getPane(final String ip) {
 		Pane pane = super.getPane();
 		Label reading = new Label(getReading() + "°" + "C");
 		reading.setLayoutX(200);
@@ -100,13 +100,13 @@ public class DanfossRadiator extends Device implements Sensor {
 						off.setId("heatButtonRed");
 						off.setDisable(false);
 						heat.setDisable(true);
-					executeHttp("http://146.87.40.27:3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOff");
+					executeHttp("http://" + ip + ":3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOff");
 					} else {
 						heat.setId("heatButtonRed");
 						off.setId("heatButtonGray");
 						off.setDisable(true);
 						heat.setDisable(false);
-						executeHttp("http://146.87.40.27:3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOn");
+						executeHttp("http://" + ip + ":3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOn");
 				}
 			}
 		};

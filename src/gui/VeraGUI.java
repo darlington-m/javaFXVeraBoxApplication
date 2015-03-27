@@ -494,7 +494,9 @@ public class VeraGUI extends Application {
 				Pane botPane;
 				
 				if (device instanceof FourInOne){
-					botPane = ((FourInOne)device).getPane(ip);
+					botPane = ((FourInOne)device).getPane(getIP());
+				} else if (device instanceof DanfossRadiator) {
+					botPane = ((DanfossRadiator)device).getPane(getIP());
 
 				} else {
 					botPane = device.getPane();
@@ -1246,7 +1248,7 @@ public class VeraGUI extends Application {
 				}else if(addRoom.getText() == "Save") {
 					
 					roomsList.add(new Room(newRoomName.getText(), roomsList.size()+1));
-					executeHttp("http://146.87.40.27:3480/data_request?id=room&action=create&name=" + newRoomName.getText());
+					executeHttp("http://" + ip + ":3480/data_request?id=room&action=create&name=" + newRoomName.getText());
 					displaySettings();
 				}
 				
@@ -1254,7 +1256,7 @@ public class VeraGUI extends Application {
 		});
 		
 		for(Room room : roomsList){
-			list.getChildren().add(room.getDetailsPane());
+			list.getChildren().add(room.getDetailsPane(getIP()));
 		}
 		
 		pane.getChildren().addAll(line, addRoom, newRoomName, list);		
@@ -1852,10 +1854,10 @@ public class VeraGUI extends Application {
 							welcome.setText("Welcome " + capitalizedName);
 							topDisplay.getChildren().clear();
 							topDisplay.getChildren().addAll(time, welcome);
-							displayDevices();
 							loggedIn = true;
 							userName = resultSet.getString("user_name");
 							ip = resultSet.getString("ip_address");
+							displayDevices();
 						}
 					}
 				} catch (SQLException e) {
@@ -1946,15 +1948,15 @@ public class VeraGUI extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 
-//				String url = "http://146.87.40.27:3480/data_request?id=device&action=rename&device=" + 
-//				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
-//				if (executeHttp(url)) {
-//					System.out.println("Command Sent");
-//					device.setName(devName.getText());
-//				} else {
-//					System.out.println("Device out of Reach");
-//				}
-//					
+				String url = "http://" + ip + ":3480/data_request?id=device&action=rename&device=" + 
+				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
+				if (executeHttp(url)) {
+					System.out.println("Command Sent");
+					device.setName(devName.getText());
+				} else {
+					System.out.println("Device out of Reach");
+				}
+					
 			}
 		});
 		
@@ -1963,20 +1965,20 @@ public class VeraGUI extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				
-//				String url = "http://146.87.40.27:3480/data_request?id=device&action=add&device=" + 
-//				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
-//				if (executeHttp(url)) {
-//					
-//					System.out.println("Command Sent");
-//					for(Room room: roomsList) {
-//						if (room.getName().equalsIgnoreCase(comboBox.getValue())) {
-//							room.addDeviceToRoom(device);
-//						}
-//					}
-//					room.removeDeviceFromRoom(device);
-//				} else {
-//					System.out.println("Device out of Reach");
-//				}
+				String url = "http://" + ip + ":3480/data_request?id=device&action=add&device=" + 
+				device.getId() + "&name=" + devName.getText() + "&room=" + room.getId();
+				if (executeHttp(url)) {
+					
+					System.out.println("Command Sent");
+					for(Room room: roomsList) {
+						if (room.getName().equalsIgnoreCase(comboBox.getValue())) {
+							room.addDeviceToRoom(device);
+						}
+					}
+					room.removeDeviceFromRoom(device);
+				} else {
+					System.out.println("Device out of Reach");
+				}
 			}
 		});
 		
@@ -2132,6 +2134,10 @@ public class VeraGUI extends Application {
 		
 		pane.getChildren().addAll(ipLab, ipLab2, changeIpBtn, newIpTxt, line, changePassLab, changePassBtn, passF);
 		display.getChildren().add(pane);	
+	}
+	
+	private String getIP(){
+		return ip;
 	}
 	
 	
