@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
-import java.util.Optional;
+//import java.util.Optional;
 import java.util.Timer;
 
 import javafx.animation.Animation;
@@ -32,10 +32,10 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+//import javafx.scene.control.Alert;
+//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+//import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -2082,15 +2082,14 @@ public class VeraGUI extends Application {
 		changePassBtn.setMaxWidth(150);
 		changePassBtn.setMinWidth(150);
 		
-		final TextField newPassTxt = new TextField();
-		newPassTxt.setText(ip);
-		newPassTxt.setId("passFields");
-		newPassTxt.setLayoutX(200);
-		newPassTxt.setLayoutY(190);
-		newPassTxt.setMaxWidth(200);
-		newPassTxt.setMinWidth(200);
-		newPassTxt.setVisible(false);
-		
+		final PasswordField passF = new PasswordField();
+		passF.setPromptText("New Password");
+		passF.setId("passFields");
+		passF.setLayoutX(200);
+		passF.setLayoutY(190);
+		passF.setMaxWidth(150);
+		passF.setMinWidth(150);
+		passF.setVisible(false);
 		
 		changeIpBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
@@ -2101,29 +2100,43 @@ public class VeraGUI extends Application {
 					newIpTxt.setVisible(true);
 					changeIpBtn.setText("Save IP");
 				}else if(changeIpBtn.getText() == "Save IP") {
-					
-					Alert alert = new Alert(AlertType.CONFIRMATION);
-					alert.setTitle("Confirm Change");
-					alert.setHeaderText("Change IP Address?");
-
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK){
-						
 						conn.insertRow("UPDATE Users SET ip_address = " + "'" + ip + "'" + " WHERE user_name = " + "'" + userName + "'");
 						displayAdvancedSettings();
-					} else {
-						
-					    //user chose CANCEL or closed the dialog
-						displayAdvancedSettings();
-					}
+					} 
 				}
-		 	}
 		});
 		
-		pane.getChildren().addAll(ipLab, ipLab2, changeIpBtn, newIpTxt, line, changePassLab, changePassBtn, newPassTxt);
 		
-		display.getChildren().add(pane);
+		changePassBtn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				
+				if(changePassBtn.getText() == "Change Password") {
+					passF.setVisible(true);
+					changePassBtn.setText("Save Password");
+				}else if(changePassBtn.getText() == "Save Password") {
+						conn.insertRow("UPDATE Users SET password = " + "'" + passF.getText() + "'" + " WHERE user_name = " + "'" + userName + "'");
+						displayAdvancedSettings();
+					} 
+				}
+		});
 		
-		
+		pane.getChildren().addAll(ipLab, ipLab2, changeIpBtn, newIpTxt, line, changePassLab, changePassBtn, passF);
+		display.getChildren().add(pane);	
 	}
+	
+	
+//	private boolean getConfirmAlert(String message) {
+//		
+//		Alert alert = new Alert(AlertType.CONFIRMATION);
+//		alert.setTitle(message);
+//		Optional<ButtonType> result = alert.showAndWait();
+//		
+//		if (result.get() == ButtonType.OK){
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 }
