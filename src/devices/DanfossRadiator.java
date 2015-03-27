@@ -1,5 +1,8 @@
 package devices;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -93,15 +96,17 @@ public class DanfossRadiator extends Device implements Sensor {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (heat.getId() == "heatButtonRed") {
-					heat.setId("heatButtonGray");
-					off.setId("heatButtonRed");
-					off.setDisable(false);
-					heat.setDisable(true);
-				} else {
-					heat.setId("heatButtonRed");
-					off.setId("heatButtonGray");
-					off.setDisable(true);
-					heat.setDisable(false);
+						heat.setId("heatButtonGray");
+						off.setId("heatButtonRed");
+						off.setDisable(false);
+						heat.setDisable(true);
+					executeHttp("http://146.87.40.27:3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOff");
+					} else {
+						heat.setId("heatButtonRed");
+						off.setId("heatButtonGray");
+						off.setDisable(true);
+						heat.setDisable(false);
+						executeHttp("http://146.87.40.27:3480/data_request?id=lu_action&output_format=json&DeviceNum=" + id + "&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&action=SetModeTarget&NewModeTarget=HeatOn");
 				}
 			}
 		};
@@ -183,5 +188,32 @@ public class DanfossRadiator extends Device implements Sensor {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	private boolean executeHttp(String urlS) {
+		// TODO Auto-generated method stub
+		
+		boolean check = false;
+
+		try {
+			try {
+				URL url = new URL(urlS);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				con.connect();
+				if (con.getResponseCode() == 200) {
+					// Internet available
+					check = true;
+				}
+			} catch (Exception exception) {
+				// No Internet
+				check = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return check;
+		
 	}
 }

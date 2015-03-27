@@ -100,7 +100,6 @@ public class VeraGUI extends Application {
 	private boolean loggedIn = false;
 	private String userName;
 	String ip = null;
-	String currentIp;
 	private ArrayList<Device> scenesSelectedDevices;
 	private final Pane graphsPane = new Pane();
 
